@@ -1,6 +1,7 @@
 import pygame
+import random
 
-pygame.init()
+pygame.init()  
 
 # Game Window
 
@@ -16,11 +17,15 @@ cell_size = 50
 direction = 'U' # UDLR, Up Down Left Right
 update_snake = 0
 loop_cap = 999
+hungry = False
+Apple = [0, 0]
+Malt = [0, 0]
 
 bg_col = (0, 0, 0,)
 snake_skin = (255, 255, 255)
 snake_guts = (0, 0, 0)
 snake_head = (255, 255, 255)
+Apple_variety = (51, 204, 51)
 
 
 #snake
@@ -46,19 +51,7 @@ while run:
     move_down_key = pygame.K_s
     move_up_key = pygame.K_w
 
-    #Event Handler
-
-    #key = pygame.key.get_pressed()
-    #if key[move_left_key]:
-    #    player.move_ip(-1,0)
-    #elif key[move_right_key]:
-    #    player.move_ip(1,0)
-    #elif key[move_up_key]:
-    #    player.move_ip(0,-1)
-    #elif key[move_down_key]:
-    #    player.move_ip(0,1)
-            
-    
+#Event Handler    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -73,7 +66,18 @@ while run:
             elif key[move_down_key] and direction != 'U':
                 direction = 'D'
 
-#snake drawing
+#Cooking
+    if hungry:
+        hungry = False
+        Apple[0] = cell_size * (random.randint(0, (Screen_Width / cell_size) - 1))
+        Apple[1] = cell_size * (random.randint(0, (Screen_height / cell_size) - 1))
+
+    pygame.draw.rect(
+        screen, Apple_variety,
+        (Apple[1], Apple[0], cell_size, cell_size)
+    )
+
+#slithering
     if update_snake > loop_cap:
         update_snake = 0
         snake_box = snake_box[ -1:] + snake_box[:-1]
@@ -90,6 +94,7 @@ while run:
             snake_box[0][0] = snake_box[1][0]
             snake_box[0][1] = snake_box[1][1] + cell_size
 
+#snake drawing
     head = 1
     for x in snake_box:
         if (head == 0): 
