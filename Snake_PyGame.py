@@ -17,9 +17,9 @@ cell_size = 50
 direction = 'U' # UDLR, Up Down Left Right
 update_snake = 0
 loop_cap = 999
-hungry = False
+hungry = True
 Apple = [0, 0]
-Malt = [0, 0]
+shed = False
 
 bg_col = (0, 0, 0,)
 snake_skin = (255, 255, 255)
@@ -69,17 +69,25 @@ while run:
 #Cooking
     if hungry:
         hungry = False
-        Apple[0] = cell_size * (random.randint(0, (Screen_Width / cell_size) - 1))
-        Apple[1] = cell_size * (random.randint(0, (Screen_height / cell_size) - 1))
+        Apple[0] = cell_size * (random.randint(0, int((Screen_Width / cell_size) - 1)))
+        Apple[1] = cell_size * (random.randint(0, int((Screen_height / cell_size) - 1)))
 
     pygame.draw.rect(
         screen, Apple_variety,
-        (Apple[1], Apple[0], cell_size, cell_size)
+        (Apple[0], Apple[1], cell_size, cell_size)
     )
 
+#IsFoodEaten?
+    if snake_box[0] == Apple:
+        hungry = True
+        shed = True    
+        
 #slithering
     if update_snake > loop_cap:
         update_snake = 0
+        if shed:
+            snake_box.append(tail)
+            shed = False
         snake_box = snake_box[ -1:] + snake_box[:-1]
         if direction =='U':
             snake_box[0][0] = snake_box[1][0] 
@@ -93,6 +101,7 @@ while run:
         if direction == 'D':
             snake_box[0][0] = snake_box[1][0]
             snake_box[0][1] = snake_box[1][1] + cell_size
+        tail = list(snake_box[-1])
 
 #snake drawing
     head = 1
@@ -116,6 +125,7 @@ while run:
                 (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
             )
             head = 0
+        
 
 
 
