@@ -80,14 +80,12 @@ while run:
 #IsFoodEaten?
     if snake_box[0] == Apple:
         hungry = True
-        shed = True    
+        snake_box.append(tail)
+    
         
 #slithering
     if update_snake > loop_cap:
         update_snake = 0
-        if shed:
-            snake_box.append(tail)
-            shed = False
         snake_box = snake_box[ -1:] + snake_box[:-1]
         if direction =='U':
             snake_box[0][0] = snake_box[1][0] 
