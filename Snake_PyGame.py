@@ -3,17 +3,25 @@ import random
 
 pygame.init()  
 
-# Game Window
+# define what size the gameboard will be
+cells_across = int(12)
+cell_size = int(50)
+cells_up = int(12)
 
-cells_across = 12
-cell_size = 50
-cells_up = 12
+Screen_Width = int(cell_size * cells_across)
+Screen_height = int(cell_size * cells_up)
 
-Screen_Width = cell_size * cells_across
-Screen_height = cell_size * cells_up
+display_info = pygame.display.Info()
 
-screen = pygame.display.set_mode((Screen_Width, Screen_height))
+Parent_height = max(Screen_height, display_info.current_h // 2)
+Parent_Width = max(Screen_Width, display_info.current_w // 2)
+Parent_Window = pygame.display.set_mode((Parent_Width, Parent_height), pygame.RESIZABLE) 
 pygame.display.set_caption('PyGame Snake')
+
+Screen_x = ((Parent_Width - Screen_Width) // 2)
+Screen_y = ((Parent_height - Screen_height) // 2)
+
+screen = pygame.Surface((Screen_Width, Screen_height))
 
 #variables
 
@@ -38,7 +46,8 @@ Slithertavel = 1000 / true_cps # Milliseconds between each snake movement
 Slithimer = 0 # Time since last snake movement
 
 
-bg_col = (0, 0, 0,)
+screen_bg_col = (0, 0, 0,)
+parent_bg_col = (30, 25 ,45)
 snake_skin = (255, 255, 255)
 snake_guts = (0, 0, 0)
 snake_head = (255, 255, 255)
@@ -54,8 +63,12 @@ snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 
 
 #functions
 
-def draw_screen():
-    screen.fill(bg_col)
+def clear_screen():
+    Parent_Window.fill(parent_bg_col)
+    Parent_Window.blit(screen, (Screen_x, Screen_y))
+
+    screen.fill(screen_bg_col)
+
 
 def is_snake_dead(game_over, autopsy):
     head_count = 0
@@ -69,17 +82,14 @@ def is_snake_dead(game_over, autopsy):
         game_over = True
         autopsy = 'OOB'
 
-    return game_over, autopsy
-
-
-    
+    return game_over, autopsy   
 
 #Game Loop
 
 run = True
 while run:
 
-    draw_screen()
+    clear_screen()
     dt = clock.tick(FPS)
     Slithimer += dt
 
@@ -103,6 +113,11 @@ while run:
                 direction = 'U'
             elif key[move_down_key] and direction != 'U':
                 direction = 'D'
+        elif event.type == pygame.VIDEORESIZE:
+            Parent_Width, Parent_height = event.size
+            Parent_Window = pygame.display.set_mode(event.size, pygame.RESIZABLE)
+            Screen_x = (Parent_Width - Screen_Width) // 2
+            Screen_y = (Parent_height - Screen_height) // 2
 
 #Cooking
     while hungry:
@@ -179,7 +194,7 @@ while run:
 )    
 
 
-
+    Parent_Window.blit(screen, (Screen_x, Screen_y))
     pygame.display.update()
 pygame.quit()
 
