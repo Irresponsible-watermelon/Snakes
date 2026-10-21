@@ -48,6 +48,8 @@ true_cps = base_cps #(For now, increasing true_cps over time or once an apple is
 Slithertavel = 1000 / true_cps # Milliseconds between each snake movement
 Slithimer = 0 # Time since last snake movement
 playing = True
+skin_sprited = False 
+apple_sprited = False
 
 #controls
 
@@ -68,6 +70,23 @@ mistakes_avoided = 0
 autopsy = ''
 max_cps = 0
 
+#sprites
+
+if skin_sprited:
+    snake_scales_png = 'temp.png'
+    snake_head_up_png = 'temp.png'
+    snake_head_down_png = 'temp.png'
+    snake_head_right_png = 'temp.png'
+    snake_head_left_png = 'temp.png'
+    snake_scales = pygame.transform.smoothscale((pygame.image.load(snake_scales_png).convert_alpha()), (cell_size, cell_size))
+    snake_head_up = pygame.transform.smoothscale((pygame.image.load(snake_head_up_png).convert_alpha()), (cell_size, cell_size))
+    snake_head_down = pygame.transform.smoothscale((pygame.image.load(snake_head_down_png).convert_alpha()), (cell_size, cell_size))
+    snake_head_right = pygame.transform.smoothscale((pygame.image.load(snake_head_right_png).convert_alpha()), (cell_size, cell_size))
+    snake_head_left = pygame.transform.smoothscale((pygame.image.load(snake_head_left_png).convert_alpha()), (cell_size, cell_size))
+
+if apple_sprited:
+    Apple_spr_png = 'temp.png'
+    Apple_spr = pygame.transform.smoothscale((pygame.image.load(Apple_spr_png).convert_alpha()), (cell_size, cell_size))
 
 #snake
 snake_box = [[int(Screen_Width / 2), int(Screen_height / 2)]]
@@ -180,30 +199,46 @@ while run:
         #Snake
         head = True
         for x in snake_box:
-            if not head: 
-                pygame.draw.rect(
-                    screen, snake_skin,
-                    (x[0], x[1], cell_size, cell_size)
-                )
-                pygame.draw.rect(
-                    screen, snake_guts,
-                    (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
-                )
-            if head:
-                pygame.draw.rect(
-                    screen, snake_skin,
-                    (x[0], x[1], cell_size, cell_size)
-                )
-                pygame.draw.rect(
-                    screen, snake_head,
-                    (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
-                )
-                head = False
+            if skin_sprited:
+                if not head:
+                    screen.blit(snake_scales, x)
+                if head:
+                    head = False
+                    if direction == 'U':
+                        screen.blit(snake_head_up, x)
+                    elif direction == 'D':
+                        screen.blit(snake_head_down, x)
+                    elif direction == 'L':
+                        screen.blit(snake_head_left, x)
+                    elif direction == 'R':
+                        screen.blit(snake_head_right, x)
+            else:
+                if not head: 
+                    pygame.draw.rect(
+                        screen, snake_skin,
+                        (x[0], x[1], cell_size, cell_size)
+                    )
+                    pygame.draw.rect(
+                        screen, snake_guts,
+                        (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
+                    )
+                if head:
+                    pygame.draw.rect(
+                        screen, snake_skin,
+                        (x[0], x[1], cell_size, cell_size)
+                    )
+                    pygame.draw.rect(
+                        screen, snake_head,
+                        (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
+                    )
+                    head = False
         #Apple
+        if apple_sprited:
+            screen.blit(Apple_spr, (Apple[0], Apple[1]))
         pygame.draw.rect(
     screen, Apple_variety,
     (Apple[0], Apple[1], cell_size, cell_size)
-)    
+    )    
 
     draw_changes()
 
