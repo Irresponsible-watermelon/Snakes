@@ -11,24 +11,27 @@ cells_up = int(12)
 Screen_Width = int(cell_size * cells_across)
 Screen_height = int(cell_size * cells_up)
 
+# decide what size window will be
+
 display_info = pygame.display.Info()
 
 Parent_height = max(Screen_height, display_info.current_h // 2)
 Parent_Width = max(Screen_Width, display_info.current_w // 2)
-Parent_Window = pygame.display.set_mode((Parent_Width, Parent_height), pygame.RESIZABLE) 
+
+# Draw & name window
+Parent_Window = pygame.display.set_mode((Parent_Width, Parent_height), pygame.RESIZABLE)
 pygame.display.set_caption('PyGame Snake')
+
+# Position gameboard in centre of window
 
 Screen_x = ((Parent_Width - Screen_Width) // 2)
 Screen_y = ((Parent_height - Screen_height) // 2)
-
 screen = pygame.Surface((Screen_Width, Screen_height))
 
 #variables
-
+#actually very important for things to work
 
 direction = 'U' # UDLR, Up Down Left Right
-update_snake = 0
-loop_cap = 399
 hungry = True
 Apple = [0, 0]
 PotApple = [0, 0]
@@ -44,7 +47,16 @@ cps_inc = 1 #How much cps is increased every time an apple is eaten
 true_cps = base_cps #(For now, increasing true_cps over time or once an apple is eaten could be interesting)
 Slithertavel = 1000 / true_cps # Milliseconds between each snake movement
 Slithimer = 0 # Time since last snake movement
+playing = True
 
+#controls
+
+move_left_key = pygame.K_a
+move_right_key = pygame.K_d
+move_down_key = pygame.K_s
+move_up_key = pygame.K_w
+
+#cosmetic & stats
 
 screen_bg_col = (0, 0, 0,)
 parent_bg_col = (30, 25 ,45)
@@ -54,6 +66,7 @@ snake_head = (255, 255, 255)
 Apple_variety = (51, 204, 51)
 mistakes_avoided = 0
 autopsy = ''
+max_cps = 0
 
 
 #snake
@@ -65,10 +78,7 @@ snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 
 
 def clear_screen():
     Parent_Window.fill(parent_bg_col)
-    Parent_Window.blit(screen, (Screen_x, Screen_y))
-
     screen.fill(screen_bg_col)
-
 
 def is_snake_dead(game_over, autopsy):
     head_count = 0
@@ -84,20 +94,16 @@ def is_snake_dead(game_over, autopsy):
 
     return game_over, autopsy   
 
+def draw_changes():
+    Parent_Window.blit(screen, (Screen_x, Screen_y))
+    pygame.display.update()
+
 #Game Loop
 
 run = True
 while run:
 
     clear_screen()
-    dt = clock.tick(FPS)
-    Slithimer += dt
-
-
-    move_left_key = pygame.K_a
-    move_right_key = pygame.K_d
-    move_down_key = pygame.K_s
-    move_up_key = pygame.K_w
 
 #Event Handler    
     for event in pygame.event.get():
@@ -119,88 +125,91 @@ while run:
             Screen_x = (Parent_Width - Screen_Width) // 2
             Screen_y = (Parent_height - Screen_height) // 2
 
-#Cooking
-    while hungry:
+#Game window actions
+    if playing:
+        dt = clock.tick(FPS) #ms since last tick(frame)
+        Slithimer += dt #ms since last slither 
 
-        AppInSnake = False
-        PotApple[0] = cell_size * (random.randint(0, int((Screen_Width / cell_size) - 1)))
-        PotApple[1] = cell_size * (random.randint(0, int((Screen_height / cell_size) - 1)))
+    #Cooking
+        while hungry:
 
-        #IsAppleInSnake?
-        if any(segment == PotApple for segment in snake_box):
-            AppInSnake = True
-            mistakes_avoided += 1
+            AppInSnake = False
+            PotApple[0] = cell_size * (random.randint(0, int((Screen_Width / cell_size) - 1)))
+            PotApple[1] = cell_size * (random.randint(0, int((Screen_height / cell_size) - 1)))
 
-        if AppInSnake:
-            continue
-        else:
-            Apple = PotApple
-            hungry = False
-            break
+            #IsAppleInSnake?
+            if any(segment == PotApple for segment in snake_box):
+                AppInSnake = True
+                mistakes_avoided += 1
 
-#IsFoodEaten?
-    if snake_box[0] == Apple:
-        hungry = True
-        snake_box.append(tail)
-        true_cps += cps_inc
-    
+            if AppInSnake:
+                continue
+            else:
+                Apple = PotApple
+                hungry = False
+                break
+
+    #IsFoodEaten?
+        if snake_box[0] == Apple:
+            hungry = True
+            snake_box.append(tail)
+            true_cps += cps_inc
+            max_cps = true_cps - cps_inc
         
-#slithering
-    if not game_over:
-        if Slithimer>= Slithertavel :
-            Slithimer -= Slithertavel
-            snake_box = snake_box[ -1:] + snake_box[:-1]
-            if direction =='U':
-                snake_box[0][0] = snake_box[1][0] 
-                snake_box[0][1] = snake_box[1][1] - cell_size
-            if direction == 'L':
-                snake_box[0][0] = snake_box[1][0] - cell_size
-                snake_box[0][1] = snake_box[1][1]
-            if direction == 'R':
-                snake_box[0][0] = snake_box[1][0] + cell_size
-                snake_box[0][1] = snake_box[1][1]
-            if direction == 'D':
-                snake_box[0][0] = snake_box[1][0]
-                snake_box[0][1] = snake_box[1][1] + cell_size
-            tail = list(snake_box[-1])
-            game_over, autopsy = is_snake_dead(game_over, autopsy)
-#drawing
-    #Snake
-    head = True
-    for x in snake_box:
-        if not head: 
-            pygame.draw.rect(
-                screen, snake_skin,
-                (x[0], x[1], cell_size, cell_size)
-            )
-            pygame.draw.rect(
-                screen, snake_guts,
-                (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
-            )
-        if head:
-            pygame.draw.rect(
-                screen, snake_skin,
-                (x[0], x[1], cell_size, cell_size)
-            )
-            pygame.draw.rect(
-                screen, snake_head,
-                (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
-            )
-            head = False
-    #Apple
-    pygame.draw.rect(
+            
+    #slithering
+        if not game_over:
+            if Slithimer>= Slithertavel :
+                Slithimer -= Slithertavel
+                snake_box = snake_box[ -1:] + snake_box[:-1]
+                if direction =='U':
+                    snake_box[0][0] = snake_box[1][0] 
+                    snake_box[0][1] = snake_box[1][1] - cell_size
+                if direction == 'L':
+                    snake_box[0][0] = snake_box[1][0] - cell_size
+                    snake_box[0][1] = snake_box[1][1]
+                if direction == 'R':
+                    snake_box[0][0] = snake_box[1][0] + cell_size
+                    snake_box[0][1] = snake_box[1][1]
+                if direction == 'D':
+                    snake_box[0][0] = snake_box[1][0]
+                    snake_box[0][1] = snake_box[1][1] + cell_size
+                tail = list(snake_box[-1])
+                game_over, autopsy = is_snake_dead(game_over, autopsy)
+    #drawing
+        #Snake
+        head = True
+        for x in snake_box:
+            if not head: 
+                pygame.draw.rect(
+                    screen, snake_skin,
+                    (x[0], x[1], cell_size, cell_size)
+                )
+                pygame.draw.rect(
+                    screen, snake_guts,
+                    (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
+                )
+            if head:
+                pygame.draw.rect(
+                    screen, snake_skin,
+                    (x[0], x[1], cell_size, cell_size)
+                )
+                pygame.draw.rect(
+                    screen, snake_head,
+                    (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
+                )
+                head = False
+        #Apple
+        pygame.draw.rect(
     screen, Apple_variety,
     (Apple[0], Apple[1], cell_size, cell_size)
 )    
 
+    draw_changes()
 
-    Parent_Window.blit(screen, (Screen_x, Screen_y))
-    pygame.display.update()
 pygame.quit()
 
-#stats
-max_cps = true_cps - cps_inc # max cps player reached before dying 
-
+#debug/reporting
 
 print(mistakes_avoided, "","mistakes avoided")
 print(game_over, "","= game_over")
