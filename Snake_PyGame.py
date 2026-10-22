@@ -54,6 +54,7 @@ apple_sprite_folder = "Apple sprites"
 Snake_head_folder = "Snake head sprites"
 body_sprite_folder = "Snake body sprites"
 
+
 #controls
 
 move_left_key = pygame.K_a
@@ -104,24 +105,24 @@ def asset_selector(asset_subfolder, fileroot):
     if asset_subfolder == Snake_head_folder:
         head_paths = [str(Path(__file__).resolve().parent
                         / "Assets"
-                        / str(asset_type)
+                        / str(asset_subfolder)
                         / str(fileroot)
-                        / "Up"),
+                        / "Up.png"),
                     str(Path(__file__).resolve().parent
                             / "Assets"
-                            / str(asset_type)
+                            / str(asset_subfolder)
                             / str(fileroot)
-                            / "Down"),
+                            / "Down.png"),
                     str(Path(__file__).resolve().parent
-                            / "Assets"
-                            / str(asset_type)
+                            / "Assets.png"
+                            / str(asset_subfolder)
                             / str(fileroot)
-                            / "Left"), 
+                            / "Left.png"), 
                     str(Path(__file__).resolve().parent
-                            / "Assets"
-                            / str(asset_type)
+                            / "Assets.png"
+                            / str(asset_subfolder)
                             / str(fileroot)
-                            / "Right"), 
+                            / "Right.png"), 
                         ]
         return head_paths
     else:
@@ -136,7 +137,8 @@ def asset_selector(asset_subfolder, fileroot):
 
 if skin_sprited:
     snake_head_root = '/temp/'
-    snake_scales_png = asset_selector(body_sprite_folder, "temp.png")
+    body_sprite = 'temp.png'
+    snake_scales_png = asset_selector(body_sprite_folder, body_sprite)
     snake_head_up_png = (asset_selector(Snake_head_folder,snake_head_root)[0])
     snake_head_down_png = (asset_selector(Snake_head_folder,snake_head_root)[1])
     snake_head_left_png = (asset_selector(Snake_head_folder,snake_head_root)[2])
