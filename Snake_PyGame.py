@@ -1,4 +1,5 @@
 import pygame
+import pygame.freetype
 import random
 from pathlib import Path
 pygame.init()  
@@ -35,6 +36,7 @@ direction = 'U' # UDLR, Up Down Left Right
 hungry = True
 Apple = [0, 0]
 PotApple = [0, 0]
+click_coords = [0, 0]
 shed = False
 game_over = False
 head_count = 0
@@ -53,6 +55,12 @@ apple_sprited = True
 apple_sprite_folder = "Apple sprites"
 Snake_head_folder = "Snake head sprites"
 body_sprite_folder = "Snake body sprites"
+font_folder = "opendyslexic-0.92"
+pause_menu = False
+
+#menus
+
+pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
 
 
 #controls
@@ -66,10 +74,13 @@ move_up_key = pygame.K_w
 
 screen_bg_col = (0, 0, 0,)
 parent_bg_col = (30, 25 ,45)
+button_col = (128, 128, 128, 216)
+button_border = (255, 255, 255, 216)
 snake_skin = (255, 255, 255)
 snake_guts = (0, 0, 0)
 snake_head = (255, 255, 255)
 Apple_variety = (51, 204, 51)
+Greyout_col = (128, 128, 128, 128) #(R, G, B, A), where A = 0 is fully transparent and A = 255 is fully opaque
 mistakes_avoided = 0
 autopsy = ''
 max_cps = 0
@@ -97,6 +108,23 @@ def is_snake_dead(game_over, autopsy):
 def draw_changes():
     Parent_Window.blit(screen, (Screen_x, Screen_y))
     pygame.display.update()
+
+def on_esc_pressed():
+    if playing:
+        playing == False
+        pause_menu == True
+    elif not playing:
+        playing == True
+        pause_menu == False
+
+def draw_pause():
+    pygame.draw.rect(pause_menu, Greyout_col, (0, 0,))
+    options_button()
+    Parent_Window.blit(pause_screen(0,0))
+
+def on_game_over():
+    pass
+
 
 # if asset type not head, outputs file path.
 # if asset type head, outputs list, with filepaths for each directional sprite, ordered UDLR. Requires head sprites to have following path: /Assets/Snake head sprites/[folder name = fileroot]/[Up/Down/Left/Right]
@@ -132,6 +160,67 @@ def asset_selector(asset_subfolder, fileroot):
             / str(fileroot)
             )
         return abs_path
+
+def click_handler(click_coords):
+    x = click_coords[0]
+    y = click_coords[1]
+    if options_btn.rect.collidepoint(click_coords) and pause_menu == True:
+        options_btn.onClickFunction
+         
+def options_press():
+    pass
+def options_button():
+    global options_btn
+    options_btn = button(
+        Parent_Width // 2, Parent_height // 3,
+        pause_screen, button_border,
+        "Options", options_press
+    )
+    options_btn.draw()
+
+# Variables reliant on functions
+
+button_font = pygame.freetype.Font(asset_selector(font_folder,"OpenDyslexic-Regular.otf"))
+
+#classes
+
+class button:
+    def __init__(self, xcp, ycp, Button_Surface, txt_col, ButtonText='button', onClickFunction=None):
+        self.x = xcp
+        self.y = ycp
+        self.onClickFunction = onClickFunction
+        self.alreadypressed = False
+        self.bg_col = button_col
+        self.border_col = button_border
+        self.ButtonText = ButtonText
+        self.button_surface = Button_Surface
+        self.txt_col = txt_col
+        self.padding_x = 10
+        self.padding_y = 10
+
+    def draw(self):
+        font_rect = button_font.get_rect(self.ButtonText)
+        self.width = font_rect.width + self.padding_x
+        self.height = font_rect.height + self.padding_y
+        temp_rect = pygame.rect(0, 0, self.width, self.height)
+        temp_rect.center = (self.x, self.y)
+        temp_surface = pygame.Surface(temp_rect.size)
+        pygame.draw.rect(temp_surface, self.border_col,(0, 0, self.width, self.height,))
+        pygame.draw.rect(temp_surface,self.bg_col,(0 + 2, 0 + 2, self.width - 4, self.height- 4,))
+        text_box = button_font.get_rect(self.ButtonText)
+        text_box.center = (temp_surface.get_rect().center)
+        button_font.render_to(
+            temp_surface,
+            text_box,
+            self.ButtonText,
+            fgcolor= self.txt_col
+        )
+        
+        self.button_surface.blit(temp_surface, temp_rect.topleft)
+
+
+
+
 
 #sprites
 
@@ -181,11 +270,18 @@ while run:
                 direction = 'U'
             elif key[move_down_key] and direction != 'U':
                 direction = 'D'
+            elif key == pygame.K_ESCAPE:
+                on_esc_pressed()
         elif event.type == pygame.VIDEORESIZE:
             Parent_Width, Parent_height = event.size
             Parent_Window = pygame.display.set_mode(event.size, pygame.RESIZABLE)
             Screen_x = (Parent_Width - Screen_Width) // 2
             Screen_y = (Parent_height - Screen_height) // 2
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            click_coords[0], click_coords[1] = event.pos
+            click_handler(click_coords) # x, y list
+
+
 
 #Game window actions
     if playing:
@@ -284,7 +380,12 @@ while run:
         (Apple[0], Apple[1], cell_size, cell_size)
         )    
 
+    if pause_menu:
+        draw_pause()
     draw_changes()
+
+    if game_over:
+        on_game_over()
 
 pygame.quit()
 
