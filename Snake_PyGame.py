@@ -52,6 +52,7 @@ skin_sprited = False
 apple_sprited = True
 apple_sprite_folder = "Apple sprites"
 Snake_head_folder = "Snake head sprites"
+body_sprite_folder = "Snake body sprites"
 
 #controls
 
@@ -99,8 +100,8 @@ def draw_changes():
 # if asset type not head, outputs file path.
 # if asset type head, outputs list, with filepaths for each directional sprite, ordered UDLR. Requires head sprites to have following path: /Assets/Snake head sprites/[folder name = fileroot]/[Up/Down/Left/Right]
 
-def asset_selector(asset_type, fileroot):
-    if asset_type == Snake_head_folder:
+def asset_selector(asset_subfolder, fileroot):
+    if asset_subfolder == Snake_head_folder:
         head_paths = [str(Path(__file__).resolve().parent
                         / "Assets"
                         / str(asset_type)
@@ -126,7 +127,7 @@ def asset_selector(asset_type, fileroot):
     else:
         abs_path = str(Path(__file__).resolve().parent
             / "Assets"
-            / str(asset_type)
+            / str(asset_subfolder)
             / str(fileroot)
             )
         return abs_path
@@ -134,11 +135,12 @@ def asset_selector(asset_type, fileroot):
 #sprites
 
 if skin_sprited:
-    snake_scales_png = 'temp.png'
-    snake_head_up_png = 'temp.png'
-    snake_head_down_png = 'temp.png'
-    snake_head_right_png = 'temp.png'
-    snake_head_left_png = 'temp.png'
+    snake_head_root = '/temp/'
+    snake_scales_png = asset_selector(body_sprite_folder, "temp.png")
+    snake_head_up_png = (asset_selector(Snake_head_folder,snake_head_root)[0])
+    snake_head_down_png = (asset_selector(Snake_head_folder,snake_head_root)[1])
+    snake_head_left_png = (asset_selector(Snake_head_folder,snake_head_root)[2])
+    snake_head_right_png = (asset_selector(Snake_head_folder,snake_head_root)[3])
     snake_scales = pygame.transform.smoothscale((pygame.image.load(snake_scales_png).convert_alpha()), (cell_size, cell_size))
     snake_head_up = pygame.transform.smoothscale((pygame.image.load(snake_head_up_png).convert_alpha()), (cell_size, cell_size))
     snake_head_down = pygame.transform.smoothscale((pygame.image.load(snake_head_down_png).convert_alpha()), (cell_size, cell_size))
@@ -274,10 +276,11 @@ while run:
         #Apple
         if apple_sprited:
             screen.blit(Apple_spr, (Apple[0], Apple[1]))
-        pygame.draw.rect(
-    screen, Apple_variety,
-    (Apple[0], Apple[1], cell_size, cell_size)
-    )    
+        else:
+            pygame.draw.rect(
+        screen, Apple_variety,
+        (Apple[0], Apple[1], cell_size, cell_size)
+        )    
 
     draw_changes()
 
