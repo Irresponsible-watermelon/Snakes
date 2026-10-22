@@ -48,7 +48,7 @@ true_cps = base_cps #(For now, increasing true_cps over time or once an apple is
 Slithertavel = 1000 / true_cps # Milliseconds between each snake movement
 Slithimer = 0 # Time since last snake movement
 playing = True
-skin_sprited = False 
+skin_sprited = True
 apple_sprited = True
 apple_sprite_folder = "Apple sprites"
 Snake_head_folder = "Snake head sprites"
@@ -114,12 +114,12 @@ def asset_selector(asset_subfolder, fileroot):
                             / str(fileroot)
                             / "Down.png"),
                     str(Path(__file__).resolve().parent
-                            / "Assets.png"
+                            / "Assets"
                             / str(asset_subfolder)
                             / str(fileroot)
                             / "Left.png"), 
                     str(Path(__file__).resolve().parent
-                            / "Assets.png"
+                            / "Assets"
                             / str(asset_subfolder)
                             / str(fileroot)
                             / "Right.png"), 
@@ -136,8 +136,8 @@ def asset_selector(asset_subfolder, fileroot):
 #sprites
 
 if skin_sprited:
-    snake_head_root = '/temp/'
-    body_sprite = 'temp.png'
+    snake_head_root = 'My_Snake_1_heads'
+    body_sprite = 'My Snake 1 Body.png'
     snake_scales_png = asset_selector(body_sprite_folder, body_sprite)
     snake_head_up_png = (asset_selector(Snake_head_folder,snake_head_root)[0])
     snake_head_down_png = (asset_selector(Snake_head_folder,snake_head_root)[1])
