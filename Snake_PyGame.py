@@ -57,6 +57,8 @@ Snake_head_folder = "Snake head sprites"
 body_sprite_folder = "Snake body sprites"
 font_folder = "opendyslexic-0.92"
 pause_menu = False
+playing = True
+options = False
 
 #menus
 
@@ -110,21 +112,22 @@ def draw_changes():
     pygame.display.update()
 
 def on_esc_pressed():
+    global playing, pause_menu
+
     if playing:
-        playing == False
-        pause_menu == True
+        playing = False
+        pause_menu = True
     elif not playing:
-        playing == True
-        pause_menu == False
+        playing = True
+        pause_menu = False
 
 def draw_pause():
-    pygame.draw.rect(pause_menu, Greyout_col, (0, 0,))
+    pause_screen.fill(Greyout_col)
     options_button()
     Parent_Window.blit(pause_screen(0,0))
 
 def on_game_over():
     pass
-
 
 # if asset type not head, outputs file path.
 # if asset type head, outputs list, with filepaths for each directional sprite, ordered UDLR. Requires head sprites to have following path: /Assets/Snake head sprites/[folder name = fileroot]/[Up/Down/Left/Right]
@@ -164,11 +167,16 @@ def asset_selector(asset_subfolder, fileroot):
 def click_handler(click_coords):
     x = click_coords[0]
     y = click_coords[1]
-    if options_btn.rect.collidepoint(click_coords) and pause_menu == True:
-        options_btn.onClickFunction
+    if options_btn.temp_rect.collidepoint(click_coords) and pause_menu == True:
+        options_btn.onClickFunction()
          
 def options_press():
-    pass
+    global options
+    if options == False:
+        options = True
+    if options == True:
+        options == False
+
 def options_button():
     global options_btn
     options_btn = button(
@@ -177,6 +185,9 @@ def options_button():
         "Options", options_press
     )
     options_btn.draw()
+
+def draw_options():
+    pass
 
 # Variables reliant on functions
 
@@ -202,11 +213,11 @@ class button:
         font_rect = button_font.get_rect(self.ButtonText)
         self.width = font_rect.width + self.padding_x
         self.height = font_rect.height + self.padding_y
-        temp_rect = pygame.rect(0, 0, self.width, self.height)
-        temp_rect.center = (self.x, self.y)
-        temp_surface = pygame.Surface(temp_rect.size)
-        pygame.draw.rect(temp_surface, self.border_col,(0, 0, self.width, self.height,))
-        pygame.draw.rect(temp_surface,self.bg_col,(0 + 2, 0 + 2, self.width - 4, self.height- 4,))
+        self.temp_rect = pygame.rect(0, 0, self.width, self.height)
+        self.temp_rect.center = (self.x, self.y)
+        temp_surface = pygame.Surface(self.temp_rect.size)
+        pygame.draw.rect(temp_surface, self.border_col,(0, 0, self.width, self.height,), 0, 1)
+        pygame.draw.rect(temp_surface,self.bg_col,(0 + 2, 0 + 2, self.width - 4, self.height- 4,), 0, 1)
         text_box = button_font.get_rect(self.ButtonText)
         text_box.center = (temp_surface.get_rect().center)
         button_font.render_to(
@@ -216,7 +227,7 @@ class button:
             fgcolor= self.txt_col
         )
         
-        self.button_surface.blit(temp_surface, temp_rect.topleft)
+        self.button_surface.blit(temp_surface, self.temp_rect.topleft)
 
 
 
@@ -281,6 +292,10 @@ while run:
             click_coords[0], click_coords[1] = event.pos
             click_handler(click_coords) # x, y list
 
+
+#options menu
+    while options:
+        pass
 
 
 #Game window actions
