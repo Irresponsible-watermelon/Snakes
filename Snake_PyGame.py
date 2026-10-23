@@ -1,6 +1,7 @@
 import pygame
 import pygame.freetype
 import random
+import pygame_gui
 from pathlib import Path
 pygame.init()  
 
@@ -59,10 +60,24 @@ font_folder = "opendyslexic-0.92"
 pause_menu = False
 playing = True
 options = False
+open_dialogue = None
 
 #menus
 
 pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
+gameover_screen =  pygame.Surface((Parent_Width, Parent_height))
+start_screen = pygame.Surface((Parent_Width, Parent_height))
+
+options_width = ((Parent_Width * 2) // 3)
+options_height = ((Parent_height * 2) // 3)
+options_x = (Parent_Width - options_width) // 2
+options_y = (Parent_height - options_height) // 2 
+
+options_screen = pygame.Surface((options_width, options_height))
+
+apple_dialog = None
+selected_apple = None
+selected_apple_path = None
 
 
 #controls
@@ -87,8 +102,10 @@ mistakes_avoided = 0
 autopsy = ''
 max_cps = 0
 
+
 #functions
 
+# High level functions
 def clear_screen():
     Parent_Window.fill(parent_bg_col)
     screen.fill(screen_bg_col)
@@ -107,31 +124,37 @@ def is_snake_dead(game_over, autopsy):
 
     return game_over, autopsy   
 
-def draw_changes():
+def draw_gameboard():
     Parent_Window.blit(screen, (Screen_x, Screen_y))
-    pygame.display.update()
-
-def on_esc_pressed():
-    global playing, pause_menu
-
-    if playing:
-        playing = False
-        pause_menu = True
-    elif not playing:
-        playing = True
-        pause_menu = False
-
-def draw_pause():
-    pause_screen.fill(Greyout_col)
-    options_button()
-    Parent_Window.blit(pause_screen(0,0))
 
 def on_game_over():
     pass
 
-# if asset type not head, outputs file path.
-# if asset type head, outputs list, with filepaths for each directional sprite, ordered UDLR. Requires head sprites to have following path: /Assets/Snake head sprites/[folder name = fileroot]/[Up/Down/Left/Right]
+def on_resize(Parent_Width, Parent_height):
+    global Parent_Window, Screen_x, Screen_y, options_width, options_height, options_x, options_y, options_screen, pause_screen, gameover_screen, start_screen, Manager
 
+    # Parent & screen resize
+
+    Parent_Window = pygame.display.set_mode(event.size, pygame.RESIZABLE)
+    Screen_x = (Parent_Width - Screen_Width) // 2
+    Screen_y = (Parent_height - Screen_height) // 2
+
+    #options resize
+
+    options_width = ((Parent_Width * 2) // 3)
+    options_height = ((Parent_height * 2) // 3)
+    options_x = (Parent_Width - options_width) // 2
+    options_y = (Parent_height - options_height) // 2
+
+    options_screen = pygame.Surface((options_width, options_height))
+
+    #other menus resize
+    pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
+    gameover_screen =  pygame.Surface((Parent_Width, Parent_height))
+    start_screen = pygame.Surface((Parent_Width, Parent_height))
+
+    #update pygame
+    update_Manager()
 def asset_selector(asset_subfolder, fileroot):
     if asset_subfolder == Snake_head_folder:
         head_paths = [str(Path(__file__).resolve().parent
@@ -164,34 +187,46 @@ def asset_selector(asset_subfolder, fileroot):
             )
         return abs_path
 
-def click_handler(click_coords):
-    x = click_coords[0]
-    y = click_coords[1]
-    if options_btn.temp_rect.collidepoint(click_coords) and pause_menu == True:
-        options_btn.onClickFunction()
+# if asset type not head, outputs file path.
+    # if asset type head, outputs list, with filepaths for each directional sprite, ordered UDLR. Requires head sprites to have following path: /Assets/Snake head sprites/[folder name = fileroot]/[Up/Down/Left/Right]
+
+# pause_manager
+
+def on_esc_pressed():
+    global playing, pause_menu, options
+
+    if playing:
+        playing = False
+        pause_menu = True
+    elif not playing:
+        playing = True
+        pause_menu = False
+        options =  False
+
+def draw_pause():
+    pause_screen.fill(Greyout_col)
+    draw_options_btn()
+    Parent_Window.blit(pause_screen, (0,0))
+
+# options
          
 def options_press():
     global options
     if options == False:
         options = True
-    if options == True:
-        options == False
+    else:
+        options = False
 
-def options_button():
-    global options_btn
-    options_btn = button(
-        Parent_Width // 2, Parent_height // 3,
-        pause_screen, button_border,
-        "Options", options_press
-    )
+
+def draw_options_btn():
     options_btn.draw()
 
-def draw_options():
-    pass
+def draw_options_menu():
+    Parent_Window.blit(options_screen, (options_x, options_y))
 
 # Variables reliant on functions
 
-button_font = pygame.freetype.Font(asset_selector(font_folder,"OpenDyslexic-Regular.otf"))
+button_font = pygame.freetype.Font(asset_selector(font_folder,"OpenDyslexic-Regular.otf"), 6)
 
 #classes
 
@@ -213,7 +248,7 @@ class button:
         font_rect = button_font.get_rect(self.ButtonText)
         self.width = font_rect.width + self.padding_x
         self.height = font_rect.height + self.padding_y
-        self.temp_rect = pygame.rect(0, 0, self.width, self.height)
+        self.temp_rect = pygame.Rect(0, 0, self.width, self.height)
         self.temp_rect.center = (self.x, self.y)
         temp_surface = pygame.Surface(self.temp_rect.size)
         pygame.draw.rect(temp_surface, self.border_col,(0, 0, self.width, self.height,), 0, 1)
@@ -229,9 +264,12 @@ class button:
         
         self.button_surface.blit(temp_surface, self.temp_rect.topleft)
 
-
-
-
+#Buttons
+options_btn = button(
+        Parent_Width // 2, Parent_height // 3,
+        pause_screen, button_border,
+        "Options", options_press
+    )
 
 #sprites
 
@@ -250,21 +288,60 @@ if skin_sprited:
     snake_head_left = pygame.transform.smoothscale((pygame.image.load(snake_head_left_png).convert_alpha()), (cell_size, cell_size))
 
 if apple_sprited:
-    Apple_selected = "Green Apple 50x50 pxlart.png"
-    Apple_spr_png = asset_selector(apple_sprite_folder, Apple_selected)
-    Apple_spr = pygame.transform.smoothscale((pygame.image.load(Apple_spr_png).convert_alpha()), (cell_size, cell_size))
+    default_apple = "Green Apple 50x50 pxlart.png"
+    Apple_def_png = asset_selector(apple_sprite_folder, default_apple)
+    selected_apple = pygame.transform.smoothscale((pygame.image.load(Apple_def_png).convert_alpha()), (cell_size, cell_size))
 
 #snake
 snake_box = [[int(Screen_Width / 2), int(Screen_height / 2)]]
 snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + cell_size)])
 snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 2))])
 
+#pygui
+def update_Manager():
+    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path
+    Manager = pygame_gui.UIManager((Parent_Width, Parent_Width))
+
+    apple_input = pygame_gui.elements.UIButton(
+        (30, 30, 180, 40),
+        "Choose an apple sprite...",
+        Manager
+    )
+update_Manager()
+
+def pygame_gui_event_handler(event):
+    global apple_dialog, open_dialogue, selected_apple_path, selected_apple
+
+    if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == apple_input:
+        apple_dialog = pygame_gui.windows.ui_file_dialog(
+            rect = pygame.rect(100, 80, 600, 450),
+            manager = Manager,
+            window_title = "select a sprite",
+            allowed_suffixes = {".png"},
+            initial_file_path=str(Path(__file__).resolve().parent / "Assets" / apple_sprite_folder),
+            allow_existing_files_only = True
+        )
+        open_dialogue = 'apple'
+    if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
+        if open_dialogue == 'apple':
+            selected_apple_path = event.text
+            selected_apple = pygame.transform.smoothscale((pygame.image.load(selected_apple_path).convert_alpha()), (cell_size, cell_size))
+
+def click_handler(event):
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if options:
+            Manager.process_events(event)
+            pygame_gui_event_handler(event)
+            
+        if pause_menu and not options and options_btn.temp_rect.collidepoint(event.pos):
+            options_btn.onClickFunction()
+
 
 #Game Loop
 
 run = True
 while run:
-
+    dt = clock.tick(FPS) #ms since last tick(frame)
     clear_screen()
 
 #Event Handler    
@@ -273,34 +350,33 @@ while run:
             run = False
         elif event.type == pygame.KEYDOWN:
             key = pygame.key.get_pressed()
-            if key[move_left_key] and direction != 'R':
-                direction = 'L'
-            elif key[move_right_key] and direction != 'L':
-                direction = 'R'
-            elif key[move_up_key] and direction != 'D':
-                direction = 'U'
-            elif key[move_down_key] and direction != 'U':
-                direction = 'D'
-            elif key == pygame.K_ESCAPE:
+            if playing:
+                if key[move_left_key] and direction != 'R':
+                    direction = 'L'
+                elif key[move_right_key] and direction != 'L':
+                    direction = 'R'
+                elif key[move_up_key] and direction != 'D':
+                    direction = 'U'
+                elif key[move_down_key] and direction != 'U':
+                    direction = 'D'
+            if event.key == pygame.K_ESCAPE:
                 on_esc_pressed()
         elif event.type == pygame.VIDEORESIZE:
             Parent_Width, Parent_height = event.size
-            Parent_Window = pygame.display.set_mode(event.size, pygame.RESIZABLE)
-            Screen_x = (Parent_Width - Screen_Width) // 2
-            Screen_y = (Parent_height - Screen_height) // 2
+            on_resize(Parent_Width, Parent_height)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click_coords[0], click_coords[1] = event.pos
-            click_handler(click_coords) # x, y list
+            click_handler(event) # x, y list
+        if not event.type == pygame.MOUSEBUTTONDOWN and options:
+            Manager.process_events(event)
+            pygame_gui_event_handler(event)
+                
 
 
-#options menu
-    while options:
-        pass
 
 
 #Game window actions
     if playing:
-        dt = clock.tick(FPS) #ms since last tick(frame)
         Slithimer += dt #ms since last slither 
 
     #Cooking
@@ -330,8 +406,8 @@ while run:
             max_cps = true_cps - cps_inc
         
             
-    #slithering
-        if not game_over:
+#slithering
+    if not game_over:
             if Slithimer>= Slithertavel :
                 Slithimer -= Slithertavel
                 snake_box = snake_box[ -1:] + snake_box[:-1]
@@ -349,59 +425,65 @@ while run:
                     snake_box[0][1] = snake_box[1][1] + cell_size
                 tail = list(snake_box[-1])
                 game_over, autopsy = is_snake_dead(game_over, autopsy)
-    #drawing
-        #Snake
-        head = True
-        for x in snake_box:
-            if skin_sprited:
-                if not head:
-                    screen.blit(snake_scales, x)
-                if head:
-                    head = False
-                    if direction == 'U':
-                        screen.blit(snake_head_up, x)
-                    elif direction == 'D':
-                        screen.blit(snake_head_down, x)
-                    elif direction == 'L':
-                        screen.blit(snake_head_left, x)
-                    elif direction == 'R':
-                        screen.blit(snake_head_right, x)
-            else:
-                if not head: 
-                    pygame.draw.rect(
-                        screen, snake_skin,
-                        (x[0], x[1], cell_size, cell_size)
-                    )
-                    pygame.draw.rect(
-                        screen, snake_guts,
-                        (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
-                    )
-                if head:
-                    pygame.draw.rect(
-                        screen, snake_skin,
-                        (x[0], x[1], cell_size, cell_size)
-                    )
-                    pygame.draw.rect(
-                        screen, snake_head,
-                        (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
-                    )
-                    head = False
-        #Apple
-        if apple_sprited:
-            screen.blit(Apple_spr, (Apple[0], Apple[1]))
+   
+#drawing
+    #Snake
+    head = True
+    for x in snake_box:
+        if skin_sprited:
+            if not head:
+                screen.blit(snake_scales, x)
+            if head:
+                head = False
+                if direction == 'U':
+                    screen.blit(snake_head_up, x)
+                elif direction == 'D':
+                    screen.blit(snake_head_down, x)
+                elif direction == 'L':
+                    screen.blit(snake_head_left, x)
+                elif direction == 'R':
+                    screen.blit(snake_head_right, x)
         else:
-            pygame.draw.rect(
-        screen, Apple_variety,
-        (Apple[0], Apple[1], cell_size, cell_size)
-        )    
+            if not head: 
+                pygame.draw.rect(
+                    screen, snake_skin,
+                    (x[0], x[1], cell_size, cell_size)
+                )
+                pygame.draw.rect(
+                    screen, snake_guts,
+                    (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
+                )
+            if head:
+                pygame.draw.rect(
+                    screen, snake_skin,
+                    (x[0], x[1], cell_size, cell_size)
+                )
+                pygame.draw.rect(
+                    screen, snake_head,
+                    (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
+                )
+                head = False
+    #Apple
+    if not selected_apple == None:
+        screen.blit(selected_apple, (Apple[0], Apple[1]))
+    else:
+        pygame.draw.rect(
+    screen, Apple_variety,
+    (Apple[0], Apple[1], cell_size, cell_size)
+    )    
+    draw_gameboard()
 
-    if pause_menu:
+    if pause_menu:        
         draw_pause()
-    draw_changes()
-
+#options menu
+    if options:
+        Manager.update(dt / 1000)
+        Manager.draw_ui(options_screen)
+        draw_options_menu()
     if game_over:
         on_game_over()
 
+    pygame.display.update()
 pygame.quit()
 
 #debug/reporting
