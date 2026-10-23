@@ -2,8 +2,12 @@ import pygame
 import pygame.freetype
 import random
 import pygame_gui
+import tkinter as tk
+from tkinter import filedialog
 from pathlib import Path
-pygame.init()  
+pygame.init() 
+file_dialog_root = tk.Tk()
+file_dialog_root.withdraw()
 
 # define what size the gameboard will be
 cells_across = int(12)
@@ -61,7 +65,8 @@ pause_menu = False
 playing = True
 options = False
 open_dialogue = None
-
+ap_pre_rect = 0, 0
+bin = None
 #menus
 
 pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
@@ -79,6 +84,7 @@ apple_dialog = None
 selected_apple = None
 selected_apple_path = None
 
+selected_body = None
 
 #controls
 
@@ -135,7 +141,7 @@ def on_resize(Parent_Width, Parent_height):
 
     # Parent & screen resize
 
-    Parent_Window = pygame.display.set_mode(event.size, pygame.RESIZABLE)
+    Parent_Window = pygame.display.set_mode((Parent_Width, Parent_height), pygame.RESIZABLE)
     Screen_x = (Parent_Width - Screen_Width) // 2
     Screen_y = (Parent_height - Screen_height) // 2
 
@@ -153,6 +159,10 @@ def on_resize(Parent_Width, Parent_height):
     gameover_screen =  pygame.Surface((Parent_Width, Parent_height))
     start_screen = pygame.Surface((Parent_Width, Parent_height))
 
+    #options button resize
+    options_btn.x = Parent_Width // 2
+    options_btn.y = Parent_height // 3
+    options_btn.button_surface = pause_screen
     #update pygame
     update_Manager()
 def asset_selector(asset_subfolder, fileroot):
@@ -205,7 +215,7 @@ def on_esc_pressed():
 
 def draw_pause():
     pause_screen.fill(Greyout_col)
-    draw_options_btn()
+    options_btn.draw()
     Parent_Window.blit(pause_screen, (0,0))
 
 # options
@@ -216,10 +226,6 @@ def options_press():
         options = True
     else:
         options = False
-
-
-def draw_options_btn():
-    options_btn.draw()
 
 def draw_options_menu():
     Parent_Window.blit(options_screen, (options_x, options_y))
@@ -299,41 +305,90 @@ snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 
 
 #pygui
 def update_Manager():
-    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path
-    Manager = pygame_gui.UIManager((Parent_Width, Parent_Width))
+    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y
+    Manager = pygame_gui.UIManager((options_width, options_height))
 
     apple_input = pygame_gui.elements.UIButton(
-        (30, 30, 180, 40),
+        (30, 30, -1, -1),
         "Choose an apple sprite...",
+        Manager,
+    )
+    body_input_y = (apple_input.rect.centery + ((cell_size // 2) + 10)) 
+    body_input = pygame_gui.elements.UIButton(
+        (30, body_input_y, -1, -1),
+        "Choose a body sprite...",
+        Manager
+    )
+    head_input_y = (body_input.rect.centery + ((cell_size // 2) + 10))
+    head_input = pygame_gui.elements.UIButton(
+        (30, head_input_y, -1, -1),
+        "Choose a head sprite set...",
         Manager
     )
 update_Manager()
 
-def pygame_gui_event_handler(event):
-    global apple_dialog, open_dialogue, selected_apple_path, selected_apple
+def pygame_gui_event_handler(event_in):
+
+    event = options_translator(event_in)
+    Manager.process_events(event)
+    
+    global apple_dialog, open_dialogue, selected_apple_path, selected_apple, selected_body_path, selected_body
 
     if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == apple_input:
-        apple_dialog = pygame_gui.windows.ui_file_dialog(
-            rect = pygame.rect(100, 80, 600, 450),
-            manager = Manager,
-            window_title = "select a sprite",
-            allowed_suffixes = {".png"},
-            initial_file_path=str(Path(__file__).resolve().parent / "Assets" / apple_sprite_folder),
-            allow_existing_files_only = True
+        path = filedialog.askopenfilename(
+            parent=file_dialog_root,
+            title="Choose an apple sprite",
+            initialdir=str(
+                Path(__file__).resolve().parent
+                / "Assets"
+                / apple_sprite_folder
+            ),
+            filetypes=[("PNG images", "*.png")]
         )
-        open_dialogue = 'apple'
-    if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
-        if open_dialogue == 'apple':
-            selected_apple_path = event.text
-            selected_apple = pygame.transform.smoothscale((pygame.image.load(selected_apple_path).convert_alpha()), (cell_size, cell_size))
+        if not path:
+            return
+        selected_apple_path = path
+        selected_apple = pygame.transform.smoothscale((pygame.image.load(path).convert_alpha()), (cell_size, cell_size))
+
+    if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == body_input:
+        path = filedialog.askopenfilename(
+            parent=file_dialog_root,
+            title="Choose a body sprite",
+            initialdir=str(
+                Path(__file__).resolve().parent
+                / "Assets"
+                / body_sprite_folder
+            ),
+            filetypes=[("PNG images", "*.png")]
+        )
+        if not path:
+            return
+        selected_body_path = path
+        selected_body = pygame.transform.smoothscale((pygame.image.load(path).convert_alpha()), (cell_size, cell_size))
+
+
+def options_translator(event_in):
+    mouse_types = (
+        pygame.MOUSEMOTION,
+        pygame.MOUSEBUTTONDOWN,
+        pygame.MOUSEBUTTONUP,
+    )
+
+    if event_in.type not in mouse_types:
+        return event_in
+    else:
+        attributes = event_in.dict.copy()
+        attributes["pos"] = (
+            event_in.pos[0] - options_x,
+            event_in.pos[1] - options_y,
+        )
+        return pygame.event.Event(event_in.type, attributes)
+
 
 def click_handler(event):
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        if options:
-            Manager.process_events(event)
-            pygame_gui_event_handler(event)
+    if event.type == pygame.MOUSEBUTTONDOWN and not options:
             
-        if pause_menu and not options and options_btn.temp_rect.collidepoint(event.pos):
+        if pause_menu and options_btn.temp_rect.collidepoint(event.pos):
             options_btn.onClickFunction()
 
 
@@ -367,8 +422,7 @@ while run:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click_coords[0], click_coords[1] = event.pos
             click_handler(event) # x, y list
-        if not event.type == pygame.MOUSEBUTTONDOWN and options:
-            Manager.process_events(event)
+        if options:
             pygame_gui_event_handler(event)
                 
 
@@ -479,11 +533,24 @@ while run:
     if options:
         Manager.update(dt / 1000)
         Manager.draw_ui(options_screen)
+
+        if selected_apple is not None:
+
+            ap_but_rect = apple_input.rect
+            ap_pre_rect = selected_apple.get_rect()
+            ap_pre_rect.centery = ap_but_rect.centery
+
+            ap_pre_rect.centerx = (ap_but_rect.centerx + (ap_but_rect.width)) 
+            options_screen.blit(selected_apple, (ap_pre_rect.topleft))
+        if selected_body is not None:
+            pass
         draw_options_menu()
     if game_over:
         on_game_over()
 
     pygame.display.update()
+
+file_dialog_root.destroy()
 pygame.quit()
 
 #debug/reporting
