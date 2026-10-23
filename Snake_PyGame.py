@@ -313,13 +313,13 @@ def update_Manager():
         "Choose an apple sprite...",
         Manager,
     )
-    body_input_y = (apple_input.rect.centery + ((cell_size // 2) + 10)) 
+    body_input_y = (apple_input.rect.centery + ((cell_size // 2) + 20)) 
     body_input = pygame_gui.elements.UIButton(
         (30, body_input_y, -1, -1),
         "Choose a body sprite...",
         Manager
     )
-    head_input_y = (body_input.rect.centery + ((cell_size // 2) + 10))
+    head_input_y = (body_input.rect.centery + ((cell_size // 2) + 20))
     head_input = pygame_gui.elements.UIButton(
         (30, head_input_y, -1, -1),
         "Choose a head sprite set...",
@@ -543,7 +543,15 @@ while run:
             ap_pre_rect.centerx = (ap_but_rect.centerx + (ap_but_rect.width)) 
             options_screen.blit(selected_apple, (ap_pre_rect.topleft))
         if selected_body is not None:
-            pass
+
+            bd_but_rect = body_input.rect
+            bd_pre_rect = selected_body.get_rect()
+            bd_pre_rect.centery = bd_but_rect.centery
+            if selected_apple is not None:
+                bd_pre_rect.centerx = ap_pre_rect.centerx
+            else:
+                bd_pre_rect.centerx = (bd_but_rect.centerx + bd_but_rect.width)
+            options_screen.blit(selected_body, (bd_pre_rect.topleft))
         draw_options_menu()
     if game_over:
         on_game_over()
