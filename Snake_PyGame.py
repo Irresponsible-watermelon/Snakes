@@ -58,8 +58,8 @@ playing = True
 skin_sprited = True
 apple_sprited = True
 apple_sprite_folder = "Apple sprites"
-Snake_head_folder = "Snake head sprites"
-body_sprite_folder = "Snake body sprites"
+snake_sprite_folder = "Snake sprites"
+default_body = 'My_Snake_1'
 font_folder = "opendyslexic-0.92"
 pause_menu = False
 playing = True
@@ -78,7 +78,7 @@ options_height = ((Parent_height * 2) // 3)
 options_x = (Parent_Width - options_width) // 2
 options_y = (Parent_height - options_height) // 2 
 
-options_screen = pygame.Surface((options_width, options_height))
+options_screen = pygame.Surface((options_width, options_height),pygame.SRCALPHA)
 
 apple_dialog = None
 selected_apple = None
@@ -107,7 +107,42 @@ Greyout_col = (128, 128, 128, 128) #(R, G, B, A), where A = 0 is fully transpare
 mistakes_avoided = 0
 autopsy = ''
 max_cps = 0
+options_bg_col = (200, 200, 200, 150)
 
+#fonts
+
+Bold_font = pygame.freetype.Font(str(Path(__file__).resolve().parent
+                                     / "Assets"
+                                     / "opendyslexic-0.92"
+                                     / "OpenDyslexic-Bold.otf"), 12)
+
+BoldItalic_font = pygame.freetype.Font(str(Path(__file__).resolve().parent
+                                     / "Assets"
+                                     / "opendyslexic-0.92"
+                                     / "OpenDyslexic-BoldItalic.otf"), 12)
+
+Reg_font = pygame.freetype.Font(str(Path(__file__).resolve().parent
+                                     / "Assets"
+                                     / "opendyslexic-0.92"
+                                     / "OpenDyslexic-Regular.otf"), 12)
+
+Reg_font_lg = pygame.freetype.Font(str(Path(__file__).resolve().parent
+                                     / "Assets"
+                                     / "opendyslexic-0.92"
+                                     / "OpenDyslexic-Bold.otf"), 24)
+
+
+Italic_font = pygame.freetype.Font(str(Path(__file__).resolve().parent
+                                     / "Assets"
+                                     / "opendyslexic-0.92"
+                                     / "OpenDyslexic-Italic.otf"), 12)
+
+
+
+#snake
+snake_box = [[int(Screen_Width / 2), int(Screen_height / 2)]]
+snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + cell_size)])
+snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 2))])
 
 #functions
 
@@ -115,6 +150,8 @@ max_cps = 0
 def clear_screen():
     Parent_Window.fill(parent_bg_col)
     screen.fill(screen_bg_col)
+    options_screen.fill(options_bg_col)
+
 
 def is_snake_dead(game_over, autopsy):
     head_count = 0
@@ -161,34 +198,63 @@ def on_resize(Parent_Width, Parent_height):
 
     #options button resize
     options_btn.x = Parent_Width // 2
-    options_btn.y = Parent_height // 3
+    options_btn.y = (Parent_height // 3) + 45
     options_btn.button_surface = pause_screen
+
+    #restart button resize
+    restart_btn.x = Parent_Width // 2
+    restart_btn.y = Parent_height // 3
+    restart_btn.button_surface = pause_screen
     #update pygame
     update_Manager()
-def asset_selector(asset_subfolder, fileroot):
-    if asset_subfolder == Snake_head_folder:
-        head_paths = [str(Path(__file__).resolve().parent
-                        / "Assets"
-                        / str(asset_subfolder)
-                        / str(fileroot)
-                        / "Up.png"),
-                    str(Path(__file__).resolve().parent
+def asset_selector(asset_subfolder, fileroot, FFP=False):
+    if asset_subfolder == snake_sprite_folder:
+        if not FFP:
+            paths = [str(Path(__file__).resolve().parent
                             / "Assets"
                             / str(asset_subfolder)
                             / str(fileroot)
-                            / "Down.png"),
-                    str(Path(__file__).resolve().parent
-                            / "Assets"
-                            / str(asset_subfolder)
-                            / str(fileroot)
-                            / "Left.png"), 
-                    str(Path(__file__).resolve().parent
-                            / "Assets"
-                            / str(asset_subfolder)
-                            / str(fileroot)
-                            / "Right.png"), 
-                        ]
-        return head_paths
+                            / "Up.png"),
+                        str(Path(__file__).resolve().parent
+                                / "Assets"
+                                / str(asset_subfolder)
+                                / str(fileroot)
+                                / "Down.png"),
+                        str(Path(__file__).resolve().parent
+                                / "Assets"
+                                / str(asset_subfolder)
+                                / str(fileroot)
+                                / "Left.png"), 
+                        str(Path(__file__).resolve().parent
+                                / "Assets"
+                                / str(asset_subfolder)
+                                / str(fileroot)
+                                / "Right.png"), 
+                        str(Path(__file__).resolve().parent
+                                / "Assets"
+                                / str(asset_subfolder)
+                                / str(fileroot)
+                                / "Body.png"), 
+                            ]
+        elif FFP:
+            paths = [
+                str(Path(__file__).resolve()
+                    / asset_subfolder
+                    / "Up.png"),
+                str(Path(__file__).resolve()
+                    / asset_subfolder
+                    / "Down.png"),
+                str(Path(__file__).resolve()
+                    / asset_subfolder
+                    / "Left.png"),
+                str(Path(__file__).resolve()
+                    / asset_subfolder
+                    / "Right.png"),
+                str(Path(__file__).resolve()
+                    / asset_subfolder
+                    / "Body.png"),
+            ]
+        return paths
     else:
         abs_path = str(Path(__file__).resolve().parent
             / "Assets"
@@ -215,6 +281,7 @@ def on_esc_pressed():
 
 def draw_pause():
     pause_screen.fill(Greyout_col)
+    restart_btn.draw()
     options_btn.draw()
     Parent_Window.blit(pause_screen, (0,0))
 
@@ -230,9 +297,23 @@ def options_press():
 def draw_options_menu():
     Parent_Window.blit(options_screen, (options_x, options_y))
 
+def draw_options_title():
+    global opts_title_bg_rect
+    font_rect = Reg_font_lg.get_rect("Options")
+    font_rect.centerx = options_width // 2
+    font_rect.y = 10
+    opts_title_bg_rect = font_rect.copy()
+    opts_title_bg_rect.inflate_ip(20, 12)
+    pygame.draw.rect(options_screen,(0,0,0, 128),opts_title_bg_rect, border_radius= 3)
+    Reg_font_lg.render_to(options_screen,font_rect.topleft, "Options", (255, 255, 255))
+
+draw_options_title()
+# resume
+def restart_press():
+    pass
 # Variables reliant on functions
 
-button_font = pygame.freetype.Font(asset_selector(font_folder,"OpenDyslexic-Regular.otf"), 6)
+button_font = pygame.freetype.Font(asset_selector(font_folder,"OpenDyslexic-Regular.otf"), 24)
 
 #classes
 
@@ -271,58 +352,96 @@ class button:
         self.button_surface.blit(temp_surface, self.temp_rect.topleft)
 
 #Buttons
+restart_btn = button(
+        Parent_Width // 2, (Parent_height // 3),
+        pause_screen, button_border,
+        "Restart", restart_press
+    )
+
 options_btn = button(
-        Parent_Width // 2, Parent_height // 3,
+        Parent_Width // 2, (Parent_height // 3) + 45,
         pause_screen, button_border,
         "Options", options_press
     )
 
 #sprites
 
-if skin_sprited:
-    snake_head_root = 'My_Snake_1_heads'
-    body_sprite = 'My Snake 1 Body.png'
-    snake_scales_png = asset_selector(body_sprite_folder, body_sprite)
-    snake_head_up_png = (asset_selector(Snake_head_folder,snake_head_root)[0])
-    snake_head_down_png = (asset_selector(Snake_head_folder,snake_head_root)[1])
-    snake_head_left_png = (asset_selector(Snake_head_folder,snake_head_root)[2])
-    snake_head_right_png = (asset_selector(Snake_head_folder,snake_head_root)[3])
-    snake_scales = pygame.transform.smoothscale((pygame.image.load(snake_scales_png).convert_alpha()), (cell_size, cell_size))
-    snake_head_up = pygame.transform.smoothscale((pygame.image.load(snake_head_up_png).convert_alpha()), (cell_size, cell_size))
-    snake_head_down = pygame.transform.smoothscale((pygame.image.load(snake_head_down_png).convert_alpha()), (cell_size, cell_size))
-    snake_head_right = pygame.transform.smoothscale((pygame.image.load(snake_head_right_png).convert_alpha()), (cell_size, cell_size))
-    snake_head_left = pygame.transform.smoothscale((pygame.image.load(snake_head_left_png).convert_alpha()), (cell_size, cell_size))
+def body_unpacker(folder, FFP):
 
-if apple_sprited:
-    default_apple = "Green Apple 50x50 pxlart.png"
-    Apple_def_png = asset_selector(apple_sprite_folder, default_apple)
-    selected_apple = pygame.transform.smoothscale((pygame.image.load(Apple_def_png).convert_alpha()), (cell_size, cell_size))
+    global snake_scales, snake_head_up, snake_head_down, snake_head_right, snake_head_left, skin_sprited
 
-#snake
-snake_box = [[int(Screen_Width / 2), int(Screen_height / 2)]]
-snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + cell_size)])
-snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 2))])
+    paths = asset_selector(snake_sprite_folder, folder, FFP)
+
+    missing_paths = [path for path in paths if not Path(path).is_file()]
+    if missing_paths:
+        raise FileNotFoundError(
+            "Sprite files not found: \n" + "\n".join(missing_paths)
+        )
+    if len(paths) != 5:
+        raise ValueError(f"Invalid folder selected")
+
+    loaded_sprites = []
+    for path in paths:
+        try:
+            image = pygame.image.load(path).convert_alpha()
+        except pygame.error as error:
+            raise RuntimeError(
+                f"Could not load sprite {path!r}: {error}"
+            ) from error
+
+        loaded_sprites.append(pygame.transform.smoothscale(image,(cell_size, cell_size)))
+
+    snake_head_up, snake_head_down, snake_head_left, snake_head_right, snake_scales = loaded_sprites
+    skin_sprited = True
+
+def body_default():
+    global skin_sprited
+    if skin_sprited:
+        global selected_body, default_body
+        selected_body = default_body
+        try:
+            body_unpacker(selected_body, False)
+        except (FileNotFoundError, RuntimeError, ValueError) as error:
+            print(f"Could not load the default sprite set: {error}")
+            skin_sprited = False
+body_default()
+
+def apple_default():
+    global default_apple, Apple_def_png, selected_apple 
+    if apple_sprited:
+        default_apple = "Green Apple 50x50 pxlart.png"
+        Apple_def_png = asset_selector(apple_sprite_folder, default_apple)
+        selected_apple = pygame.transform.smoothscale((pygame.image.load(Apple_def_png).convert_alpha()), (cell_size, cell_size))
+apple_default()
 
 #pygui
 def update_Manager():
-    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y
+    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited
     Manager = pygame_gui.UIManager((options_width, options_height))
 
+    draw_options_title()
+    bin, apple_input_y = opts_title_bg_rect.bottomleft
+    apple_input_y += 10
     apple_input = pygame_gui.elements.UIButton(
-        (30, 30, -1, -1),
+        (30, apple_input_y, -1, -1),
         "Choose an apple sprite...",
         Manager,
     )
+    is_apple_sprited_height = apple_input.rect.height
+    is_apple_sprited_rect = pygame.Rect(0, 0, is_apple_sprited_height, is_apple_sprited_height)
+    is_apple_sprited_rect.centerx = 15
+    is_apple_sprited_y, bin = is_apple_sprited_rect.topleft 
+    is_apple_sprited = pygame_gui.elements.UICheckBox(
+        (is_apple_sprited_y, 30, is_apple_sprited_height, is_apple_sprited_height),
+        "",
+        Manager,
+        initial_state=True
+    )
+
     body_input_y = (apple_input.rect.centery + ((cell_size // 2) + 20)) 
     body_input = pygame_gui.elements.UIButton(
         (30, body_input_y, -1, -1),
-        "Choose a body sprite...",
-        Manager
-    )
-    head_input_y = (body_input.rect.centery + ((cell_size // 2) + 20))
-    head_input = pygame_gui.elements.UIButton(
-        (30, head_input_y, -1, -1),
-        "Choose a head sprite set...",
+        "Choose a snake sprite set...",
         Manager
     )
 update_Manager()
@@ -332,7 +451,7 @@ def pygame_gui_event_handler(event_in):
     event = options_translator(event_in)
     Manager.process_events(event)
     
-    global apple_dialog, open_dialogue, selected_apple_path, selected_apple, selected_body_path, selected_body
+    global apple_dialog, open_dialogue, selected_apple_path, selected_apple, selected_body, apple_sprited
 
     if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == apple_input:
         path = filedialog.askopenfilename(
@@ -346,25 +465,33 @@ def pygame_gui_event_handler(event_in):
             filetypes=[("PNG images", "*.png")]
         )
         if not path:
+            apple_default()
             return
         selected_apple_path = path
         selected_apple = pygame.transform.smoothscale((pygame.image.load(path).convert_alpha()), (cell_size, cell_size))
 
     if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == body_input:
-        path = filedialog.askopenfilename(
+        folder_path = filedialog.askdirectory(
             parent=file_dialog_root,
-            title="Choose a body sprite",
+            title="Choose a body sprite folder",
             initialdir=str(
                 Path(__file__).resolve().parent
                 / "Assets"
-                / body_sprite_folder
-            ),
-            filetypes=[("PNG images", "*.png")]
-        )
-        if not path:
-            return
-        selected_body_path = path
-        selected_body = pygame.transform.smoothscale((pygame.image.load(path).convert_alpha()), (cell_size, cell_size))
+                / snake_sprite_folder
+            ))
+        
+        if folder_path:
+            try:
+                body_unpacker(folder_path, True)
+            except (FileNotFoundError, RuntimeError, ValueError) as error:
+                print(f"Could not use that sprite set: {error}")
+        else:
+            pass
+
+    if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_apple_sprited:
+        apple_sprited = True
+    if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_apple_sprited:
+        apple_sprited = False
 
 
 def options_translator(event_in):
@@ -390,6 +517,8 @@ def click_handler(event):
             
         if pause_menu and options_btn.temp_rect.collidepoint(event.pos):
             options_btn.onClickFunction()
+        if pause_menu and restart_btn.temp_rect.collidepoint(event.pos):
+            restart_btn.onClickFunction()
 
 
 #Game Loop
@@ -518,7 +647,7 @@ while run:
                 )
                 head = False
     #Apple
-    if not selected_apple == None:
+    if not selected_apple == None and apple_sprited:
         screen.blit(selected_apple, (Apple[0], Apple[1]))
     else:
         pygame.draw.rect(
@@ -545,13 +674,13 @@ while run:
         if selected_body is not None:
 
             bd_but_rect = body_input.rect
-            bd_pre_rect = selected_body.get_rect()
+            bd_pre_rect = snake_scales.get_rect()
             bd_pre_rect.centery = bd_but_rect.centery
-            if selected_apple is not None:
+            if snake_scales is not None:
                 bd_pre_rect.centerx = ap_pre_rect.centerx
             else:
                 bd_pre_rect.centerx = (bd_but_rect.centerx + bd_but_rect.width)
-            options_screen.blit(selected_body, (bd_pre_rect.topleft))
+            options_screen.blit(snake_scales, (bd_pre_rect.topleft))
         draw_options_menu()
     if game_over:
         on_game_over()
