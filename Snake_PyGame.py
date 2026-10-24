@@ -205,6 +205,12 @@ def on_resize(Parent_Width, Parent_height):
     restart_btn.x = Parent_Width // 2
     restart_btn.y = Parent_height // 3
     restart_btn.button_surface = pause_screen
+
+    #quit button resize
+    quit_btn.x = Parent_Width // 2
+    quit_btn.y = (Parent_height // 3) + 90
+    quit_btn.button_surface = pause_screen
+
     #update pygame
     update_Manager()
 def asset_selector(asset_subfolder, fileroot, FFP=False):
@@ -283,8 +289,12 @@ def draw_pause():
     pause_screen.fill(Greyout_col)
     restart_btn.draw()
     options_btn.draw()
+    quit_btn.draw()
     Parent_Window.blit(pause_screen, (0,0))
 
+def quit_press():
+    global run
+    run = False
 # options
          
 def options_press():
@@ -338,8 +348,8 @@ class button:
         self.temp_rect = pygame.Rect(0, 0, self.width, self.height)
         self.temp_rect.center = (self.x, self.y)
         temp_surface = pygame.Surface(self.temp_rect.size)
-        pygame.draw.rect(temp_surface, self.border_col,(0, 0, self.width, self.height,), 0, 1)
-        pygame.draw.rect(temp_surface,self.bg_col,(0 + 2, 0 + 2, self.width - 4, self.height- 4,), 0, 1)
+        pygame.draw.rect(temp_surface, self.border_col,(0, 0, self.width, self.height,), border_radius= 3)
+        pygame.draw.rect(temp_surface,self.bg_col,(0 + 2, 0 + 2, self.width - 4, self.height- 4,), border_radius= 3)
         text_box = button_font.get_rect(self.ButtonText)
         text_box.center = (temp_surface.get_rect().center)
         button_font.render_to(
@@ -364,6 +374,11 @@ options_btn = button(
         "Options", options_press
     )
 
+quit_btn = button(
+    Parent_Width // 2, (Parent_height //3) + 90,
+    pause_screen, button_border,
+    "Quit", quit_press
+)
 #sprites
 
 def body_unpacker(folder, FFP):
@@ -420,13 +435,22 @@ def update_Manager():
     Manager = pygame_gui.UIManager((options_width, options_height))
 
     draw_options_title()
-    bin, apple_input_y = opts_title_bg_rect.bottomleft
-    apple_input_y += 10
     apple_input = pygame_gui.elements.UIButton(
-        (30, apple_input_y, -1, -1),
+        (30, 0, -1, -1),
         "Choose an apple sprite...",
         Manager,
     )
+    apple_input_rect = apple_input.rect
+    bin, optsttly = (opts_title_bg_rect.bottomleft)
+    apple_input_centery = optsttly + 10 + (cell_size //2)
+    apple_input_rect.centery = apple_input_centery
+    bin, apple_input_y = apple_input_rect.topleft
+    apple_input = pygame_gui.elements.UIButton(
+    (30, apple_input_y, -1, -1),
+    "Choose an apple sprite...",
+    Manager,
+    )
+
     is_apple_sprited_height = apple_input.rect.height
     is_apple_sprited_rect = pygame.Rect(0, 0, is_apple_sprited_height, is_apple_sprited_height)
     is_apple_sprited_rect.centerx = 15
@@ -535,6 +559,8 @@ def click_handler(event):
             options_btn.onClickFunction()
         if pause_menu and restart_btn.temp_rect.collidepoint(event.pos):
             restart_btn.onClickFunction()
+        if pause_menu and quit_btn.temp_rect.collidepoint(event.pos):
+            quit_btn.onClickFunction()
 
 
 #Game Loop
