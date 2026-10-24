@@ -35,7 +35,8 @@ Screen_y = ((Parent_height - Screen_height) // 2)
 screen = pygame.Surface((Screen_Width, Screen_height))
 
 #variables
-#actually very important for things to work
+
+#actually importantish for things to work
 
 direction = 'U' # UDLR, Up Down Left Right
 hungry = True
@@ -61,6 +62,7 @@ apple_sprite_folder = "Apple sprites"
 snake_sprite_folder = "Snake sprites"
 default_body = 'My_Snake_1'
 font_folder = "opendyslexic-0.92"
+start_menu = False
 pause_menu = False
 playing = True
 options = False
@@ -320,7 +322,16 @@ def draw_options_title():
 draw_options_title()
 # resume
 def restart_press():
-    pass
+    global start_menu, pause_menu, playing
+    start_menu = True
+    pause_menu = False
+    playing = False
+
+def start_press():
+    global start_menu, playing
+    start_menu = False
+    playing = True
+
 # Variables reliant on functions
 
 button_font = pygame.freetype.Font(asset_selector(font_folder,"OpenDyslexic-Regular.otf"), 24)
@@ -340,28 +351,46 @@ class button:
         self.txt_col = txt_col
         self.padding_x = 10
         self.padding_y = 10
-
-    def draw(self):
         font_rect = button_font.get_rect(self.ButtonText)
         self.width = font_rect.width + self.padding_x
         self.height = font_rect.height + self.padding_y
         self.temp_rect = pygame.Rect(0, 0, self.width, self.height)
         self.temp_rect.center = (self.x, self.y)
-        temp_surface = pygame.Surface(self.temp_rect.size)
-        pygame.draw.rect(temp_surface, self.border_col,(0, 0, self.width, self.height,), border_radius= 3)
-        pygame.draw.rect(temp_surface,self.bg_col,(0 + 2, 0 + 2, self.width - 4, self.height- 4,), border_radius= 3)
+        self.temp_surface = pygame.Surface(self.temp_rect.size)
+
+    def draw(self):
+        pygame.draw.rect(self.temp_surface, self.border_col,(0, 0, self.width, self.height,), border_radius= 3)
+        pygame.draw.rect(self.temp_surface,self.bg_col,(0 + 2, 0 + 2, self.width - 4, self.height- 4,), border_radius= 3)
         text_box = button_font.get_rect(self.ButtonText)
-        text_box.center = (temp_surface.get_rect().center)
+        text_box.center = (self.temp_surface.get_rect().center)
         button_font.render_to(
-            temp_surface,
+            self.temp_surface,
             text_box,
             self.ButtonText,
             fgcolor= self.txt_col
         )
-        
-        self.button_surface.blit(temp_surface, self.temp_rect.topleft)
+        self.button_surface.blit(self.temp_surface, self.temp_rect.topleft)
 
-#Buttons
+#Start Buttons
+
+start_btn = button(
+        Parent_Width // 2, (Parent_height // 3),
+        start_screen, button_border,
+        "Play", start_press
+    )
+
+start_options_btn = button(
+    Parent_Width // 2, (Parent_height // 3) + 45,
+        start_screen, button_border,
+        "Options", options_press
+    )
+
+start_quit_btn = button(
+        Parent_Width // 2, (Parent_height //3) + 90,
+        start_screen, button_border,
+        "Quit", quit_press
+)
+#Pause Buttons
 restart_btn = button(
         Parent_Width // 2, (Parent_height // 3),
         pause_screen, button_border,
@@ -431,7 +460,7 @@ apple_default()
 
 #pygui
 def update_Manager():
-    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited, is_body_sprited
+    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited, is_body_sprited, guts_input, is_guts_sprited
     Manager = pygame_gui.UIManager((options_width, options_height))
 
     draw_options_title()
@@ -447,7 +476,7 @@ def update_Manager():
     bin, apple_input_y = apple_input_rect.topleft
     apple_input = pygame_gui.elements.UIButton(
     (30, apple_input_y, -1, -1),
-    "Choose an apple sprite...",
+    "Choose a food sprite...",
     Manager,
     )
 
@@ -480,6 +509,25 @@ def update_Manager():
         initial_state=True
     )
 
+    guts_input_y = body_input.rect.centery + (cell_size // 2) + 20
+    guts_input = pygame_gui.elements.UIButton(
+        (30, guts_input_y, -1, -1),
+        "Pick a body fill color",
+        Manager
+    )
+
+    is_guts_sprited_height = guts_input.rect.height
+    is_guts_sprited_rect = pygame.Rect(0, 0, is_guts_sprited_height, is_guts_sprited_height)
+    is_guts_sprited_rect.centerx = 15
+    is_guts_sprited_rect.centery = guts_input.rect.centery
+    is_guts_sprited = pygame_gui.elements.UICheckBox(
+        (is_guts_sprited_rect),
+        "",
+        Manager,
+        initial_state=False
+    )
+    
+
 update_Manager()
 
 def pygame_gui_event_handler(event_in):
@@ -492,7 +540,7 @@ def pygame_gui_event_handler(event_in):
     if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == apple_input:
         path = filedialog.askopenfilename(
             parent=file_dialog_root,
-            title="Choose an apple sprite",
+            title="Choose a food sprite",
             initialdir=str(
                 Path(__file__).resolve().parent
                 / "Assets"
@@ -530,8 +578,10 @@ def pygame_gui_event_handler(event_in):
         apple_sprited = False
     if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_body_sprited:
         skin_sprited = True
+        is_guts_sprited.set_state(False)
     if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_body_sprited:
         skin_sprited = False
+        is_guts_sprited.set_state(True)
 
 
 def options_translator(event_in):
@@ -561,6 +611,12 @@ def click_handler(event):
             restart_btn.onClickFunction()
         if pause_menu and quit_btn.temp_rect.collidepoint(event.pos):
             quit_btn.onClickFunction()
+        if start_menu and start_btn.temp_rect.collidepoint(event.pos):
+            start_btn.onClickFunction()
+        if start_menu and start_options_btn.temp_rect.collidepoint(event.pos):
+            start_options_btn.onClickFunction()
+        if start_menu and start_quit_btn.temp_rect.collidepoint(event.pos):
+            start_quit_btn.onClickFunction()
 
 
 #Game Loop
@@ -596,9 +652,6 @@ while run:
         if options:
             pygame_gui_event_handler(event)
                 
-
-
-
 
 #Game window actions
     if playing:
