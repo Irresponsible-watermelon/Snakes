@@ -416,7 +416,7 @@ apple_default()
 
 #pygui
 def update_Manager():
-    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited
+    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited, is_body_sprited
     Manager = pygame_gui.UIManager((options_width, options_height))
 
     draw_options_title()
@@ -430,9 +430,9 @@ def update_Manager():
     is_apple_sprited_height = apple_input.rect.height
     is_apple_sprited_rect = pygame.Rect(0, 0, is_apple_sprited_height, is_apple_sprited_height)
     is_apple_sprited_rect.centerx = 15
-    is_apple_sprited_y, bin = is_apple_sprited_rect.topleft 
+    is_apple_sprited_rect.centery = apple_input.rect.centery 
     is_apple_sprited = pygame_gui.elements.UICheckBox(
-        (is_apple_sprited_y, 30, is_apple_sprited_height, is_apple_sprited_height),
+        (is_apple_sprited_rect),
         "",
         Manager,
         initial_state=True
@@ -444,6 +444,18 @@ def update_Manager():
         "Choose a snake sprite set...",
         Manager
     )
+
+    is_body_sprited_height = body_input.rect.height
+    is_body_sprited_rect = pygame.Rect(0, 0, is_body_sprited_height, is_body_sprited_height)
+    is_body_sprited_rect.centerx = 15
+    is_body_sprited_rect.centery = body_input.rect.centery
+    is_body_sprited = pygame_gui.elements.UICheckBox(
+        (is_body_sprited_rect),
+        "",
+        Manager,
+        initial_state=True
+    )
+
 update_Manager()
 
 def pygame_gui_event_handler(event_in):
@@ -451,7 +463,7 @@ def pygame_gui_event_handler(event_in):
     event = options_translator(event_in)
     Manager.process_events(event)
     
-    global apple_dialog, open_dialogue, selected_apple_path, selected_apple, selected_body, apple_sprited
+    global apple_dialog, open_dialogue, selected_apple_path, selected_apple, selected_body, apple_sprited, skin_sprited
 
     if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == apple_input:
         path = filedialog.askopenfilename(
@@ -492,6 +504,10 @@ def pygame_gui_event_handler(event_in):
         apple_sprited = True
     if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_apple_sprited:
         apple_sprited = False
+    if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_body_sprited:
+        skin_sprited = True
+    if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_body_sprited:
+        skin_sprited = False
 
 
 def options_translator(event_in):
@@ -613,7 +629,7 @@ while run:
     #Snake
     head = True
     for x in snake_box:
-        if skin_sprited:
+        if not selected_body == None and skin_sprited:
             if not head:
                 screen.blit(snake_scales, x)
             if head:
@@ -681,6 +697,7 @@ while run:
             else:
                 bd_pre_rect.centerx = (bd_but_rect.centerx + bd_but_rect.width)
             options_screen.blit(snake_scales, (bd_pre_rect.topleft))
+        draw_options_title()
         draw_options_menu()
     if game_over:
         on_game_over()
