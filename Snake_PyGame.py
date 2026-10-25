@@ -69,6 +69,8 @@ options = False
 open_dialogue = None
 ap_pre_rect = 0, 0
 bin = None
+custom_bg = False
+screen_bg_col_selected = None
 #menus
 
 pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
@@ -81,6 +83,11 @@ options_x = (Parent_Width - options_width) // 2
 options_y = (Parent_height - options_height) // 2 
 
 options_screen = pygame.Surface((options_width, options_height),pygame.SRCALPHA)
+
+preview_surface = pygame.Surface(
+    (options_width - 20, options_height), pygame.SRCALPHA)
+
+preview_surface.fill((0, 0, 0, 0,))
 
 apple_dialog = None
 selected_apple = None
@@ -150,10 +157,13 @@ snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 
 
 # High level functions
 def clear_screen():
+    global custom_bg, screen_bg_col_selected
     Parent_Window.fill(parent_bg_col)
-    screen.fill(screen_bg_col)
+    if screen_bg_col_selected is not None and custom_bg:
+        screen.fill(screen_bg_col_selected)
+    else:
+        screen.fill(screen_bg_col)
     options_screen.fill(options_bg_col)
-
 
 def is_snake_dead(game_over, autopsy):
     head_count = 0
@@ -201,17 +211,39 @@ def on_resize(Parent_Width, Parent_height):
     #options button resize
     options_btn.x = Parent_Width // 2
     options_btn.y = (Parent_height // 3) + 45
+    options_btn.temp_rect.center = (options_btn.x, options_btn.y)
     options_btn.button_surface = pause_screen
 
     #restart button resize
     restart_btn.x = Parent_Width // 2
     restart_btn.y = Parent_height // 3
+    restart_btn.temp_rect.center = (restart_btn.x, restart_btn.y)
     restart_btn.button_surface = pause_screen
 
     #quit button resize
     quit_btn.x = Parent_Width // 2
     quit_btn.y = (Parent_height // 3) + 90
+    quit_btn.temp_rect.center = (quit_btn.x, quit_btn.y)
     quit_btn.button_surface = pause_screen
+
+    #start button resize
+    start_btn.x = Parent_Width // 2
+    start_btn.y = Parent_height // 3
+    start_btn.temp_rect.center = (start_btn.x, start_btn.y)
+    start_btn.button_surface = start_screen
+
+    #start options button resize
+    start_options_btn.x = Parent_Width // 2
+    start_options_btn.y = (Parent_height // 3) + 45
+    start_options_btn.temp_rect.center = (start_options_btn.x, start_options_btn.y)
+    start_options_btn.button_surface = start_screen
+
+    #start quit button resize
+    start_quit_btn.x = Parent_Width // 2
+    start_quit_btn.y = (Parent_height // 3) + 90
+    start_quit_btn.temp_rect.center = (start_quit_btn.x, start_quit_btn.y)
+    start_quit_btn.button_surface = start_screen 
+
 
     #update pygame
     update_Manager()
@@ -458,74 +490,200 @@ def apple_default():
         selected_apple = pygame.transform.smoothscale((pygame.image.load(Apple_def_png).convert_alpha()), (cell_size, cell_size))
 apple_default()
 
+def screen_bg_default():
+    global screen_bg_col
+    screen_bg_col = (0, 0, 0)
 #pygui
 def update_Manager():
-    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited, is_body_sprited, guts_input, is_guts_sprited
+    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited, is_body_sprited, guts_input, is_guts_col, is_apple_col, apple_col_input, head_col_input, is_head_col, bdr_col_input, is_bdr_col, bg_col_input, is_bg_col, preview_image, preview_surface
     Manager = pygame_gui.UIManager((options_width, options_height))
 
     draw_options_title()
-    apple_input = pygame_gui.elements.UIButton(
-        (30, 0, -1, -1),
-        "Choose an apple sprite...",
-        Manager,
-    )
-    apple_input_rect = apple_input.rect
-    bin, optsttly = (opts_title_bg_rect.bottomleft)
-    apple_input_centery = optsttly + 10 + (cell_size //2)
-    apple_input_rect.centery = apple_input_centery
-    bin, apple_input_y = apple_input_rect.topleft
-    apple_input = pygame_gui.elements.UIButton(
-    (30, apple_input_y, -1, -1),
-    "Choose a food sprite...",
-    Manager,
+
+    options_scroll = pygame_gui.elements.UIScrollingContainer(
+        relative_rect=pygame.Rect(
+            10, 65,
+            options_width - 20,
+            options_height - 75,
+        ),
+        manager=Manager,
+        allow_scroll_x=False,
+        allow_scroll_y=True,
     )
 
-    is_apple_sprited_height = apple_input.rect.height
+    preview_width = options_width - 20
+    preview_surface = pygame.Surface(
+        (preview_width, options_height),
+        pygame.SRCALPHA,
+    )
+    preview_surface.fill((0, 0, 0, 0))
+    preview_image = pygame_gui.elements.UIImage(
+        (0, 0, preview_width, options_height),
+        preview_surface,
+        Manager,
+        container=options_scroll
+    )
+
+    apple_input = pygame_gui.elements.UIButton(
+        (30, 10, -1, -1),
+        "Choose an apple sprite...",
+        Manager,
+        container=options_scroll,
+    )
+
+    is_apple_sprited_height = apple_input.relative_rect.height
     is_apple_sprited_rect = pygame.Rect(0, 0, is_apple_sprited_height, is_apple_sprited_height)
     is_apple_sprited_rect.centerx = 15
-    is_apple_sprited_rect.centery = apple_input.rect.centery 
+    is_apple_sprited_rect.centery = apple_input.relative_rect.centery 
     is_apple_sprited = pygame_gui.elements.UICheckBox(
         (is_apple_sprited_rect),
         "",
         Manager,
-        initial_state=True
+        initial_state=True,
+        container=options_scroll,
     )
 
-    body_input_y = (apple_input.rect.centery + ((cell_size // 2) + 20)) 
+    apple_col_input_y = (apple_input.relative_rect.centery + (cell_size // 2) + 20) 
+    apple_col_input = pygame_gui.elements.UIButton(
+        (30, apple_col_input_y, -1, -1),
+        "Choose a food fill colour...",
+        Manager,
+        container=options_scroll,
+    )
+
+    is_apple_col_height = apple_col_input.relative_rect.height
+    is_apple_col_rect = pygame.Rect(0, 0, is_apple_col_height, is_apple_col_height)
+    is_apple_col_rect.centerx = 15
+    is_apple_col_rect.centery = apple_col_input.relative_rect.centery
+    is_apple_col = pygame_gui.elements.UICheckBox(
+        (is_apple_col_rect),
+        "",
+        Manager,
+        initial_state=False,
+        container= options_scroll,
+    )
+
+    body_input_y = apple_col_input.relative_rect.centery + ((cell_size // 2) + 20)    
     body_input = pygame_gui.elements.UIButton(
         (30, body_input_y, -1, -1),
         "Choose a snake sprite set...",
-        Manager
+        Manager,
+        container=options_scroll,
     )
 
-    is_body_sprited_height = body_input.rect.height
+    is_body_sprited_height = body_input.relative_rect.height
     is_body_sprited_rect = pygame.Rect(0, 0, is_body_sprited_height, is_body_sprited_height)
     is_body_sprited_rect.centerx = 15
-    is_body_sprited_rect.centery = body_input.rect.centery
+    is_body_sprited_rect.centery = body_input.relative_rect.centery
     is_body_sprited = pygame_gui.elements.UICheckBox(
         (is_body_sprited_rect),
         "",
         Manager,
-        initial_state=True
+        initial_state=True,
+        container=options_scroll,
     )
 
-    guts_input_y = body_input.rect.centery + (cell_size // 2) + 20
+    guts_input_y = body_input.relative_rect.centery + (cell_size // 2) + 20
     guts_input = pygame_gui.elements.UIButton(
         (30, guts_input_y, -1, -1),
-        "Pick a body fill color",
-        Manager
+        "Pick a body fill colour",
+        Manager,
+        container=options_scroll,
     )
 
-    is_guts_sprited_height = guts_input.rect.height
+    is_guts_sprited_height = guts_input.relative_rect.height
     is_guts_sprited_rect = pygame.Rect(0, 0, is_guts_sprited_height, is_guts_sprited_height)
     is_guts_sprited_rect.centerx = 15
-    is_guts_sprited_rect.centery = guts_input.rect.centery
-    is_guts_sprited = pygame_gui.elements.UICheckBox(
+    is_guts_sprited_rect.centery = guts_input.relative_rect.centery
+    is_guts_col = pygame_gui.elements.UICheckBox(
         (is_guts_sprited_rect),
         "",
         Manager,
-        initial_state=False
+        initial_state=False,
+        container=options_scroll
     )
+    head_col_input_y = guts_input.relative_rect.centery + (cell_size // 2) + 20
+    head_col_input = pygame_gui.elements.UIButton(
+        (30, head_col_input_y, -1, -1),
+        "Pick a head fill colour",
+        Manager,
+        container=options_scroll
+    )
+    is_head_col_height = head_col_input.relative_rect.height
+    is_head_col_rect = pygame.Rect(0, 0, is_head_col_height, is_head_col_height)
+    is_head_col_rect.centerx = 15
+    is_head_col_rect.centery = head_col_input.relative_rect.centery
+    is_head_col = pygame_gui.elements.UICheckBox(
+        (is_head_col_rect),
+        "",
+        Manager,
+        initial_state=False,
+        container=options_scroll
+    )
+    bdr_col_input_y = head_col_input.relative_rect.centery +(cell_size // 2) + 20
+    bdr_col_input = pygame_gui.elements.UIButton(
+        (30, bdr_col_input_y, -1, -1),
+        "Pick a snake border colour",
+        Manager,
+        container=options_scroll,
+    )
+    is_bdr_col_height = bdr_col_input.relative_rect.height
+    is_bdr_col_rect = pygame.Rect(0, 0, is_bdr_col_height, is_bdr_col_height)
+    is_bdr_col_rect.centerx = 15
+    is_bdr_col_rect.centery = bdr_col_input.relative_rect.centery
+    is_bdr_col = pygame_gui.elements.UICheckBox(
+        (is_bdr_col_rect),
+        "",
+        Manager,
+        initial_state=False,
+        container=options_scroll,
+    )
+    bg_col_input_y = bdr_col_input.relative_rect.centery + (cell_size // 2) + 20
+    bg_col_input = pygame_gui.elements.UIButton(
+        (30, bg_col_input_y, -1, -1),
+        "Pick a background colour",
+        Manager,
+        container=options_scroll,
+    )
+    is_bg_col_height = bg_col_input.relative_rect.height
+    is_bg_col_rect = pygame.Rect(0, 0, is_bg_col_height, is_bg_col_height)
+    is_bg_col_rect.centerx = 15
+    is_bg_col_rect.centery = bg_col_input.relative_rect.centery
+    is_bg_col = pygame_gui.elements.UICheckBox(
+        (is_bg_col_rect),
+        "",
+        Manager,
+        initial_state=False,
+        container=options_scroll,
+    )
+
+    content_height = max(
+        apple_input.relative_rect.bottom,
+        is_apple_sprited.relative_rect.bottom,
+        apple_col_input.relative_rect.bottom,
+        is_apple_col.relative_rect.bottom,
+        body_input.relative_rect.bottom,
+        is_body_sprited.relative_rect.bottom,
+        guts_input.relative_rect.bottom,
+        is_guts_col.relative_rect.bottom,
+        head_col_input.relative_rect.bottom,
+        is_head_col.relative_rect.bottom,
+        bdr_col_input.relative_rect.bottom,
+        is_bdr_col.relative_rect.bottom,
+        bg_col_input.relative_rect.bottom,
+        is_bg_col.relative_rect.bottom,
+    ) + 25
+    preview_surface = pygame.Surface(
+        (preview_width, content_height),
+        pygame.SRCALPHA,
+    )
+    preview_surface.fill((0, 0, 0, 0))
+    preview_image.set_dimensions((preview_width, content_height))
+    preview_image.set_image(preview_surface)
+    options_scroll.set_scrollable_area_dimensions(
+        (preview_width, content_height)
+    )
+
     
 
 update_Manager()
@@ -535,7 +693,7 @@ def pygame_gui_event_handler(event_in):
     event = options_translator(event_in)
     Manager.process_events(event)
     
-    global apple_dialog, open_dialogue, selected_apple_path, selected_apple, selected_body, apple_sprited, skin_sprited
+    global apple_dialog, open_dialogue, selected_apple_path, selected_apple, selected_body, apple_sprited, skin_sprited, colour_target, initial_colour, Apple_variety, snake_guts, colour_picker, snake_head, snake_skin, screen_bg_col_selected, screen_bg_col, custom_bg, screen_bg_col_selected
 
     if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == apple_input:
         path = filedialog.askopenfilename(
@@ -572,17 +730,80 @@ def pygame_gui_event_handler(event_in):
         else:
             pass
 
+    if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == apple_col_input:
+        colour_target = 'Apple'
+        initial_colour = pygame.Color(*Apple_variety)
+    elif event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == guts_input:
+        colour_target = 'Guts'
+        initial_colour = pygame.Color(*snake_guts)
+    elif event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == head_col_input:
+        colour_target = 'Head'
+        initial_colour = pygame.Color(*snake_head)
+    elif event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == bdr_col_input:
+        colour_target = 'Border'
+        initial_colour = pygame.Color(*snake_skin)
+    elif event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == bg_col_input:
+        colour_target = 'Screen Background'
+        initial_colour = pygame.Color(*screen_bg_col)
+    else:
+        initial_colour = None
+
+    if initial_colour is not None:
+        colour_picker = pygame_gui.windows.UIColourPickerDialog(
+            rect=pygame.Rect(0, 0, options_width, options_height),
+            manager=Manager,
+            initial_colour=initial_colour,
+            window_title="Choose a colour",
+        )
+    elif event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
+        if event.ui_element == colour_picker:
+            rgb = tuple(event.colour)[:3]
+
+            if colour_target == 'Apple':
+                Apple_variety = rgb
+            if colour_target == 'Guts':
+                snake_guts = rgb
+            if colour_target == 'Head':
+                snake_head = rgb
+            if colour_target == 'Border':
+                snake_skin = rgb
+            if colour_target == 'Screen Background':
+                screen_bg_col_selected = rgb
+
+            colour_picker = None
+            colour_target = None
     if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_apple_sprited:
         apple_sprited = True
+        is_apple_col.set_state(False)
     if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_apple_sprited:
         apple_sprited = False
+        is_apple_col.set_state(True)
+    if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_apple_col:
+        apple_sprited = False
+        is_apple_sprited.set_state(False)
+    if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_apple_col:
+        apple_sprited = True
+        is_apple_sprited.set_state(True)
     if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_body_sprited:
         skin_sprited = True
-        is_guts_sprited.set_state(False)
+        is_guts_col.set_state(False)
+        is_head_col.set_state(False)
+        is_bdr_col.set_state(False)
     if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_body_sprited:
         skin_sprited = False
-        is_guts_sprited.set_state(True)
-
+    if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_guts_col:
+        skin_sprited = False
+        is_body_sprited.set_state(False)
+    if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_head_col:
+        skin_sprited = False
+        is_body_sprited.set_state(False)
+    if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_bdr_col:
+        skin_sprited = False
+        is_body_sprited.set_state(False)
+    if event.type == pygame_gui.UI_CHECK_BOX_CHECKED and event.ui_element == is_bg_col:
+        custom_bg = True
+    if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_bg_col:
+        custom_bg = False
 
 def options_translator(event_in):
     mouse_types = (
@@ -756,28 +977,60 @@ while run:
 #options menu
     if options:
         Manager.update(dt / 1000)
-        Manager.draw_ui(options_screen)
-
+        preview_surface.fill((0, 0, 0, 0))
+        preview_x = apple_input.relative_rect.right + 30
         if selected_apple is not None:
 
-            ap_but_rect = apple_input.rect
+            ap_but_rect = apple_input.relative_rect
             ap_pre_rect = selected_apple.get_rect()
             ap_pre_rect.centery = ap_but_rect.centery
+            ap_pre_rect.left = preview_x
+            preview_surface.blit(selected_apple, (ap_pre_rect.topleft))
+        if selected_body is not None and snake_scales is not None:
 
-            ap_pre_rect.centerx = (ap_but_rect.centerx + (ap_but_rect.width)) 
-            options_screen.blit(selected_apple, (ap_pre_rect.topleft))
-        if selected_body is not None:
-
-            bd_but_rect = body_input.rect
+            bd_but_rect = body_input.relative_rect
             bd_pre_rect = snake_scales.get_rect()
             bd_pre_rect.centery = bd_but_rect.centery
-            if snake_scales is not None:
-                bd_pre_rect.centerx = ap_pre_rect.centerx
-            else:
-                bd_pre_rect.centerx = (bd_but_rect.centerx + bd_but_rect.width)
-            options_screen.blit(snake_scales, (bd_pre_rect.topleft))
+            bd_pre_rect.left = preview_x
+            preview_surface.blit(snake_scales, (bd_pre_rect.topleft))
+
+        ap_col_rect = apple_col_input.relative_rect
+        ap_dem_rect = pygame.Rect(0, 0, cell_size, cell_size)
+        ap_dem_rect.centery = ap_col_rect.centery
+        ap_dem_rect.left = preview_x
+        pygame.draw.rect(preview_surface, Apple_variety, ap_dem_rect) 
+
+        gut_col_rect = guts_input.relative_rect
+        gut_dem_rect = pygame.Rect(0, 0, cell_size, cell_size)
+        gut_dem_rect.centery = gut_col_rect.centery
+        gut_dem_rect.left = preview_x
+        pygame.draw.rect(preview_surface, snake_guts, gut_dem_rect)
+
+        head_col_rect = head_col_input.relative_rect
+        head_dem_rect = pygame.Rect(0, 0, cell_size, cell_size)
+        head_dem_rect.centery = head_col_rect.centery
+        head_dem_rect.centerx = gut_dem_rect.centerx
+        pygame.draw.rect(preview_surface, snake_head, head_dem_rect)
+
+        bdr_col_rect = bdr_col_input.relative_rect
+        bdr_dem_rect = pygame.Rect(0, 0, cell_size, cell_size)
+        bdr_dem_rect.centery = bdr_col_rect.centery
+        bdr_dem_rect.centerx = head_dem_rect.centerx
+        pygame.draw.rect(preview_surface, snake_skin, bdr_dem_rect)
+
+        bg_col_rect = bg_col_input.relative_rect
+        bg_dem_rect = pygame.Rect(0, 0, cell_size, cell_size)
+        bg_dem_rect.centery = bg_col_rect.centery
+        bg_dem_rect.centerx = bdr_dem_rect.centerx
+        if screen_bg_col_selected is not None:
+            pygame.draw.rect(preview_surface, screen_bg_col_selected, bg_dem_rect)
+        else:
+            pygame.draw.rect(preview_surface, screen_bg_col, bg_dem_rect)
+        preview_image.set_image(preview_surface)
         draw_options_title()
+        Manager.draw_ui(options_screen)
         draw_options_menu()
+        
     if game_over:
         on_game_over()
 
