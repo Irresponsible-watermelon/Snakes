@@ -79,6 +79,8 @@ snake_sprite_sources = None
 score = 0
 rnd_diff = 5
 game_ended = False
+survival_time = 0
+has_max = False
 #menus
 
 pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
@@ -191,9 +193,10 @@ def draw_gameboard():
     Parent_Window.blit(screen, (Screen_x, Screen_y))
 
 def on_game_over():
-    global game_ended
+    global game_ended, has_max 
     game_ended = True
-    if game_ended:
+    if not has_max:
+        has_max = True
         max_speed_bonus()
 
 def on_resize(Parent_Width, Parent_height):
@@ -575,11 +578,14 @@ def difficulty_handler(difficulty_in):
         cps_inc = 0.2
 
 def survival_score():
-    global score
-    score += round(max(rnd_diff * 2, 1))
+    global score, survival_time
+    survival_time += 1
+    if survival_time <= 5:
+        score += round(max(rnd_diff * 2, 1))
 
 def eating_score():
-    global score
+    global score, survival_time
+    survival_time = 0
     score += round(max((rnd_diff * 200) + (true_cps * 50), 100))
 
 def max_speed_bonus():
