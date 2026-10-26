@@ -65,7 +65,6 @@ default_body = 'My_Snake_1'
 font_folder = "opendyslexic-0.92"
 start_menu = False
 pause_menu = False
-playing = True
 options = False
 open_dialogue = None
 ap_pre_rect = 0, 0
@@ -81,9 +80,17 @@ rnd_diff = 5
 game_ended = False
 survival_time = 0
 has_max = False
+show_death = False
+high_score = 0
+new_hs = False
+been_triggered = False
+death_message = None
+start_menu
+
 #menus
 
 pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
+death_screen = pygame.Surface.copy(pause_screen)
 gameover_screen =  pygame.Surface((Parent_Width, Parent_height))
 start_screen = pygame.Surface((Parent_Width, Parent_height))
 
@@ -150,11 +157,10 @@ Reg_font_lg = pygame.freetype.Font(str(Path(__file__).resolve().parent
                                      / "opendyslexic-0.92"
                                      / "OpenDyslexic-Bold.otf"), 24)
 
-
-Italic_font = pygame.freetype.Font(str(Path(__file__).resolve().parent
+Italic_font_lg = pygame.freetype.Font(str(Path(__file__).resolve().parent
                                      / "Assets"
                                      / "opendyslexic-0.92"
-                                     / "OpenDyslexic-Italic.otf"), 12)
+                                     / "OpenDyslexic-Italic.otf"), 24)
 
 
 
@@ -193,14 +199,73 @@ def draw_gameboard():
     Parent_Window.blit(screen, (Screen_x, Screen_y))
 
 def on_game_over():
-    global game_ended, has_max 
+    global game_ended, has_max, show_death, playing, been_triggered, death_message
     game_ended = True
+    playing = False
+
     if not has_max:
         has_max = True
         max_speed_bonus()
+        high_score_manager()
+
+    if not been_triggered:
+        show_death = True
+        death_message = death_messager()
+
+    if show_death:
+        draw_death()
+        been_triggered = True
+
+def draw_death():
+    global death_message, death_screen
+    death_screen.fill(Greyout_col)
+
+    hs_font_rect = Reg_font_lg.get_rect(str(f"Highscore: {str(high_score)}"))
+    hs_rect = hs_font_rect.copy()
+    hs_rect.inflate_ip(10, 10)
+    hs_bdr_rect = hs_rect.copy()
+    hs_bdr_rect.inflate_ip(4, 4)
+    if new_hs:
+        hs_col = (219, 153, 29, 216)
+    else:
+        hs_col = button_border
+    hs_bdr_rect.centerx = Parent_Width // 2
+    hs_bdr_rect.centery = Parent_height // 3
+    hs_rect.center = hs_bdr_rect.center
+    hs_font_rect.center = hs_bdr_rect.center
+    pygame.draw.rect(death_screen, hs_col, hs_bdr_rect, border_radius=3)
+    pygame.draw.rect(death_screen, button_col, hs_rect, border_radius=3)
+    Reg_font_lg.render_to(death_screen, hs_font_rect, f"Highscore: {str(high_score)}",hs_col,
+    )
+
+    sc_font_rect = Reg_font_lg.get_rect(str(f"Score: {str(score)}"))
+    sc_rect = sc_font_rect.copy()
+    sc_rect.inflate_ip(10, 10)
+    sc_bdr_rect = sc_rect.copy()
+    sc_bdr_rect.inflate_ip(4, 4)
+    sc_bdr_rect.top = hs_bdr_rect.bottom + 10
+    sc_bdr_rect.centerx = hs_bdr_rect.centerx
+    sc_rect.center = sc_bdr_rect.center
+    sc_font_rect.center = sc_bdr_rect.center
+    pygame.draw.rect(death_screen, hs_col, sc_bdr_rect, border_radius=3)
+    pygame.draw.rect(death_screen, button_col, sc_rect, border_radius=3)
+    Reg_font_lg.render_to(death_screen, sc_font_rect, f"Score: {str(score)}")
+
+    dm_font_rect = Reg_font.get_rect(str(death_message))
+    dm_rect = dm_font_rect.copy()
+    dm_rect.inflate_ip(10, 10)
+    dm_rect.top = sc_bdr_rect.bottom + 20
+    dm_rect.centerx = sc_rect.centerx
+    dm_font_rect.center = dm_rect.center
+    pygame.draw.rect(death_screen, button_col, dm_rect, border_radius=3)
+    Reg_font.render_to(death_screen, dm_font_rect, str(death_message)) 
+
+
+    death_btn.draw()
+    Parent_Window.blit(death_screen, (0, 0))
 
 def on_resize(Parent_Width, Parent_height):
-    global Parent_Window, Screen_x, Screen_y, options_width, options_height, options_x, options_y, options_screen, pause_screen, gameover_screen, start_screen, Manager
+    global Parent_Window, Screen_x, Screen_y, options_width, options_height, options_x, options_y, options_screen, pause_screen, gameover_screen, start_screen, Manager, death_screen
 
     # Parent & screen resize
 
@@ -221,6 +286,7 @@ def on_resize(Parent_Width, Parent_height):
     pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
     gameover_screen =  pygame.Surface((Parent_Width, Parent_height))
     start_screen = pygame.Surface((Parent_Width, Parent_height))
+    death_screen = pygame.Surface.copy(pause_screen)
 
     #options button resize
     options_btn.x = Parent_Width // 2
@@ -258,9 +324,16 @@ def on_resize(Parent_Width, Parent_height):
     start_quit_btn.temp_rect.center = (start_quit_btn.x, start_quit_btn.y)
     start_quit_btn.button_surface = start_screen 
 
+    #death buttonresize
+
+    death_btn.x = Parent_Width // 2
+    death_btn.y = int((Parent_height // 3) * 2)
+    death_btn.temp_rect.center = (death_btn.x, death_btn.y)
+    death_btn.button_surface = death_screen
 
     #update pygame
     update_Manager()
+
 def asset_selector(asset_subfolder, fileroot, FFP=False):
     if asset_subfolder == snake_sprite_folder:
         if not FFP:
@@ -368,16 +441,61 @@ def draw_options_title():
 draw_options_title()
 # resume
 def restart_press():
-    global start_menu, pause_menu, playing
-    start_menu = True
+    global start_menu, pause_menu, playing, autopsy, game_over
     pause_menu = False
     playing = False
+    game_over = True
+    autopsy = 'RES'
 
 def start_press():
     global start_menu, playing
     start_menu = False
     playing = True
 
+def death_press():
+    global show_death, score, start_menu
+    show_death = False
+    score = 0
+    difficulty_handler(5)
+    start_menu = True
+
+def death_messager():
+    global autopsy
+    randint = random.randint(0, 10)
+    if autopsy == 'GRD':
+        if randint == 0:
+            death_message = str('You died - How Ouroboric!')
+        elif randint == 1 or randint == 2 or randint == 3:
+            death_message = str('You died - Someone got peckish...')
+        elif randint == 4 or randint == 5 or randint == 6:
+            death_message = str('You died - Talk about tongue in foot disease...')
+        elif randint == 7 or randint == 8:
+            death_message = str('You died - Mmmmm yummy..?')
+        elif randint == 9 or randint == 10:
+            death_message = str('You died - Did that taste nice?')
+    elif autopsy == 'OOB':
+        if randint == 0:
+            death_message = str('You died - It happens sometimes')
+        elif randint == 1 or randint == 2 or randint == 3:
+            death_message = str("You died - Watch where you're going!")
+        elif randint == 4 or randint == 5 or randint == 6:
+            death_message = str("You died - Don't run off the map!")
+        elif randint == 7 or randint == 8:
+            death_message = str('You died - Was that on purpose?')
+        elif randint == 9 or randint == 10:
+            death_message = str('You died - Try to avoid doing that')
+    elif autopsy == 'RES':
+        if randint == 0:
+            death_message = str('Giving up so quickly?')
+        elif randint == 1 or randint == 2 or randint == 3:
+            death_message = ("Chiquitita what's wrong?")
+        elif randint == 4 or randint == 5 or randint == 6:
+            death_message = str('Here we go again...')
+        elif randint == 7 or randint == 8:
+            death_message = str("Leaving so soon?")
+        elif randint == 9 or randint == 10:
+            death_message = str("I guess things weren't going too well for you")
+    return death_message
 # Variables reliant on functions
 
 button_font = pygame.freetype.Font(asset_selector(font_folder,"OpenDyslexic-Regular.otf"), 24)
@@ -453,6 +571,12 @@ quit_btn = button(
     Parent_Width // 2, (Parent_height //3) + 90,
     pause_screen, button_border,
     "Quit", quit_press
+)
+
+death_btn = button(
+    Parent_Width // 2, int((Parent_height // 3) * 2),
+    death_screen, button_border,
+    "Continue", death_press
 )
 #sprites
 
@@ -587,6 +711,12 @@ def eating_score():
     global score, survival_time
     survival_time = 0
     score += round(max((rnd_diff * 200) + (true_cps * 50), 100))
+
+def high_score_manager():
+    global score, high_score, new_hs
+    if score > high_score:
+        high_score = score
+        new_hs = True
 
 def max_speed_bonus():
     global score
@@ -902,8 +1032,6 @@ def update_Manager():
         (options_width, content_height)
     )
 
-    
-
 update_Manager()
 
 def pygame_gui_event_handler(event_in):
@@ -1030,8 +1158,6 @@ def pygame_gui_event_handler(event_in):
         difficulty_in = event.value
         difficulty_handler(difficulty_in)
 
-
-
 def options_translator(event_in):
     mouse_types = (
         pygame.MOUSEMOTION,
@@ -1048,7 +1174,6 @@ def options_translator(event_in):
             event_in.pos[1] - options_y,
         )
         return pygame.event.Event(event_in.type, attributes)
-
 
 def click_handler(event):
     if event.type == pygame.MOUSEBUTTONDOWN and not options:
@@ -1068,7 +1193,7 @@ def click_handler(event):
 
 def score_board():
     global score
-    font_rect = Reg_font.get_rect(f"Score: {str(score)}")
+    font_rect = Reg_font.get_rect(f"Score: {(score)}")
     score_rect = font_rect.copy()
     score_rect.inflate_ip(10, 10)
     score_rect_border = score_rect.copy()
@@ -1084,7 +1209,6 @@ def score_board():
     score_rect_border.left += 10
     score_rect_border.top += 10
     Parent_Window.blit(score_surface, score_rect_border)
-
 
 #Game Loop
 
@@ -1158,71 +1282,70 @@ while run:
             
 #slithering
     if not game_over:
-            if Slithimer>= Slithertavel :
-                Slithimer -= Slithertavel
-                snake_box = snake_box[ -1:] + snake_box[:-1]
-                if direction =='U':
-                    snake_box[0][0] = snake_box[1][0] 
-                    snake_box[0][1] = snake_box[1][1] - cell_size
-                if direction == 'L':
-                    snake_box[0][0] = snake_box[1][0] - cell_size
-                    snake_box[0][1] = snake_box[1][1]
-                if direction == 'R':
-                    snake_box[0][0] = snake_box[1][0] + cell_size
-                    snake_box[0][1] = snake_box[1][1]
-                if direction == 'D':
-                    snake_box[0][0] = snake_box[1][0]
-                    snake_box[0][1] = snake_box[1][1] + cell_size
-                tail = list(snake_box[-1])
-                survival_score()
-                game_over, autopsy = is_snake_dead(game_over, autopsy)
-   
+        if Slithimer>= Slithertavel :
+            Slithimer -= Slithertavel
+            snake_box = snake_box[ -1:] + snake_box[:-1]
+            if direction =='U':
+                snake_box[0][0] = snake_box[1][0] 
+                snake_box[0][1] = snake_box[1][1] - cell_size
+            if direction == 'L':
+                snake_box[0][0] = snake_box[1][0] - cell_size
+                snake_box[0][1] = snake_box[1][1]
+            if direction == 'R':
+                snake_box[0][0] = snake_box[1][0] + cell_size
+                snake_box[0][1] = snake_box[1][1]
+            if direction == 'D':
+                snake_box[0][0] = snake_box[1][0]
+                snake_box[0][1] = snake_box[1][1] + cell_size
+            tail = list(snake_box[-1])
+            survival_score()
+            game_over, autopsy = is_snake_dead(game_over, autopsy)  
 #drawing
     #Snake
-    head = True
-    for x in snake_box:
-        if not selected_body == None and skin_sprited:
-            if not head:
-                screen.blit(snake_scales, x)
-            if head:
-                head = False
-                if direction == 'U':
-                    screen.blit(snake_head_up, x)
-                elif direction == 'D':
-                    screen.blit(snake_head_down, x)
-                elif direction == 'L':
-                    screen.blit(snake_head_left, x)
-                elif direction == 'R':
-                    screen.blit(snake_head_right, x)
+        head = True
+        for x in snake_box:
+            if not selected_body == None and skin_sprited:
+                if not head:
+                    screen.blit(snake_scales, x)
+                if head:
+                    head = False
+                    if direction == 'U':
+                        screen.blit(snake_head_up, x)
+                    elif direction == 'D':
+                        screen.blit(snake_head_down, x)
+                    elif direction == 'L':
+                        screen.blit(snake_head_left, x)
+                    elif direction == 'R':
+                        screen.blit(snake_head_right, x)
+            else:
+                if not head: 
+                    pygame.draw.rect(
+                        screen, snake_skin,
+                        (x[0], x[1], cell_size, cell_size)
+                    )
+                    pygame.draw.rect(
+                        screen, snake_guts,
+                        (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
+                    )
+                if head:
+                    pygame.draw.rect(
+                        screen, snake_skin,
+                        (x[0], x[1], cell_size, cell_size)
+                    )
+                    pygame.draw.rect(
+                        screen, snake_head,
+                        (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
+                    )
+                    head = False
+        #Apple
+        if not selected_apple == None and apple_sprited:
+            screen.blit(selected_apple, (Apple[0], Apple[1]))
         else:
-            if not head: 
-                pygame.draw.rect(
-                    screen, snake_skin,
-                    (x[0], x[1], cell_size, cell_size)
-                )
-                pygame.draw.rect(
-                    screen, snake_guts,
-                    (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
-                )
-            if head:
-                pygame.draw.rect(
-                    screen, snake_skin,
-                    (x[0], x[1], cell_size, cell_size)
-                )
-                pygame.draw.rect(
-                    screen, snake_head,
-                    (x[0] + 2, x[1] + 2, cell_size - 4, cell_size - 4)
-                )
-                head = False
-    #Apple
-    if not selected_apple == None and apple_sprited:
-        screen.blit(selected_apple, (Apple[0], Apple[1]))
-    else:
-        pygame.draw.rect(
-    screen, Apple_variety,
-    (Apple[0], Apple[1], cell_size, cell_size)
-    )    
-    draw_gameboard()
+            pygame.draw.rect(
+        screen, Apple_variety,
+        (Apple[0], Apple[1], cell_size, cell_size)
+        )    
+        draw_gameboard()
 
     if pause_menu:        
         draw_pause()
@@ -1282,11 +1405,16 @@ while run:
         draw_options_title()
         Manager.draw_ui(options_screen)
         draw_options_menu()
-        
+
+
     if game_over:
         on_game_over()
 
-    score_board()
+    if playing:
+        score_board()
+
+    if start_menu:
+        pass
     pygame.display.update()
 
 file_dialog_root.destroy()
