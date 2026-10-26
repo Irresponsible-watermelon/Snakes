@@ -1,6 +1,7 @@
 import pygame
 import pygame.freetype
 import random
+import math
 import pygame_gui
 import tkinter as tk
 from tkinter import filedialog
@@ -51,7 +52,7 @@ Snake_fed = False
 clock = pygame.time.Clock()
 FPS = 60
 base_cps = 2 #cells snake travels per second
-cps_inc = 1 #How much cps is increased every time an apple is eaten
+cps_inc = 0.05 #How much cps is increased every time an apple is eaten
 true_cps = base_cps #(For now, increasing true_cps over time or once an apple is eaten could be interesting)
 Slithertavel = 1000 / true_cps # Milliseconds between each snake movement
 Slithimer = 0 # Time since last snake movement
@@ -71,6 +72,13 @@ ap_pre_rect = 0, 0
 bin = None
 custom_bg = False
 screen_bg_col_selected = None
+def_screen_size = 12
+def_cell_size = 50
+pending_board_settings = None
+snake_sprite_sources = None
+score = 0
+rnd_diff = 5
+game_ended = False
 #menus
 
 pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
@@ -183,7 +191,10 @@ def draw_gameboard():
     Parent_Window.blit(screen, (Screen_x, Screen_y))
 
 def on_game_over():
-    pass
+    global game_ended
+    game_ended = True
+    if game_ended:
+        max_speed_bonus()
 
 def on_resize(Parent_Width, Parent_height):
     global Parent_Window, Screen_x, Screen_y, options_width, options_height, options_x, options_y, options_screen, pause_screen, gameover_screen, start_screen, Manager
@@ -444,7 +455,7 @@ quit_btn = button(
 
 def body_unpacker(folder, FFP):
 
-    global snake_scales, snake_head_up, snake_head_down, snake_head_right, snake_head_left, skin_sprited
+    global snake_scales, snake_head_up, snake_head_down, snake_head_right, snake_head_left, skin_sprited, snake_sprite_sources, selected_body
 
     paths = asset_selector(snake_sprite_folder, folder, FFP)
 
@@ -456,7 +467,7 @@ def body_unpacker(folder, FFP):
     if len(paths) != 5:
         raise ValueError(f"Invalid folder selected")
 
-    loaded_sprites = []
+    source_sprites = []
     for path in paths:
         try:
             image = pygame.image.load(path).convert_alpha()
@@ -465,9 +476,14 @@ def body_unpacker(folder, FFP):
                 f"Could not load sprite {path!r}: {error}"
             ) from error
 
-        loaded_sprites.append(pygame.transform.smoothscale(image,(cell_size, cell_size)))
+        source_sprites.append(image)
 
-    snake_head_up, snake_head_down, snake_head_left, snake_head_right, snake_scales = loaded_sprites
+    snake_sprite_sources = source_sprites
+    snake_head_up, snake_head_down, snake_head_left, snake_head_right, snake_scales = [
+        pygame.transform.smoothscale(image, (cell_size, cell_size))
+        for image in snake_sprite_sources
+    ]
+    selected_body = folder
     skin_sprited = True
 
 def body_default():
@@ -493,9 +509,146 @@ apple_default()
 def screen_bg_default():
     global screen_bg_col
     screen_bg_col = (0, 0, 0)
+
+def queue_board_settings():
+    global pending_board_settings
+
+    try:
+        new_cells = int(set_screen_size.get_text())
+        new_cell_size = int(set_cell_size.get_text())
+    except ValueError:
+        print("Please enter whole numbers for map size and cell size.")
+        set_screen_size.set_text(str(cells_across))
+        set_cell_size.set_text(str(cell_size))
+        return
+
+    if new_cells < 3 or new_cell_size <= 0:
+        print("Map size must be at least 3 cells and cell size must be positive.")
+        set_screen_size.set_text(str(cells_across))
+        set_cell_size.set_text(str(cell_size))
+        return
+
+    if new_cells * new_cell_size > min(Parent_Width, Parent_height):
+        print("Please enter dimensions that fit inside the game window.")
+        set_screen_size.set_text(str(cells_across))
+        set_cell_size.set_text(str(cell_size))
+        return
+
+    pending_board_settings = (new_cells, new_cell_size)
+    print("Board size queued; it will be applied when the game is over.")
+
+def difficulty_handler(difficulty_in):
+    global cps_inc, base_cps, rnd_diff, Slithertavel, true_cps
+    rnd_diff = int(math.floor(difficulty_in))
+    if rnd_diff == 0:
+        base_cps = 1
+        cps_inc = 0
+    elif rnd_diff == 1:
+        base_cps = 1
+        cps_inc = 0.01
+    elif rnd_diff == 2:
+        base_cps = 1.5
+        cps_inc = 0.01
+    elif rnd_diff == 3:
+        base_cps = 1.5
+        cps_inc = 0.025
+    elif rnd_diff == 4:
+        base_cps = 1.5
+        cps_inc = 0.4
+    elif rnd_diff == 5:
+        base_cps = 2
+        cps_inc = 0.05
+    elif rnd_diff == 6:
+        base_cps = 2
+        cps_inc = 0.075
+    elif rnd_diff == 7:
+        base_cps = 3
+        cps_inc = 0.075
+    elif rnd_diff == 8:
+        base_cps = 5
+        cps_inc = 0.1
+    elif rnd_diff == 9:
+        base_cps = 6
+        cps_inc = 0.1
+    elif rnd_diff == 10:
+        base_cps = 7
+        cps_inc = 0.2
+
+def survival_score():
+    global score
+    score += round(max(rnd_diff * 2, 1))
+
+def eating_score():
+    global score
+    score += round(max((rnd_diff * 200) + (true_cps * 50), 100))
+
+def max_speed_bonus():
+    global score
+    score += round((max_cps * 300))
+
+def apply_pending_board_settings():
+    global pending_board_settings, cells_up, cells_across, cell_size
+    global Screen_Width, Screen_height, screen, Screen_x, Screen_y
+    global snake_box, direction, tail, hungry, game_over, Slithimer
+    global selected_apple
+    global snake_scales, snake_head_up, snake_head_down, snake_head_left, snake_head_right
+
+    if pending_board_settings is None or not game_over:
+        return
+
+    cells_across, cell_size = pending_board_settings
+    cells_up = cells_across
+    pending_board_settings = None
+
+    Screen_Width = cells_across * cell_size
+    Screen_height = cells_up * cell_size
+    screen = pygame.Surface((Screen_Width, Screen_height))
+    Screen_x = (Parent_Width - Screen_Width) // 2
+    Screen_y = (Parent_height - Screen_height) // 2
+
+    head_col = min(max(cells_across // 2, 2), cells_across - 1)
+    row = cells_up // 2
+    snake_box = [
+        [(head_col - offset) * cell_size, row * cell_size]
+        for offset in range(3)
+    ]
+    direction = "R"
+    tail = list(snake_box[-1])
+    hungry = True
+    Slithimer = 0
+
+    if selected_apple_path is not None:
+        apple_path = selected_apple_path
+    else:
+        apple_path = Apple_def_png
+    if apple_sprited:
+        apple_source = pygame.image.load(apple_path).convert_alpha()
+        selected_apple = pygame.transform.smoothscale(
+            apple_source,
+            (cell_size, cell_size),
+        )
+
+    if snake_sprite_sources:
+        (
+            snake_head_up,
+            snake_head_down,
+            snake_head_left,
+            snake_head_right,
+            snake_scales,
+        ) = [
+            pygame.transform.smoothscale(image, (cell_size, cell_size))
+            for image in snake_sprite_sources
+        ]
+
+    set_screen_size.set_text(str(cells_across))
+    set_cell_size.set_text(str(cell_size))
+    update_Manager()
+    game_over = False
+    print(f"Applied board settings: {cells_across} cells at {cell_size}px per cell.")
+
 #pygui
 def update_Manager():
-    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited, is_body_sprited, guts_input, is_guts_col, is_apple_col, apple_col_input, head_col_input, is_head_col, bdr_col_input, is_bdr_col, bg_col_input, is_bg_col, preview_image, preview_surface
+    global Manager, apple_input, apple_dialog, selected_apple, selected_apple_path, body_input, head_input, body_input_y, head_input_y, is_apple_sprited, is_body_sprited, guts_input, is_guts_col, is_apple_col, apple_col_input, head_col_input, is_head_col, bdr_col_input, is_bdr_col, bg_col_input, is_bg_col, preview_image, preview_surface, set_screen_size, set_cell_size, set_difficulty
     Manager = pygame_gui.UIManager((options_width, options_height))
 
     draw_options_title()
@@ -657,6 +810,60 @@ def update_Manager():
         container=options_scroll,
     )
 
+    set_screen_text_y = bg_col_input.relative_rect.centery + (cell_size // 2) + 20
+    set_screen_text = pygame_gui.elements.UITextBox(
+        "Map size (in cells):",
+        (0, set_screen_text_y, -1, -1),
+        Manager,
+        container=options_scroll
+    )
+
+    set_screen_y = bg_col_input.relative_rect.centery + (cell_size // 2) + 20
+    set_screen_x = set_screen_text.relative_rect.right + 5
+    set_screen_size = pygame_gui.elements.UITextEntryBox(
+        (set_screen_x, set_screen_y, -1, -1),
+        "12",
+        Manager,
+        options_scroll,
+    )
+
+    set_cell_text_y = set_screen_text.relative_rect.centery + (cell_size // 2) + 20
+    set_cell_text = pygame_gui.elements.UITextBox(
+        "Cell size (in pixels):",
+        (0, set_cell_text_y, -1, -1),
+        Manager,
+        container=options_scroll
+    )
+
+    set_cell_x = set_cell_text.relative_rect.right + 5
+    set_cell_size = pygame_gui.elements.UITextEntryBox(
+        (set_cell_x, set_cell_text_y, -1, -1),
+        "50",
+        Manager,
+        container=options_scroll
+    )
+
+    set_dif_text_y = set_cell_text.relative_rect.centery + (cell_size // 2) + 20
+    set_dif_text = pygame_gui.elements.UITextBox(
+        "Difficulty:",
+        (0, set_dif_text_y, -1, -1),
+        Manager,
+        container=options_scroll
+    )
+
+    set_dif_height = set_cell_text.relative_rect.height // 2
+    set_dif_width = set_cell_text.relative_rect.width
+    set_dif_x = set_dif_text.relative_rect.right + 5
+    set_dif_rect = pygame.Rect(set_dif_x, 0, set_dif_width, set_dif_height)
+    set_dif_rect.centery = set_dif_text.relative_rect.centery   
+    set_difficulty = pygame_gui.elements.UIHorizontalSlider(
+        (set_dif_rect), 5, (0, 10),
+        Manager,
+        container=options_scroll,
+        visible=1, click_increment=1,
+    )
+
+
     content_height = max(
         apple_input.relative_rect.bottom,
         is_apple_sprited.relative_rect.bottom,
@@ -672,6 +879,9 @@ def update_Manager():
         is_bdr_col.relative_rect.bottom,
         bg_col_input.relative_rect.bottom,
         is_bg_col.relative_rect.bottom,
+        set_screen_size.relative_rect.bottom,
+        set_cell_size.relative_rect.bottom,
+        set_difficulty.relative_rect.bottom,
     ) + 25
     preview_surface = pygame.Surface(
         (preview_width, content_height),
@@ -680,8 +890,10 @@ def update_Manager():
     preview_surface.fill((0, 0, 0, 0))
     preview_image.set_dimensions((preview_width, content_height))
     preview_image.set_image(preview_surface)
+
+
     options_scroll.set_scrollable_area_dimensions(
-        (preview_width, content_height)
+        (options_width, content_height)
     )
 
     
@@ -804,6 +1016,15 @@ def pygame_gui_event_handler(event_in):
         custom_bg = True
     if event.type == pygame_gui.UI_CHECK_BOX_UNCHECKED and event.ui_element == is_bg_col:
         custom_bg = False
+    if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and event.ui_element == set_screen_size:
+        queue_board_settings()
+    if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and event.ui_element == set_cell_size:
+        queue_board_settings()
+    if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED and event.ui_element == set_difficulty:
+        difficulty_in = event.value
+        difficulty_handler(difficulty_in)
+
+
 
 def options_translator(event_in):
     mouse_types = (
@@ -839,6 +1060,25 @@ def click_handler(event):
         if start_menu and start_quit_btn.temp_rect.collidepoint(event.pos):
             start_quit_btn.onClickFunction()
 
+def score_board():
+    global score
+    font_rect = Reg_font.get_rect(f"Score: {str(score)}")
+    score_rect = font_rect.copy()
+    score_rect.inflate_ip(10, 10)
+    score_rect_border = score_rect.copy()
+    score_rect_border.inflate_ip(4, 4)
+    score_rect_border.topleft = (0, 0)
+    score_rect.center = score_rect_border.center
+    font_rect.center = score_rect.center
+    score_surface = pygame.Surface(score_rect_border.size, pygame.SRCALPHA)
+    pygame.draw.rect(score_surface, button_border, score_rect_border, border_radius=3)
+    pygame.draw.rect(score_surface, button_col, score_rect, border_radius=3)
+    Reg_font.render_to(
+        score_surface, font_rect, f"Score: {str(score)}", button_border)
+    score_rect_border.left += 10
+    score_rect_border.top += 10
+    Parent_Window.blit(score_surface, score_rect_border)
+
 
 #Game Loop
 
@@ -873,6 +1113,8 @@ while run:
         if options:
             pygame_gui_event_handler(event)
                 
+    if game_over and pending_board_settings is not None:
+        apply_pending_board_settings()
 
 #Game window actions
     if playing:
@@ -903,6 +1145,9 @@ while run:
             snake_box.append(tail)
             true_cps += cps_inc
             max_cps = true_cps - cps_inc
+            Slithertavel = 1000 / true_cps
+            if not game_over:
+                eating_score()
         
             
 #slithering
@@ -923,6 +1168,7 @@ while run:
                     snake_box[0][0] = snake_box[1][0]
                     snake_box[0][1] = snake_box[1][1] + cell_size
                 tail = list(snake_box[-1])
+                survival_score()
                 game_over, autopsy = is_snake_dead(game_over, autopsy)
    
 #drawing
@@ -1034,6 +1280,7 @@ while run:
     if game_over:
         on_game_over()
 
+    score_board()
     pygame.display.update()
 
 file_dialog_root.destroy()
