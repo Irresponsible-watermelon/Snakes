@@ -85,8 +85,6 @@ high_score = 0
 new_hs = False
 been_triggered = False
 death_message = None
-start_menu
-
 #menus
 
 pause_screen = pygame.Surface((Parent_Width, Parent_height), pygame.SRCALPHA)
@@ -162,7 +160,31 @@ Italic_font_lg = pygame.freetype.Font(str(Path(__file__).resolve().parent
                                      / "opendyslexic-0.92"
                                      / "OpenDyslexic-Italic.otf"), 24)
 
-
+def onStart():
+    global max_cps, autopsy, mistakes_avoided, game_ended, survival_time, has_max, show_death, high_score, new_hs, been_triggered, death_message
+    global start_menu, pause_menu, playing, Slithimer, true_cps, shed, game_over, head_count, AppInSnake, Snake_fed, hungry
+    max_cps = 0
+    autopsy = ''
+    mistakes_avoided = 0
+    game_ended = False
+    survival_time = 0
+    has_max = False
+    show_death = False
+    high_score = 0
+    new_hs = False
+    been_triggered = False
+    death_message = None
+    start_menu = False
+    pause_menu = False
+    playing = True
+    Slithimer = 0
+    true_cps = base_cps
+    shed = False
+    game_over = False
+    head_count = 0
+    AppInSnake = False
+    Snake_fed = False
+    hungry = True
 
 #snake
 snake_box = [[int(Screen_Width / 2), int(Screen_height / 2)]]
@@ -263,6 +285,14 @@ def draw_death():
 
     death_btn.draw()
     Parent_Window.blit(death_screen, (0, 0))
+
+def draw_start():
+    start_screen.fill(parent_bg_col)
+    start_btn.draw()
+    start_options_btn.draw()
+    start_quit_btn.draw()
+
+    Parent_Window.blit(start_screen, (0, 0))
 
 def on_resize(Parent_Width, Parent_height):
     global Parent_Window, Screen_x, Screen_y, options_width, options_height, options_x, options_y, options_screen, pause_screen, gameover_screen, start_screen, Manager, death_screen
@@ -453,9 +483,10 @@ def start_press():
     playing = True
 
 def death_press():
-    global show_death, score, start_menu
+    global show_death, score, start_menu, game_over
     show_death = False
     score = 0
+    game_over = False
     difficulty_handler(5)
     start_menu = True
 
@@ -1190,6 +1221,8 @@ def click_handler(event):
             start_options_btn.onClickFunction()
         if start_menu and start_quit_btn.temp_rect.collidepoint(event.pos):
             start_quit_btn.onClickFunction()
+        if show_death and death_btn.temp_rect.collidepoint(event.pos):
+            death_btn.onClickFunction()
 
 def score_board():
     global score
@@ -1414,7 +1447,7 @@ while run:
         score_board()
 
     if start_menu:
-        pass
+        draw_start()
     pygame.display.update()
 
 file_dialog_root.destroy()
