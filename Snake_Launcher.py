@@ -7,7 +7,8 @@ from tkinter import messagebox
 
 def launch_snakePy():
     if getattr(sys, "frozen", False):
-        app_dir = Path(sys.executable).parent
+        app_dir = Path(Path(sys.executable).parent
+                       / "Snake_Game(Pygame)")
     else:
         app_dir = Path(__file__).parent / "dist"
 

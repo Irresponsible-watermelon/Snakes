@@ -1,0 +1,7 @@
+To upload your own apple sprite, copy any png image into the 'Apple sprites' folder and select it using the ingame menu.
+
+To upload your own snake sprites, copy a folder into 'Snake sprites' containing png images of the same dimensions, named the following:
+'Up.png' , 'Down.png', 'Left.png', 'Right.png', 'Body.png'
+
+These images should represent the snake head pointing up, down, left, and right, alongside one for the rest of its body.
+You can then select a folder containing a set ofp pngs formatting in this way using the ingame dialogue.
