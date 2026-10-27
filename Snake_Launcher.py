@@ -12,7 +12,7 @@ def launch_snakePy():
     else:
         app_dir = Path(__file__).parent / "dist"
 
-    game_path = app_dir / "Snake_Game.exe"
+    game_path = app_dir / "Snake_Game(Pygame).exe"
 
     if not game_path.is_file():
         messagebox.showerror("Game not found", f"Could not find:\n{game_path}")
