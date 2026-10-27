@@ -3,6 +3,7 @@ import pygame.freetype
 import random
 import math
 import pygame_gui
+import sys
 import tkinter as tk
 from tkinter import filedialog
 from pathlib import Path
@@ -45,7 +46,7 @@ Apple = [0, 0]
 PotApple = [0, 0]
 click_coords = [0, 0]
 shed = False
-game_over = False
+game_over = True
 head_count = 0
 AppInSnake = False
 Snake_fed = False
@@ -56,14 +57,14 @@ cps_inc = 0.05 #How much cps is increased every time an apple is eaten
 true_cps = base_cps #(For now, increasing true_cps over time or once an apple is eaten could be interesting)
 Slithertavel = 1000 / true_cps # Milliseconds between each snake movement
 Slithimer = 0 # Time since last snake movement
-playing = True
+playing = False
 skin_sprited = True
 apple_sprited = True
 apple_sprite_folder = "Apple sprites"
 snake_sprite_folder = "Snake sprites"
 default_body = 'My_Snake_1'
 font_folder = "opendyslexic-0.92"
-start_menu = False
+start_menu = True
 pause_menu = False
 options = False
 open_dialogue = None
@@ -135,34 +136,34 @@ options_bg_col = (200, 200, 200, 150)
 
 #fonts
 
-Bold_font = pygame.freetype.Font(str(Path(__file__).resolve().parent
-                                     / "Assets"
-                                     / "opendyslexic-0.92"
-                                     / "OpenDyslexic-Bold.otf"), 12)
+APP_DIR = (
+    Path(sys.executable).resolve().parent
+    if getattr(sys, "frozen", False)
+    else Path(__file__).resolve().parent
+)
+ASSETS_DIR = APP_DIR / "Assets"
 
-BoldItalic_font = pygame.freetype.Font(str(Path(__file__).resolve().parent
-                                     / "Assets"
-                                     / "opendyslexic-0.92"
-                                     / "OpenDyslexic-BoldItalic.otf"), 12)
+Bold_font = pygame.freetype.Font(str(ASSETS_DIR / "opendyslexic-0.92" / "OpenDyslexic-Bold.otf"), 12)
 
-Reg_font = pygame.freetype.Font(str(Path(__file__).resolve().parent
-                                     / "Assets"
-                                     / "opendyslexic-0.92"
-                                     / "OpenDyslexic-Regular.otf"), 12)
+BoldItalic_font = pygame.freetype.Font(str(ASSETS_DIR / "opendyslexic-0.92" / "OpenDyslexic-BoldItalic.otf"), 12)
 
-Reg_font_lg = pygame.freetype.Font(str(Path(__file__).resolve().parent
-                                     / "Assets"
-                                     / "opendyslexic-0.92"
-                                     / "OpenDyslexic-Bold.otf"), 24)
+Reg_font = pygame.freetype.Font(str(ASSETS_DIR / "opendyslexic-0.92" / "OpenDyslexic-Regular.otf"), 12)
 
-Italic_font_lg = pygame.freetype.Font(str(Path(__file__).resolve().parent
-                                     / "Assets"
-                                     / "opendyslexic-0.92"
-                                     / "OpenDyslexic-Italic.otf"), 24)
+Reg_font_lg = pygame.freetype.Font(str(ASSETS_DIR / "opendyslexic-0.92" / "OpenDyslexic-Regular.otf"), 24)
+
+Italic_font_lg = pygame.freetype.Font(str(ASSETS_DIR / "opendyslexic-0.92" / "OpenDyslexic-Italic.otf"), 24)
+
+def build_snake():
+    global snake_box
+    snake_box = [[int(Screen_Width / 2), int(Screen_height / 2)]]
+    snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + cell_size)])
+    snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 2))])
+build_snake()
+
 
 def onStart():
     global max_cps, autopsy, mistakes_avoided, game_ended, survival_time, has_max, show_death, high_score, new_hs, been_triggered, death_message
-    global start_menu, pause_menu, playing, Slithimer, true_cps, shed, game_over, head_count, AppInSnake, Snake_fed, hungry
+    global start_menu, pause_menu, playing, Slithimer, true_cps, shed, game_over, head_count, AppInSnake, Snake_fed, hungry, direction
     max_cps = 0
     autopsy = ''
     mistakes_avoided = 0
@@ -185,11 +186,10 @@ def onStart():
     AppInSnake = False
     Snake_fed = False
     hungry = True
+    direction = 'U'
+    build_snake()
 
 #snake
-snake_box = [[int(Screen_Width / 2), int(Screen_height / 2)]]
-snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + cell_size)])
-snake_box.append([int(Screen_Width / 2), int((Screen_height / 2) + (cell_size * 2))])
 
 #functions
 
@@ -367,57 +367,23 @@ def on_resize(Parent_Width, Parent_height):
 def asset_selector(asset_subfolder, fileroot, FFP=False):
     if asset_subfolder == snake_sprite_folder:
         if not FFP:
-            paths = [str(Path(__file__).resolve().parent
-                            / "Assets"
-                            / str(asset_subfolder)
-                            / str(fileroot)
-                            / "Up.png"),
-                        str(Path(__file__).resolve().parent
-                                / "Assets"
-                                / str(asset_subfolder)
-                                / str(fileroot)
-                                / "Down.png"),
-                        str(Path(__file__).resolve().parent
-                                / "Assets"
-                                / str(asset_subfolder)
-                                / str(fileroot)
-                                / "Left.png"), 
-                        str(Path(__file__).resolve().parent
-                                / "Assets"
-                                / str(asset_subfolder)
-                                / str(fileroot)
-                                / "Right.png"), 
-                        str(Path(__file__).resolve().parent
-                                / "Assets"
-                                / str(asset_subfolder)
-                                / str(fileroot)
-                                / "Body.png"), 
-                            ]
+            paths = [str(ASSETS_DIR / str(asset_subfolder) / str(fileroot) / "Up.png"),
+                    str(ASSETS_DIR / str(asset_subfolder) / str(fileroot) / "Down.png"),
+                    str(ASSETS_DIR / str(asset_subfolder) / str(fileroot) / "Left.png"),
+                    str(ASSETS_DIR / str(asset_subfolder) / str(fileroot) / "Right.png"),
+                    str(ASSETS_DIR / str(asset_subfolder) / str(fileroot) / "Body.png"),
+                        ]
         elif FFP:
             paths = [
-                str(Path(__file__).resolve()
-                    / asset_subfolder
-                    / "Up.png"),
-                str(Path(__file__).resolve()
-                    / asset_subfolder
-                    / "Down.png"),
-                str(Path(__file__).resolve()
-                    / asset_subfolder
-                    / "Left.png"),
-                str(Path(__file__).resolve()
-                    / asset_subfolder
-                    / "Right.png"),
-                str(Path(__file__).resolve()
-                    / asset_subfolder
-                    / "Body.png"),
+                str(ASSETS_DIR / str(asset_subfolder) / "Up.png"),
+                str(ASSETS_DIR / str(asset_subfolder) / "Down.png"),
+                str(ASSETS_DIR / str(asset_subfolder) / "Left.png"),
+                str(ASSETS_DIR / str(asset_subfolder) / "Right.png"),
+                str(ASSETS_DIR / str(asset_subfolder) / "Body.png"),
             ]
         return paths
     else:
-        abs_path = str(Path(__file__).resolve().parent
-            / "Assets"
-            / str(asset_subfolder)
-            / str(fileroot)
-            )
+        abs_path = str(ASSETS_DIR / str(asset_subfolder) / str(fileroot))
         return abs_path
 
 # if asset type not head, outputs file path.
@@ -428,13 +394,18 @@ def asset_selector(asset_subfolder, fileroot, FFP=False):
 def on_esc_pressed():
     global playing, pause_menu, options
 
-    if playing:
-        playing = False
-        pause_menu = True
-    elif not playing:
-        playing = True
-        pause_menu = False
-        options =  False
+    if not start_menu:
+        if playing and not pause_menu:
+            playing = False
+            pause_menu = True
+        elif not playing and pause_menu:
+            playing = True
+            pause_menu = False
+            options =  False
+    
+    if start_menu and options:
+        options = False
+
 
 def draw_pause():
     pause_screen.fill(Greyout_col)
@@ -481,6 +452,7 @@ def start_press():
     global start_menu, playing
     start_menu = False
     playing = True
+    onStart()
 
 def death_press():
     global show_death, score, start_menu, game_over
@@ -491,7 +463,7 @@ def death_press():
     start_menu = True
 
 def death_messager():
-    global autopsy
+    global autopsy, death_message
     randint = random.randint(0, 10)
     if autopsy == 'GRD':
         if randint == 0:
@@ -1076,11 +1048,7 @@ def pygame_gui_event_handler(event_in):
         path = filedialog.askopenfilename(
             parent=file_dialog_root,
             title="Choose a food sprite",
-            initialdir=str(
-                Path(__file__).resolve().parent
-                / "Assets"
-                / apple_sprite_folder
-            ),
+            initialdir= ASSETS_DIR / apple_sprite_folder,
             filetypes=[("PNG images", "*.png")]
         )
         if not path:
@@ -1093,11 +1061,8 @@ def pygame_gui_event_handler(event_in):
         folder_path = filedialog.askdirectory(
             parent=file_dialog_root,
             title="Choose a body sprite folder",
-            initialdir=str(
-                Path(__file__).resolve().parent
-                / "Assets"
-                / snake_sprite_folder
-            ))
+            initialdir= ASSETS_DIR / snake_sprite_folder,
+            )
         
         if folder_path:
             try:
@@ -1382,6 +1347,8 @@ while run:
 
     if pause_menu:        
         draw_pause()
+    if start_menu:
+        draw_start()
 #options menu
     if options:
         Manager.update(dt / 1000)
@@ -1440,14 +1407,12 @@ while run:
         draw_options_menu()
 
 
-    if game_over:
+    if game_over and not start_menu:
         on_game_over()
 
-    if playing:
+    if not game_over and not show_death and not start_menu:
         score_board()
 
-    if start_menu:
-        draw_start()
     pygame.display.update()
 
 file_dialog_root.destroy()
