@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Snake (godot)"
+run/main_scene="uid://dcqcp2po28cyf"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
 
 [editor]
 
