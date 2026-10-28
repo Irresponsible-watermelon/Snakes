@@ -1,7 +1,34 @@
 [gd_scene format=3 uid="uid://dcqcp2po28cyf"]
 
 [ext_resource type="PackedScene" uid="uid://b381g51uua3xa" path="res://snake.tscn" id="1_t1xjx"]
+[ext_resource type="Texture2D" uid="uid://bbjglpraq5p2e" path="res://icon.svg" id="2_npmxb"]
 
 [node name="Main" type="Node2D" unique_id=1107367377]
 
 [node name="Snake" parent="." unique_id=189533688 instance=ExtResource("1_t1xjx")]
+position = Vector2(50, 50)
+
+[node name="Timer" type="Timer" parent="Snake" unique_id=245364244]
+wait_time = 0.2
+autostart = true
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1828285225]
+zoom = Vector2(0.5, 0.5)
+
+[node name="Walls" type="Node" parent="." unique_id=621466389]
+
+[node name="BottomWall" type="Sprite2D" parent="Walls" unique_id=1634994407]
+position = Vector2(0, 600)
+texture = ExtResource("2_npmxb")
+
+[node name="TopWall" type="Sprite2D" parent="Walls" unique_id=1553293858]
+position = Vector2(0, -600)
+texture = ExtResource("2_npmxb")
+
+[node name="RightWall" type="Sprite2D" parent="Walls" unique_id=217016212]
+position = Vector2(600, 0)
+texture = ExtResource("2_npmxb")
+
+[node name="LeftWall" type="Sprite2D" parent="Walls" unique_id=355280407]
+position = Vector2(-600, 0)
+texture = ExtResource("2_npmxb")
