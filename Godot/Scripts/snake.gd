@@ -2,8 +2,6 @@ class_name Snake
 
 extends Node2D
 
-const body_segment_size = 50
-
 enum CollisionDirection {
 	TOP,
 	BOTTOM,
@@ -24,6 +22,8 @@ var apple_eaten = false
 @onready var snake_parts:Node = $SnakeParts
 @onready var timer = $Timer
 
+@export var global: Main
+@onready var body_segment_size = global.cell_size
 @export var walls: Walls
 var walls_dict
 
@@ -59,7 +59,6 @@ func _input(event):
 		pending_move_direction = Vector2.LEFT
 	elif (event.is_action_pressed("ui_right") or event.is_action_pressed("Right")) and (move_direction != Vector2.LEFT):
 		pending_move_direction = Vector2.RIGHT
-	print_debug(move_direction)
 
 func on_timeout():
 	move_direction = pending_move_direction

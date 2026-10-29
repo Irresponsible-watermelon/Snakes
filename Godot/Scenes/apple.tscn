@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://daojfp6lky2hv"]
+
+[ext_resource type="Texture2D" uid="uid://75ebhyscq1f6" path="res://Assets/Apple sprites/Red Apple pxlart.png" id="1_ir1en"]
+
+[node name="Apple" type="Node2D" unique_id=1843909988]
+
+[node name="Apple" type="Sprite2D" parent="." unique_id=1243729888]
+texture = ExtResource("1_ir1en")
