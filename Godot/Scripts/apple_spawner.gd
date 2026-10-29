@@ -43,3 +43,8 @@ func check_food_location(pos):
 			is_location_bad = true
 			return is_location_bad
 	return is_location_bad
+
+func remove_food():
+	if is_instance_valid(apple):
+		apple.queue_free()
+		apple = null

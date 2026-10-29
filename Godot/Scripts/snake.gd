@@ -26,7 +26,6 @@ var apple_eaten = false
 @onready var body_segment_size = global.cell_size
 @export var walls: Walls
 @export var apple_spawner: AppleSpawner
-@onready var apple_pos = apple_spawner.apple_position
 @onready var apple_needed = apple_spawner.food_needed
 var walls_dict
 
@@ -71,15 +70,19 @@ func on_timeout():
 	var new_head_position = new_head_pos_finder()
 	var wall_collision = check_wall_collision(new_head_position) 
 	
+	if is_snake_inself(new_head_position):
+		has_collisioned = true
+		
+	if is_food_eaten(new_head_position):
+		apple_needed = true
+		apple_spawner.remove_food()
+		apple_spawner.spawn_food()
+		
 	if wall_collision == null:
 		head_selector(head, move_direction)
 		move_to_position(new_head_position)
 	else:
 		has_collisioned = true
-	if is_snake_inself(new_head_position):
-		has_collisioned = true
-	if is_food_eaten(new_head_position):
-		apple_needed = true
 		
 func new_head_pos_finder():
 	var new_head_position = body_parts[0].position
@@ -136,12 +139,8 @@ func snake_elongate(grow_position):
 	snake_parts.add_child(part)
 	body_parts.append(part)
 	
-func is_food_eaten(new_head_position):
-	if apple_pos == new_head_position:
-		return true
-		print_debug("apple_eaten:")
-	else:
-		return false
+func is_food_eaten(new_head_position: Vector2) -> bool:
+	return apple_spawner.apple_position == new_head_position
 	
 func is_snake_inself(new_head_position):
 	var is_inself = false
