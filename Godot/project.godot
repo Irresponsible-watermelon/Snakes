@@ -13,7 +13,7 @@ config_version=5
 config/name="Snake (godot)"
 run/main_scene="uid://dcqcp2po28cyf"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://Assets/icon.svg"
 
 [display]
 

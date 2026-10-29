@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dcqcp2po28cyf"]
 
-[ext_resource type="PackedScene" uid="uid://b381g51uua3xa" path="res://snake.tscn" id="1_t1xjx"]
-[ext_resource type="Script" uid="uid://bnm6n8cs2y8wx" path="res://Scenes/walls.gd" id="2_h7c1l"]
+[ext_resource type="PackedScene" uid="uid://b381g51uua3xa" path="res://Scenes/snake.tscn" id="1_t1xjx"]
+[ext_resource type="Script" uid="uid://bnm6n8cs2y8wx" path="res://Scripts/walls.gd" id="2_h7c1l"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_se6al"]
 size = Vector2(50, 50)
