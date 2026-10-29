@@ -4,11 +4,22 @@ extends Node2D
 
 const body_segment_size = 50
 
+enum CollisionDirection {
+	TOP,
+	BOTTOM,
+	LEFT,
+	RIGHT,
+}
+
 var body_parts = []
 var body_texture = preload("res://Assets/Snake sprites/My_Snake_1/Body.png")
 var head_texture = preload("res://Assets/Snake sprites/My_Snake_1/Up.png")
 @onready var snake_parts:Node = $SnakeParts
 @onready var timer = $Timer
+
+@export var walls: Walls
+var walls_dict
+
 var move_direction = Vector2.UP
 var cells_per_second = 2
 var wait_time = (1 / cells_per_second)
@@ -16,14 +27,16 @@ var wait_time = (1 / cells_per_second)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var head = Sprite2D.new()
-	head.position = Vector2(50,50)
+	head.centered = false
 	head.scale = Vector2(1,1)
+	head.position = Vector2(50,50)
 	head.texture = head_texture
 	snake_parts.add_child(head)
 	body_parts.append(head)
 	timer.timeout.connect(on_timeout)
 	timer.wait_time = wait_time
 	
+	walls_dict = walls.walls_dict
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -40,9 +53,23 @@ func _input(event):
 
 func on_timeout():
 	var new_head_position = position + (move_direction * body_segment_size)
-	move_to_position(new_head_position)
+	
+	var wall_collision = check_wall_collision(new_head_position) 
+	if wall_collision == null:
+		move_to_position(new_head_position)
+	
 	
 func move_to_position(new_position):
 	position = new_position
 	body_parts[0].position = new_position
 	
+func check_wall_collision(new_head_position: Vector2):
+	if (new_head_position.x == walls_dict["left"].position.x + body_segment_size) and move_direction == Vector2.LEFT:
+		return CollisionDirection.LEFT
+	elif (new_head_position.y == walls_dict["top"].position.y + body_segment_size) and move_direction == Vector2.UP:
+		return CollisionDirection.TOP
+	elif new_head_position.y == walls_dict["bottom"].position.y and move_direction == Vector2.DOWN:
+		return CollisionDirection.BOTTOM
+	elif new_head_position.x == walls_dict["right"].position.x and move_direction == Vector2.RIGHT:
+		return CollisionDirection.RIGHT
+		

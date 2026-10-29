@@ -6,5 +6,3 @@
 script = ExtResource("1_baghe")
 
 [node name="SnakeParts" type="Node" parent="." unique_id=56186883]
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=841887602]

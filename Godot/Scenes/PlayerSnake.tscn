@@ -1,12 +1,16 @@
 [gd_scene format=3 uid="uid://dcqcp2po28cyf"]
 
 [ext_resource type="PackedScene" uid="uid://b381g51uua3xa" path="res://snake.tscn" id="1_t1xjx"]
-[ext_resource type="Texture2D" uid="uid://bbjglpraq5p2e" path="res://icon.svg" id="2_npmxb"]
+[ext_resource type="Script" uid="uid://bnm6n8cs2y8wx" path="res://Scenes/walls.gd" id="2_h7c1l"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_se6al"]
+size = Vector2(50, 50)
 
 [node name="Main" type="Node2D" unique_id=1107367377]
 
-[node name="Snake" parent="." unique_id=189533688 instance=ExtResource("1_t1xjx")]
+[node name="Snake" parent="." unique_id=189533688 node_paths=PackedStringArray("walls") instance=ExtResource("1_t1xjx")]
 position = Vector2(50, 50)
+walls = NodePath("../Walls")
 
 [node name="Timer" type="Timer" parent="Snake" unique_id=245364244]
 wait_time = 0.2
@@ -16,19 +20,30 @@ autostart = true
 zoom = Vector2(0.5, 0.5)
 
 [node name="Walls" type="Node" parent="." unique_id=621466389]
+script = ExtResource("2_h7c1l")
 
-[node name="BottomWall" type="Sprite2D" parent="Walls" unique_id=1634994407]
-position = Vector2(0, 600)
-texture = ExtResource("2_npmxb")
+[node name="BottomWall" type="Sprite2D" parent="Walls" unique_id=1634994407 groups=["Walls"]]
+position = Vector2(-300, 300)
+scale = Vector2(12, 1)
+texture = SubResource("PlaceholderTexture2D_se6al")
+centered = false
 
-[node name="TopWall" type="Sprite2D" parent="Walls" unique_id=1553293858]
-position = Vector2(0, -600)
-texture = ExtResource("2_npmxb")
+[node name="TopWall" type="Sprite2D" parent="Walls" unique_id=1553293858 groups=["Walls"]]
+position = Vector2(-300, -300)
+scale = Vector2(12, 1)
+texture = SubResource("PlaceholderTexture2D_se6al")
+centered = false
+offset = Vector2(0, -50)
 
-[node name="RightWall" type="Sprite2D" parent="Walls" unique_id=217016212]
-position = Vector2(600, 0)
-texture = ExtResource("2_npmxb")
+[node name="RightWall" type="Sprite2D" parent="Walls" unique_id=217016212 groups=["Walls"]]
+position = Vector2(300, -300)
+scale = Vector2(1, 12)
+texture = SubResource("PlaceholderTexture2D_se6al")
+centered = false
 
-[node name="LeftWall" type="Sprite2D" parent="Walls" unique_id=355280407]
-position = Vector2(-600, 0)
-texture = ExtResource("2_npmxb")
+[node name="LeftWall" type="Sprite2D" parent="Walls" unique_id=355280407 groups=["Walls"]]
+position = Vector2(-300, -300)
+scale = Vector2(1, 12)
+texture = SubResource("PlaceholderTexture2D_se6al")
+centered = false
+offset = Vector2(-50, 0)
