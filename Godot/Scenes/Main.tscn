@@ -32,23 +32,23 @@ global = NodePath("..")
 
 [node name="BottomWall" type="Sprite2D" parent="Walls" unique_id=1634994407 groups=["Walls"]]
 z_index = -1
-position = Vector2(0, 350)
-scale = Vector2(13, 1)
+position = Vector2(0, 650)
+scale = Vector2(25, 1)
 texture = SubResource("PlaceholderTexture2D_se6al")
 
 [node name="TopWall" type="Sprite2D" parent="Walls" unique_id=1553293858 groups=["Walls"]]
-position = Vector2(0, -350)
-scale = Vector2(13, 1)
+position = Vector2(0, -650)
+scale = Vector2(25, 1)
 texture = SubResource("PlaceholderTexture2D_se6al")
 
 [node name="RightWall" type="Sprite2D" parent="Walls" unique_id=217016212 groups=["Walls"]]
-position = Vector2(350, 0)
-scale = Vector2(1, 13)
+position = Vector2(650, 0)
+scale = Vector2(1, 25)
 texture = SubResource("PlaceholderTexture2D_se6al")
 
 [node name="LeftWall" type="Sprite2D" parent="Walls" unique_id=355280407 groups=["Walls"]]
-position = Vector2(-350, 0)
-scale = Vector2(1, 13)
+position = Vector2(-650, 0)
+scale = Vector2(1, 25)
 texture = SubResource("PlaceholderTexture2D_se6al")
 
 [node name="Food" type="Node" parent="." unique_id=903751541]

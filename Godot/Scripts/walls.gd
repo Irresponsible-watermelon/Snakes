@@ -11,6 +11,7 @@ var bottom_right_corner: Vector2
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var walls = get_tree().get_nodes_in_group("Walls") as Array[Node2D]
+	
 	for wall in walls:
 		if wall.position.x < 0:
 			walls_dict["left"] = wall

@@ -1,6 +1,7 @@
 extends Node2D
 
 var cell_size: int = 50
+var cells_across: int = 12
 var score: int = 0
 var survival_time = 0
 var difficulty: int
