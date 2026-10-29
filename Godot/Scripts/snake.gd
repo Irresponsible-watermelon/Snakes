@@ -18,6 +18,8 @@ var head_down_texture = preload("res://Assets/Snake sprites/My_Snake_1/Down.png"
 var head_left_texture = preload("res://Assets/Snake sprites/My_Snake_1/Left.png")
 var head_right_texture = preload("res://Assets/Snake sprites/My_Snake_1/Right.png")
 var head: Sprite2D
+var grow_position: Vector2
+var apple_eaten = false
 
 @onready var snake_parts:Node = $SnakeParts
 @onready var timer = $Timer
@@ -26,7 +28,8 @@ var head: Sprite2D
 var walls_dict
 
 var move_direction = Vector2.UP
-var cells_per_second = 2
+var pending_move_direction = Vector2.UP
+var cells_per_second = 1
 var wait_time = (1 / cells_per_second)
 
 # Called when the node enters the scene tree for the first time.
@@ -38,6 +41,8 @@ func _ready():
 	head.texture = head_up_texture
 	snake_parts.add_child(head)
 	body_parts.append(head)
+	snake_elongate(Vector2(50,100))
+	snake_elongate(Vector2(50,150))
 	timer.timeout.connect(on_timeout)
 	timer.wait_time = wait_time
 	
@@ -46,18 +51,20 @@ func _ready():
 func _process(delta: float) -> void:
 	pass
 func _input(event):
-	if (event.is_action_pressed("ui_up") or event.is_action_pressed("Up") and move_direction != Vector2.DOWN):
-		move_direction = Vector2.UP
-	elif (event.is_action_pressed("ui_down") or event.is_action_pressed("Down") and move_direction != Vector2.UP):
-			move_direction = Vector2.DOWN
-	elif (event.is_action_pressed("ui_left") or event.is_action_pressed("Left") and move_direction != Vector2.RIGHT):
-		move_direction = Vector2.LEFT
-	elif (event.is_action_pressed("ui_right") or event.is_action_pressed("Right") and move_direction != Vector2.LEFT):
-		move_direction = Vector2.RIGHT
+	if (event.is_action_pressed("ui_up") or event.is_action_pressed("Up")) and (move_direction != Vector2.DOWN):
+		pending_move_direction = Vector2.UP
+	elif (event.is_action_pressed("ui_down") or event.is_action_pressed("Down")) and (move_direction != Vector2.UP):
+			pending_move_direction = Vector2.DOWN
+	elif (event.is_action_pressed("ui_left") or event.is_action_pressed("Left")) and (move_direction != Vector2.RIGHT):
+		pending_move_direction = Vector2.LEFT
+	elif (event.is_action_pressed("ui_right") or event.is_action_pressed("Right")) and (move_direction != Vector2.LEFT):
+		pending_move_direction = Vector2.RIGHT
 	print_debug(move_direction)
 
 func on_timeout():
-	var new_head_position = position + (move_direction * body_segment_size)
+	move_direction = pending_move_direction
+	grow_position = body_parts[-1].position
+	var new_head_position = new_head_pos_finder()
 	
 	var wall_collision = check_wall_collision(new_head_position) 
 	if wall_collision == null:
@@ -67,9 +74,31 @@ func on_timeout():
 		var has_collisioned = true
 	
 	
-func move_to_position(new_position):
-	position = new_position
-	body_parts[0].position = new_position
+func new_head_pos_finder():
+	var new_head_position = body_parts[0].position
+	
+	if move_direction == Vector2.UP:
+		new_head_position.y -= body_segment_size
+	elif move_direction == Vector2.DOWN:
+		new_head_position.y += body_segment_size
+	elif move_direction == Vector2.LEFT:
+		new_head_position.x -= body_segment_size
+	elif move_direction == Vector2.RIGHT:
+		new_head_position.x += body_segment_size
+	return new_head_position
+
+func move_to_position(new_head_position):
+	var previous_positions: Array[Vector2] = []
+	
+	for part in body_parts:
+		previous_positions.append(part.position)
+	for x in range(1, body_parts.size()):
+		body_parts[x].position = previous_positions[x - 1]
+	
+	body_parts[0].position = new_head_position
+	if apple_eaten:
+		snake_elongate(grow_position)
+		apple_eaten = false
 	
 func check_wall_collision(new_head_position: Vector2):
 	if (new_head_position.x == walls_dict["left"].position.x) and move_direction == Vector2.LEFT:
@@ -90,3 +119,16 @@ func head_selector(head: Sprite2D, move_direction: Vector2):
 		head.texture = head_left_texture
 	elif move_direction ==  Vector2.RIGHT:
 		head.texture = head_right_texture
+
+func snake_elongate(grow_position):
+	var part = Sprite2D.new()
+	part.centered = true
+	part.scale = Vector2 (1,1)
+	part.texture = body_texture
+	part.position = grow_position
+	snake_parts.add_child(part)
+	body_parts.append(part)
+	
+	
+	
+	
