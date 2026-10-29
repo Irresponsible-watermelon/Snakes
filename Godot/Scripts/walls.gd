@@ -23,7 +23,7 @@ func _ready() -> void:
 
 
 	top_left_corner = Vector2((walls_dict["left"].position.x + cell_size), (walls_dict["top"].position.y) + cell_size)
-	bottom_right_corner = Vector2((walls_dict["right"].position.x), (walls_dict["bottom"].position.y))
+	bottom_right_corner = Vector2((walls_dict["right"].position.x - cell_size), (walls_dict["bottom"].position.y - cell_size))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:

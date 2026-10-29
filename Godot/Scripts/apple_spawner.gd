@@ -20,9 +20,6 @@ func _ready():
 		food_needed = false
 
 func spawn_food():
-	print("Spawner path: ", get_path())
-	print("Spawner parent: ", get_parent().name)
-	
 	apple = food_scene.instantiate()
 	var pos: Vector2 = generate_food_location()
 	while check_food_location(pos):
@@ -30,6 +27,7 @@ func spawn_food():
 	add_child(apple)
 	apple_position = pos
 	apple.position = apple_position
+	apple.z_index = -1
 
 func generate_food_location():
 	var x_pos = (randi_range( roundi(wall.top_left_corner.x / cell_size), roundi(wall.bottom_right_corner.x / cell_size))) * cell_size

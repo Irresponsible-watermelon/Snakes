@@ -25,12 +25,16 @@ var apple_eaten = false
 @export var global: Main
 @onready var body_segment_size = global.cell_size
 @export var walls: Walls
+@export var apple_spawner: AppleSpawner
+@onready var apple_pos = apple_spawner.apple_position
+@onready var apple_needed = apple_spawner.food_needed
 var walls_dict
 
 var move_direction = Vector2.UP
 var pending_move_direction = Vector2.UP
 var cells_per_second = 1
 var wait_time = (1 / cells_per_second)
+var has_collisioned: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -71,9 +75,12 @@ func on_timeout():
 		head_selector(head, move_direction)
 		move_to_position(new_head_position)
 	else:
-		var has_collisioned = true
-	
-	
+		has_collisioned = true
+	if is_snake_inself(new_head_position):
+		has_collisioned = true
+	if is_food_eaten(new_head_position):
+		apple_needed = true
+		
 func new_head_pos_finder():
 	var new_head_position = body_parts[0].position
 	
@@ -129,6 +136,17 @@ func snake_elongate(grow_position):
 	snake_parts.add_child(part)
 	body_parts.append(part)
 	
+func is_food_eaten(new_head_position):
+	if apple_pos == new_head_position:
+		return true
+		print_debug("apple_eaten:")
+	else:
+		return false
 	
-	
-	
+func is_snake_inself(new_head_position):
+	var is_inself = false
+	for x in range(1, body_parts.size()):
+		if body_parts[x].position == new_head_position:
+			is_inself = true
+			return is_inself
+	return is_inself

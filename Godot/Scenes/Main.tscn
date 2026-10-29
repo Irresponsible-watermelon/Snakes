@@ -12,10 +12,12 @@ size = Vector2(50, 50)
 [node name="Main" type="Node2D" unique_id=1107367377]
 script = ExtResource("1_pbw6q")
 
-[node name="Snake" parent="." unique_id=189533688 node_paths=PackedStringArray("global", "walls") instance=ExtResource("2_v1gob")]
+[node name="Snake" parent="." unique_id=189533688 node_paths=PackedStringArray("global", "walls", "apple_spawner") instance=ExtResource("2_v1gob")]
+z_index = 1
 position = Vector2(50, 50)
 global = NodePath("..")
 walls = NodePath("../Walls")
+apple_spawner = NodePath("../Food/AppleSpawner")
 
 [node name="Timer" type="Timer" parent="Snake" unique_id=245364244]
 wait_time = 0.2
@@ -29,6 +31,7 @@ script = ExtResource("3_jw32o")
 global = NodePath("..")
 
 [node name="BottomWall" type="Sprite2D" parent="Walls" unique_id=1634994407 groups=["Walls"]]
+z_index = -1
 position = Vector2(0, 350)
 scale = Vector2(13, 1)
 texture = SubResource("PlaceholderTexture2D_se6al")
@@ -51,6 +54,7 @@ texture = SubResource("PlaceholderTexture2D_se6al")
 [node name="Food" type="Node" parent="." unique_id=903751541]
 
 [node name="Apple" parent="Food" unique_id=1843909988 instance=ExtResource("4_50glp")]
+z_index = 1
 
 [node name="Apple" parent="Food/Apple" index="0" unique_id=1243729888]
 visible = false
