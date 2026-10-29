@@ -8,7 +8,7 @@ enum CollisionDirection {
 	LEFT,
 	RIGHT,
 }
-
+# variables soup
 var body_parts = []
 var body_texture = preload("res://Assets/Snake sprites/My_Snake_1/Body.png")
 var head_up_texture = preload("res://Assets/Snake sprites/My_Snake_1/Up.png")
@@ -53,6 +53,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
 func _input(event):
 	if (event.is_action_pressed("ui_up") or event.is_action_pressed("Up")) and (move_direction != Vector2.DOWN):
 		pending_move_direction = Vector2.UP
@@ -63,6 +64,7 @@ func _input(event):
 	elif (event.is_action_pressed("ui_right") or event.is_action_pressed("Right")) and (move_direction != Vector2.LEFT):
 		pending_move_direction = Vector2.RIGHT
 
+#on_game_tick
 func on_timeout():
 	move_direction = pending_move_direction
 	grow_position = body_parts[-1].position
@@ -75,15 +77,19 @@ func on_timeout():
 		
 	if is_food_eaten(new_head_position):
 		apple_needed = true
+		global.score_on_apple_eaten()
 		apple_spawner.remove_food()
 		apple_spawner.spawn_food()
 		
 	if wall_collision == null:
 		head_selector(head, move_direction)
 		move_to_position(new_head_position)
+		global.survival_score()
 	else:
 		has_collisioned = true
-		
+
+#functions library
+
 func new_head_pos_finder():
 	var new_head_position = body_parts[0].position
 	
