@@ -64,9 +64,10 @@ func _input(event):
 func on_timeout():
 	move_direction = pending_move_direction
 	grow_position = body_parts[-1].position
-	var new_head_position = new_head_pos_finder()
 	
+	var new_head_position = new_head_pos_finder()
 	var wall_collision = check_wall_collision(new_head_position) 
+	
 	if wall_collision == null:
 		head_selector(head, move_direction)
 		move_to_position(new_head_position)
