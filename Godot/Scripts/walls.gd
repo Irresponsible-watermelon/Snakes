@@ -21,7 +21,7 @@ func _ready() -> void:
 
 	print(walls_dict.keys())
 
-	top_left_corner = Vector2((walls_dict["left"].position.x) + 50, (walls_dict["top"].position.y) + 50)
+	top_left_corner = Vector2((walls_dict["left"].position.x - 50), (walls_dict["top"].position.y) - 50)
 	bottom_right_corner = Vector2((walls_dict["right"].position.x), (walls_dict["bottom"].position.y))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 @warning_ignore("unused_parameter")

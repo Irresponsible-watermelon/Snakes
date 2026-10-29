@@ -27,7 +27,7 @@ var wait_time = (1 / cells_per_second)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var head = Sprite2D.new()
-	head.centered = false
+	head.centered = true
 	head.scale = Vector2(1,1)
 	head.position = Vector2(50,50)
 	head.texture = head_texture
@@ -57,6 +57,7 @@ func on_timeout():
 	var wall_collision = check_wall_collision(new_head_position) 
 	if wall_collision == null:
 		move_to_position(new_head_position)
+	print_debug(wall_collision)
 	
 	
 func move_to_position(new_position):
@@ -64,9 +65,9 @@ func move_to_position(new_position):
 	body_parts[0].position = new_position
 	
 func check_wall_collision(new_head_position: Vector2):
-	if (new_head_position.x == walls_dict["left"].position.x + body_segment_size) and move_direction == Vector2.LEFT:
+	if (new_head_position.x == walls_dict["left"].position.x) and move_direction == Vector2.LEFT:
 		return CollisionDirection.LEFT
-	elif (new_head_position.y == walls_dict["top"].position.y + body_segment_size) and move_direction == Vector2.UP:
+	elif (new_head_position.y == walls_dict["top"].position.y) and move_direction == Vector2.UP:
 		return CollisionDirection.TOP
 	elif new_head_position.y == walls_dict["bottom"].position.y and move_direction == Vector2.DOWN:
 		return CollisionDirection.BOTTOM

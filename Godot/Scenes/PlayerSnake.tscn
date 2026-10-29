@@ -23,27 +23,21 @@ zoom = Vector2(0.5, 0.5)
 script = ExtResource("2_h7c1l")
 
 [node name="BottomWall" type="Sprite2D" parent="Walls" unique_id=1634994407 groups=["Walls"]]
-position = Vector2(-300, 300)
-scale = Vector2(12, 1)
+position = Vector2(0, 350)
+scale = Vector2(13, 1)
 texture = SubResource("PlaceholderTexture2D_se6al")
-centered = false
 
 [node name="TopWall" type="Sprite2D" parent="Walls" unique_id=1553293858 groups=["Walls"]]
-position = Vector2(-300, -300)
-scale = Vector2(12, 1)
+position = Vector2(0, -350)
+scale = Vector2(13, 1)
 texture = SubResource("PlaceholderTexture2D_se6al")
-centered = false
-offset = Vector2(0, -50)
 
 [node name="RightWall" type="Sprite2D" parent="Walls" unique_id=217016212 groups=["Walls"]]
-position = Vector2(300, -300)
-scale = Vector2(1, 12)
+position = Vector2(350, 0)
+scale = Vector2(1, 13)
 texture = SubResource("PlaceholderTexture2D_se6al")
-centered = false
 
 [node name="LeftWall" type="Sprite2D" parent="Walls" unique_id=355280407 groups=["Walls"]]
-position = Vector2(-300, -300)
-scale = Vector2(1, 12)
+position = Vector2(-350, 0)
+scale = Vector2(1, 13)
 texture = SubResource("PlaceholderTexture2D_se6al")
-centered = false
-offset = Vector2(-50, 0)
