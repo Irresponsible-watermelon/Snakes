@@ -18,6 +18,8 @@ var head_right_texture = preload("res://Assets/Snake sprites/My_Snake_1/Right.pn
 var head: Sprite2D
 var grow_position: Vector2
 var apple_eaten = false
+var tex_size = body_texture.get_height()
+var scale_needed: int
 
 @onready var snake_parts:Node = $SnakeParts
 @onready var timer = $Timer
@@ -37,15 +39,16 @@ var has_collisioned: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	scale_needed = int(body_segment_size / tex_size)
 	head = Sprite2D.new()
 	head.centered = true
-	head.scale = Vector2(1,1)
-	head.position = Vector2(50,50)
+	head.scale = Vector2(scale_needed,scale_needed)
+	head.position = Vector2((50 * scale_needed),(50 * scale_needed))
 	head.texture = head_up_texture
 	snake_parts.add_child(head)
 	body_parts.append(head)
-	snake_elongate(Vector2(50,100))
-	snake_elongate(Vector2(50,150))
+	snake_elongate(Vector2((50 * scale_needed),(100 * scale_needed)))
+	snake_elongate(Vector2(50 * scale_needed,150 * scale_needed))
 	timer.timeout.connect(on_timeout)
 	timer.wait_time = wait_time
 	
@@ -139,7 +142,7 @@ func head_selector(head: Sprite2D, move_direction: Vector2):
 func snake_elongate(grow_position):
 	var part = Sprite2D.new()
 	part.centered = true
-	part.scale = Vector2 (1,1)
+	part.scale = Vector2 (scale_needed, scale_needed)
 	part.texture = body_texture
 	part.position = grow_position
 	snake_parts.add_child(part)

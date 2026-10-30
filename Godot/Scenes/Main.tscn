@@ -59,11 +59,12 @@ z_index = 1
 [node name="Apple" parent="Food/Apple" index="0" unique_id=1243729888]
 visible = false
 
-[node name="AppleSpawner" type="Node" parent="Food" unique_id=316563984 node_paths=PackedStringArray("wall", "snake", "global")]
+[node name="AppleSpawner" type="Node" parent="Food" unique_id=316563984 node_paths=PackedStringArray("wall", "snake", "global", "app_spr")]
 script = ExtResource("5_pbw6q")
 wall = NodePath("../../Walls")
 food_scene = ExtResource("4_50glp")
 snake = NodePath("../../Snake")
 global = NodePath("../..")
+app_spr = NodePath("../Apple/Apple")
 
 [editable path="Food/Apple"]

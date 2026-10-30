@@ -5,17 +5,20 @@ extends Node
 @export var food_scene: PackedScene
 @export var snake: Snake
 @export var global: Main
+@export var app_spr: Sprite2D
 
 var apple_position: Vector2
 @onready var cell_size = global.cell_size
+@onready var tex_size = app_spr.texture.get_height()
+var scale_needed: int
 var apple: Node2D
 var food_needed: bool = true
 var spawn_count: int = 0
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if food_needed:
+		scale_needed = int(cell_size / tex_size)
 		spawn_food()
 		food_needed = false
 
@@ -25,6 +28,7 @@ func spawn_food():
 	while check_food_location(pos):
 		pos = generate_food_location()
 	add_child(apple)
+	apple.scale = Vector2(scale_needed, scale_needed)
 	apple_position = pos
 	apple.position = apple_position
 	apple.z_index = -1
