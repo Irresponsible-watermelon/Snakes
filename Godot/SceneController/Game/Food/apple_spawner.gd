@@ -4,7 +4,7 @@ extends Node
 @export var wall: Walls
 @export var food_scene: PackedScene
 @export var snake: Snake
-@export var global: Main
+@export var global: Game
 @export var app_spr: Sprite2D
 
 var apple_position: Vector2

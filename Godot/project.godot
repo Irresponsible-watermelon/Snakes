@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="Snake (godot)"
-run/main_scene="uid://dcqcp2po28cyf"
+run/main_scene="uid://b8v5qj3x1vxd8"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://Assets/icon.svg"
 
 [autoload]
 
-Main="*uid://7pbukn2s7yw5"
+Game="*uid://7pbukn2s7yw5"
+SceneManger="*uid://bkv4odqvl3stc"
 
 [display]
 

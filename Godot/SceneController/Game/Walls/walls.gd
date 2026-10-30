@@ -2,16 +2,19 @@ class_name Walls
 
 extends Node
 
-@export var global: Main
+@export var global: Game
 @onready var cell_size = global.cell_size
+@onready var map_size: float = (global.cells_across * global.cell_size) + global.cell_size
 var walls_dict = {}
 var top_left_corner: Vector2
-var bottom_right_corner: Vector2
+var bottom_right_corner: Vector2 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var walls_distance = map_size
 	var walls = get_tree().get_nodes_in_group("Walls") as Array[Node2D]
-	
+	var scale_needed: float = (float(map_size) / float(600))
+	var scale_vec: Vector2 = Vector2(scale_needed,scale_needed)
 	for wall in walls:
 		if wall.position.x < 0:
 			walls_dict["left"] = wall
@@ -21,7 +24,15 @@ func _ready() -> void:
 			walls_dict["top"] = wall
 		if wall.position.y > 0:
 			walls_dict["bottom"] = wall
-
+	
+	walls_dict["left"].position.x = (0 - (walls_distance / 2))
+	walls_dict["left"].scale = scale_vec
+	walls_dict["right"].position.x = (0 + (walls_distance / 2))
+	walls_dict["right"].scale = scale_vec
+	walls_dict["top"].position.y = (0 - (walls_distance / 2))
+	walls_dict["top"].scale = scale_vec
+	walls_dict["bottom"].position.y = (0 + (walls_distance / 2))
+	walls_dict["bottom"].scale = scale_vec
 
 	top_left_corner = Vector2((walls_dict["left"].position.x + cell_size), (walls_dict["top"].position.y) + cell_size)
 	bottom_right_corner = Vector2((walls_dict["right"].position.x - cell_size), (walls_dict["bottom"].position.y - cell_size))
