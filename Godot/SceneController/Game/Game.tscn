@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://bnm6n8cs2y8wx" path="res://SceneController/Game/Walls/walls.gd" id="3_v310c"]
 [ext_resource type="PackedScene" uid="uid://daojfp6lky2hv" path="res://SceneController/Game/Food/apple.tscn" id="4_4jq6i"]
 [ext_resource type="Script" uid="uid://b35xvp2f4e6vv" path="res://SceneController/Game/Food/apple_spawner.gd" id="5_11yct"]
-[ext_resource type="PackedScene" uid="uid://d3id3rcbychmv" path="res://SceneController/Game/Pause_Menu/pause_menu.tscn" id="6_s1owg"]
+[ext_resource type="PackedScene" uid="uid://bp66ks31q2y65" path="res://SceneController/Game/pause/pause.tscn" id="6_s1owg"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_pbw6q"]
 size = Vector2(600, 50)
@@ -19,8 +19,9 @@ size = Vector2(50, 600)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jw32o"]
 size = Vector2(50, 600)
 
-[node name="Game" type="Node2D" unique_id=1107367377]
+[node name="Game" type="Node2D" unique_id=1107367377 node_paths=PackedStringArray("pause")]
 script = ExtResource("1_1c8af")
+pause = NodePath("PauseMenu")
 
 [node name="Snake" parent="." unique_id=189533688 node_paths=PackedStringArray("global", "walls", "apple_spawner") instance=ExtResource("2_s1owg")]
 z_index = 1
@@ -73,6 +74,6 @@ snake = NodePath("../../Snake")
 global = NodePath("../..")
 app_spr = NodePath("../Apple/Apple")
 
-[node name="Pause_Menu" parent="." unique_id=1927856306 instance=ExtResource("6_s1owg")]
+[node name="PauseMenu" parent="." unique_id=1465565726 instance=ExtResource("6_s1owg")]
 
 [editable path="Food/Apple"]

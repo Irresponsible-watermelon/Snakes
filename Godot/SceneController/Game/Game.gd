@@ -15,3 +15,24 @@ func survival_score():
 	survival_time += 1
 	if survival_time <= 5:
 		score += roundi(max(difficulty * 2, 1))
+
+#Pause_Menu handler
+
+signal esc_pressed(esc_pressed: bool)
+var is_paused: bool
+
+@export var pause: Control
+
+func _input(event: InputEvent):
+	emit_signal("esc_pressed")
+	if event.is_action_pressed("Esc") and not is_paused:
+		show_pause()
+	elif event.is_action_pressed("Esc") and is_paused:
+		hide_pause()
+
+func show_pause():
+	pause.hide()
+	pause.process_mode = Node.PROCESS_MODE_DISABLED
+func hide_pause():
+	pause.process_mode = Node.PROCESS_MODE_ALWAYS
+	pause.show()
