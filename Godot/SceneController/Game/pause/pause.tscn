@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bp66ks31q2y65"]
 
-[node name="Options" type="SubViewportContainer" unique_id=1465565726]
+[node name="Pause" type="SubViewportContainer" unique_id=1465565726]
 anchors_preset = -1
 offset_left = -640.0
 offset_top = -360.0

@@ -23,8 +23,10 @@ var is_paused: bool
 var pause_scene = preload("res://SceneController/Game/pause/pause.tscn")
 @export var pause: Control
 
-func _onready():
+func _ready():
+	print("starting up")
 	button_setup()
+	pause_hide_pause(SceneManger.type.BOTH)
 
 func _input(event: InputEvent):
 	emit_signal("esc_pressed")
@@ -45,7 +47,7 @@ func load_show_pause():
 		pause.show()
 
 func pause_hide_pause(kind):
-	
+	print("function triggered")
 	match kind:
 		SceneManger.type.PAUSE:
 			kind = SceneManger.type.PAUSE
@@ -68,9 +70,9 @@ func del_pause():
 #button click handlers
 
 func button_setup():
-	$PauseMenu/SubViewport/Esc/Button.pressed.connect(on_close_button)
-	$"PauseMenu/SubViewport/middle buttons/Resume".pressed.connect(load_show_pause)
-
+	if is_instance_valid(pause):
+		pause.get_node("SubViewport/Esc/Button").pressed.connect(on_close_button)
+		pause.get_node("SubViewport/middle buttons/Resume/Resume").pressed.connect(load_show_pause)
 func on_close_button():
 	pause_hide_pause(SceneManger.type.BOTH)
 	if is_instance_valid(SceneManger.options) and (SceneManger.options.process_mode == Node.PROCESS_MODE_ALWAYS or SceneManger.options.visible == true):
