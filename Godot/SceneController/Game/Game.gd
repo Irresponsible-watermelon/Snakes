@@ -20,19 +20,58 @@ func survival_score():
 
 signal esc_pressed(esc_pressed: bool)
 var is_paused: bool
-
+var pause_scene = preload("res://SceneController/Game/pause/pause.tscn")
 @export var pause: Control
+
+func _onready():
+	button_setup()
 
 func _input(event: InputEvent):
 	emit_signal("esc_pressed")
 	if event.is_action_pressed("Esc") and not is_paused:
-		show_pause()
+		load_show_pause()
 	elif event.is_action_pressed("Esc") and is_paused:
-		hide_pause()
+		pause_hide_pause(SceneManger.type.BOTH)
 
-func show_pause():
-	pause.hide()
-	pause.process_mode = Node.PROCESS_MODE_DISABLED
-func hide_pause():
-	pause.process_mode = Node.PROCESS_MODE_ALWAYS
-	pause.show()
+#pause menu scene handlers
+
+func load_show_pause():
+	if not is_instance_valid(pause):
+		pause = pause_scene.instantiate()
+		add_child(pause)
+	
+	elif is_instance_valid(pause):
+		pause.process_mode = Node.PROCESS_MODE_ALWAYS
+		pause.show()
+
+func pause_hide_pause(kind):
+	
+	match kind:
+		SceneManger.type.PAUSE:
+			kind = SceneManger.type.PAUSE
+		SceneManger.type.HIDE:
+			kind = SceneManger.type.HIDE
+		SceneManger.type.BOTH: 
+			kind = SceneManger.type.BOTH
+	
+	if is_instance_valid(pause):
+		if kind == SceneManger.type.PAUSE or kind == SceneManger.type.BOTH: 
+			pause.process_mode = Node.PROCESS_MODE_ALWAYS
+		if kind == SceneManger.type.HIDE or kind == SceneManger.type.BOTH:
+			pause.hide()
+
+func del_pause():
+	if is_instance_valid(pause):
+		pause.queue_free()
+		pause = null
+
+#button click handlers
+
+func button_setup():
+	$PauseMenu/SubViewport/Esc/Button.pressed.connect(on_close_button)
+	$"PauseMenu/SubViewport/middle buttons/Resume".pressed.connect(load_show_pause)
+
+func on_close_button():
+	pause_hide_pause(SceneManger.type.BOTH)
+	if is_instance_valid(SceneManger.options) and (SceneManger.options.process_mode == Node.PROCESS_MODE_ALWAYS or SceneManger.options.visible == true):
+		SceneManger.pause_hide_options(SceneManger.type.BOTH)

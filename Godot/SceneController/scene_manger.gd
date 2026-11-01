@@ -21,11 +21,11 @@ var death: Control
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	game_temp.esc_pressed.connect(on_esc_pressed)
+	
 
 func on_esc_pressed():
-	print("Function triggered by signal")
 	if is_options_open:
-		del_options()
+		pause_hide_options(type.BOTH)
 
 #scene loaders
 
@@ -80,20 +80,52 @@ func pause_hide_game(kind):
 		elif kind == type.PAUSE or kind == type.BOTH:
 			game.process_mode = Node.PROCESS_MODE_DISABLED
 
-func pause_hide_start():
+func pause_hide_start(kind):
+	match kind:
+		type.PAUSE:
+			kind = type.PAUSE
+		type.HIDE:
+			kind = type.HIDE
+		type.BOTH: 
+			kind = type.BOTH
+	
 	if is_instance_valid(start):
-		start.hide()
-		start.process_mode = Node.PROCESS_MODE_DISABLED
+		if kind == type.HIDE or kind == type.BOTH:
+			start.hide()
+		if kind == type.PAUSE or kind == type.BOTH:
+			start.process_mode = Node.PROCESS_MODE_DISABLED
 
-func pause_hide_options():
+func pause_hide_options(kind):
+	match kind:
+		type.PAUSE:
+			kind = type.PAUSE
+		type.HIDE:
+			kind = type.HIDE
+		type.BOTH: 
+			kind = type.BOTH
+			
 	if is_instance_valid(options):
-		options.hide()
-		options.process_mode = Node.PROCESS_MODE_DISABLED
+		if kind == type.HIDE or kind == type.BOTH:
+			options.hide()
+		if kind == type.PAUSE or kind == type.BOTH:
+			options.process_mode = Node.PROCESS_MODE_DISABLED
 		
-func pause_hide_death():
+func pause_hide_death(kind):
+	
+	match kind:
+		type.PAUSE:
+			kind = type.PAUSE
+		type.HIDE:
+			kind = type.HIDE
+		type.BOTH: 
+			kind = type.BOTH
+	
 	if is_instance_valid(death):
-		death.hide()
-		death.process_mode = Node.PROCESS_MODE_DISABLED
+		if kind == type.HIDE or kind == type.BOTH:
+			death.hide()
+		if kind == type.PAUSE or kind == type.BOTH:
+			death.process_mode = Node.PROCESS_MODE_DISABLED
+
 #scene deleters
 
 func del_options():
