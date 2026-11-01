@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dcqcp2po28cyf" path="res://SceneController/Game/Game.tscn" id="2_qd6lu"]
 [ext_resource type="PackedScene" uid="uid://4bgj6y6bmw57" path="res://SceneController/options/options.tscn" id="3_qd6lu"]
 [ext_resource type="PackedScene" uid="uid://bjtmrmq4q7myy" path="res://SceneController/Start_menu/start_menu.tscn" id="4_wgv7h"]
+[ext_resource type="PackedScene" uid="uid://chogiui80jxh1" path="res://SceneController/Death_Screen/death_screen.tscn" id="5_ick6y"]
 
 [node name="SceneController" type="Node" unique_id=1885958401]
 script = ExtResource("1_62kil")
@@ -14,4 +15,7 @@ script = ExtResource("1_62kil")
 visible = false
 
 [node name="Options" parent="." unique_id=1318203368 instance=ExtResource("3_qd6lu")]
+visible = false
+
+[node name="Death_Screen" parent="." unique_id=620477804 instance=ExtResource("5_ick6y")]
 visible = false
