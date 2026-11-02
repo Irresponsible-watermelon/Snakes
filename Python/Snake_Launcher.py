@@ -12,7 +12,22 @@ def launch_snakePy():
     else:
         app_dir = Path(__file__).parent / "dist"
 
-    game_path = app_dir / "Snake_Game(Pygame).exe"
+    game_path = app_dir / "Snake_Game.exe"
+
+    if not game_path.is_file():
+        messagebox.showerror("Game not found", f"Could not find:\n{game_path}")
+        return
+
+    subprocess.Popen([str(game_path)], cwd=app_dir)
+
+def launch_snakeGd():
+    if getattr(sys, "frozen", False):
+        app_dir = Path(Path(sys.executable).parent
+                       / "Snake_Game(Godot)")
+    else:
+        app_dir = Path(__file__).parent / "dist"
+
+    game_path = app_dir / "Snake(Godot).exe"
 
     if not game_path.is_file():
         messagebox.showerror("Game not found", f"Could not find:\n{game_path}")
@@ -44,7 +59,8 @@ PyGame_button.pack(pady=10)
 
 Godot_button = ttk.Button(
     window,
-    text="Launch Snake - Godot Edition"
+    text="Launch Snake - Godot Edition",
+    command=launch_snakeGd
 )
 Godot_button.pack(pady=10)
 
