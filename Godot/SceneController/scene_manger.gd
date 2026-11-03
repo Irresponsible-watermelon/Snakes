@@ -16,15 +16,27 @@ var start: Control
 var death_scene = preload("res://SceneController/Death_Screen/death_screen.tscn")
 var death: Control
 
+var cell_size: int = 100
+var cells_across: int = 13 # must be odd
+var score: int = 0
+var survival_time = 0
+var difficulty: int
+var true_cps: int = 0
+
+
 @onready var game_temp = Game
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	#passes new pause state after esc pressing
 	game_temp.esc_pressed.connect(on_esc_pressed)
 	
 
-func on_esc_pressed():
-	if is_options_open:
+func on_esc_pressed(is_paused: bool):
+	if is_paused:
+		pause_hide_game(type.BOTH)
+	elif not is_paused:
+		show_load_game()
 		pause_hide_options(type.BOTH)
 
 #scene loaders

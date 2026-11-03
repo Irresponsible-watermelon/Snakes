@@ -23,16 +23,10 @@ size = Vector2(50, 600)
 script = ExtResource("1_1c8af")
 pause = NodePath("PauseMenu")
 
-[node name="Snake" parent="." unique_id=189533688 node_paths=PackedStringArray("global", "walls", "apple_spawner") instance=ExtResource("2_s1owg")]
+[node name="Snake" parent="." unique_id=189533688 node_paths=PackedStringArray("walls") instance=ExtResource("2_s1owg")]
 z_index = 1
 position = Vector2(50, 50)
-global = NodePath("..")
 walls = NodePath("../Walls")
-apple_spawner = NodePath("../Food/AppleSpawner")
-
-[node name="Timer" type="Timer" parent="Snake" unique_id=245364244]
-wait_time = 0.2
-autostart = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1828285225]
 zoom = Vector2(0.5, 0.5)

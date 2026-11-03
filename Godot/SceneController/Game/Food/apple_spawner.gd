@@ -8,7 +8,6 @@ extends Node
 @export var app_spr: Sprite2D
 
 var apple_position: Vector2
-@onready var cell_size = global.cell_size
 @onready var tex_size = app_spr.texture.get_height()
 var scale_needed: int
 var apple: Node2D
@@ -18,7 +17,7 @@ var spawn_count: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if food_needed:
-		scale_needed = int(cell_size / tex_size)
+		scale_needed = int(SceneManger.cell_size / tex_size)
 		spawn_food()
 		food_needed = false
 
@@ -34,8 +33,8 @@ func spawn_food():
 	apple.z_index = -1
 
 func generate_food_location():
-	var x_pos = (randi_range( roundi(wall.top_left_corner.x / cell_size), roundi(wall.bottom_right_corner.x / cell_size))) * cell_size
-	var y_pos = (randi_range( roundi(wall.top_left_corner.y / cell_size), roundi(wall.bottom_right_corner.y / cell_size))) * cell_size
+	var x_pos = (randi_range( roundi(wall.top_left_corner.x / SceneManger.cell_size), roundi(wall.bottom_right_corner.x / SceneManger.cell_size))) * SceneManger.cell_size
+	var y_pos = (randi_range( roundi(wall.top_left_corner.y / SceneManger.cell_size), roundi(wall.bottom_right_corner.y / SceneManger.cell_size))) * SceneManger.cell_size
 	return Vector2(x_pos, y_pos)
 
 func check_food_location(pos):

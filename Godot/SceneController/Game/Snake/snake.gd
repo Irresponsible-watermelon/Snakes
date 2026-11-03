@@ -22,12 +22,14 @@ var tex_size = body_texture.get_height()
 var scale_needed: int
 
 @onready var snake_parts:Node = $SnakeParts
-@onready var timer = $Timer
 
-@export var global: Game
+var global = SceneManger
 @onready var body_segment_size = global.cell_size
 @export var walls: Walls
-@export var apple_spawner: AppleSpawner
+
+
+
+@onready var apple_spawner: Node = $"../Food/AppleSpawner"
 @onready var apple_needed = apple_spawner.food_needed
 var walls_dict
 
@@ -40,6 +42,11 @@ var snake_dead:bool
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+
+	#setup timer
+	var timer = Timer.new()
+	timer.wait_time = wait_time 
+	
 	scale_needed = int(body_segment_size / tex_size)
 	head = Sprite2D.new()
 	head.centered = true
@@ -88,7 +95,7 @@ func on_timeout():
 	#events on survival
 	if not has_collisioned:
 		move_to_position(new_head_position)
-		global.survival_score()
+		Game.survival_score()
 	elif has_collisioned:
 		snake_dead = true
 #functions library

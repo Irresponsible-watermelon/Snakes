@@ -10,6 +10,7 @@
 script = ExtResource("1_62kil")
 
 [node name="Game" parent="." unique_id=1107367377 instance=ExtResource("2_qd6lu")]
+script = null
 
 [node name="start_menu" parent="." unique_id=858246148 instance=ExtResource("4_wgv7h")]
 visible = false

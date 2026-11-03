@@ -3,8 +3,7 @@ class_name Walls
 extends Node
 
 @export var global: Game
-@onready var cell_size = global.cell_size
-@onready var map_size: float = (global.cells_across * global.cell_size) + global.cell_size
+@onready var map_size: float = (SceneManger.cells_across * SceneManger.cell_size) + SceneManger.cell_size
 var walls_dict = {}
 var top_left_corner: Vector2
 var bottom_right_corner: Vector2 
@@ -34,8 +33,8 @@ func _ready() -> void:
 	walls_dict["bottom"].position.y = (0 + (walls_distance / 2))
 	walls_dict["bottom"].scale = scale_vec
 
-	top_left_corner = Vector2((walls_dict["left"].position.x + cell_size), (walls_dict["top"].position.y) + cell_size)
-	bottom_right_corner = Vector2((walls_dict["right"].position.x - cell_size), (walls_dict["bottom"].position.y - cell_size))
+	top_left_corner = Vector2((walls_dict["left"].position.x + SceneManger.cell_size), (walls_dict["top"].position.y) + SceneManger.cell_size)
+	bottom_right_corner = Vector2((walls_dict["right"].position.x - SceneManger.cell_size), (walls_dict["bottom"].position.y - SceneManger.cell_size))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
