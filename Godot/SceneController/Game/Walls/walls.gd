@@ -2,7 +2,7 @@ class_name Walls
 
 extends Node
 
-@export var global: Game
+@export var global: Node
 @onready var map_size: float = (SceneManger.cells_across * SceneManger.cell_size) + SceneManger.cell_size
 var walls_dict = {}
 var top_left_corner: Vector2

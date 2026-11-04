@@ -9,7 +9,7 @@ enum type {
 var is_options_open: bool = false
 var options_menu = preload("res://SceneController/options/options.tscn")
 var options: Control
-var game_scene = preload("res://SceneController/Game/Game.tscn")
+var game_scene: PackedScene
 var game: Node2D
 var start_scene = preload("res://SceneController/Start_menu/start_menu.tscn")
 var start: Control
@@ -28,10 +28,12 @@ var true_cps: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("SHOW LOAD GAME CALLED")
+	print("SCRIPT EXISTS: ", FileAccess.file_exists("res://SceneController/Game/Game.gd"))
 	#passes new pause state after esc pressing
 	game_temp.esc_pressed.connect(on_esc_pressed)
 	show_load_game()
-	
+
 
 func on_esc_pressed(is_paused: bool):
 	if is_paused:
@@ -43,15 +45,20 @@ func on_esc_pressed(is_paused: bool):
 #scene loaders
 
 func show_load_game():
-	
+	print("SHOW LOAD GAME CALLED")
+
 	if not is_instance_valid(game):
-		game = get_node_or_null("/root/SceneController/Game")
-	elif get_node_or_null("Game") == null:
+		game_scene = load("res://SceneController/Game/Game.tscn")
+
+		if game_scene == null:
+			print("ERROR: Game scene failed to load")
+			return
+
 		game = game_scene.instantiate()
 		add_child(game)
-	if is_instance_valid(game):
-		game.process_mode = Node.PROCESS_MODE_ALWAYS
-		game.show()
+
+	game.process_mode = Node.PROCESS_MODE_ALWAYS
+	game.show()
 
 func show_load_options():
 	if not is_instance_valid(options):
