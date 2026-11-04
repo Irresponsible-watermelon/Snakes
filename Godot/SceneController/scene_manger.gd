@@ -9,7 +9,7 @@ enum type {
 var is_options_open: bool = false
 var options_menu = preload("res://SceneController/options/options.tscn")
 var options: Control
-var game_scene = preload("res://SceneController/Game/Snake/snake.tscn")
+var game_scene = preload("res://SceneController/Game/Game.tscn")
 var game: Node2D
 var start_scene = preload("res://SceneController/Start_menu/start_menu.tscn")
 var start: Control
@@ -30,6 +30,7 @@ var true_cps: int = 0
 func _ready() -> void:
 	#passes new pause state after esc pressing
 	game_temp.esc_pressed.connect(on_esc_pressed)
+	show_load_game()
 	
 
 func on_esc_pressed(is_paused: bool):
@@ -42,10 +43,13 @@ func on_esc_pressed(is_paused: bool):
 #scene loaders
 
 func show_load_game():
-	if (not is_instance_valid(game)) and get_node_or_null("Game") == null:
+	
+	if not is_instance_valid(game):
+		game = get_node_or_null("/root/SceneController/Game")
+	elif get_node_or_null("Game") == null:
 		game = game_scene.instantiate()
 		add_child(game)
-	elif is_instance_valid(game):
+	if is_instance_valid(game):
 		game.process_mode = Node.PROCESS_MODE_ALWAYS
 		game.show()
 

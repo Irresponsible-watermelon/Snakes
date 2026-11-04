@@ -17,7 +17,7 @@ var spawn_count: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if food_needed:
-		scale_needed = int(SceneManger.cell_size / tex_size)
+		scale_needed = float(SceneManger.cell_size / tex_size)
 		spawn_food()
 		food_needed = false
 

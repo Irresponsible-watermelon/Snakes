@@ -29,14 +29,14 @@ var global = SceneManger
 
 
 
-@onready var apple_spawner: Node = $"../Food/AppleSpawner"
+@onready var apple_spawner = $"../Food/AppleSpawner"
 @onready var apple_needed = apple_spawner.food_needed
 var walls_dict
 
 var move_direction = Vector2.UP
 var pending_move_direction = Vector2.UP
 var cells_per_second = 1
-var wait_time = (1 / cells_per_second)
+var wait_time = float(1 / cells_per_second)
 var has_collisioned: bool = false
 var snake_dead:bool
 
@@ -168,7 +168,6 @@ func check_wall_collision(new_head_position: Vector2):
 	if (new_head_position.x == walls_dict["left"].position.x) and move_direction == Vector2.LEFT:
 		has_collisioned = true
 		return true
-		return CollisionDirection.LEFT
 	elif (new_head_position.y == walls_dict["top"].position.y) and move_direction == Vector2.UP:
 		has_collisioned = true
 		return true
