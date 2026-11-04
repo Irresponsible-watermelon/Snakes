@@ -9,8 +9,8 @@ var apple_position: Vector2
 var texture = load("res://Assets/Apple sprites/Green Apple 50x50 pxlart.png")
 @onready var tex_size: float = texture.get_height()
 var scale_needed: float
+var food_needed: bool
 var apple: Node2D
-var food_needed: bool = true
 var spawn_count: int = 0
 var app_tpl: Sprite2D
 
@@ -18,27 +18,26 @@ var app_tpl: Sprite2D
 func _ready():
 	app_tpl = Sprite2D.new()
 	app_tpl.hide()
-	add_sibling.call_deferred(app_tpl)
+	add_child(app_tpl)
 	app_tpl.texture = texture
 	app_tpl.scale = Vector2(scale_needed, scale_needed)
-	
-	if food_needed:
-		scale_needed = float(SceneManger.cell_size / tex_size)
-		spawn_food()
 
 func spawn_food():
-	food_needed = false
-	apple = app_tpl.duplicate()
-	add_sibling.call_deferred(apple)
-	var pos: Vector2 = generate_food_location()
-	while check_food_location(pos):
-		pos = generate_food_location()
-	apple_position = pos
-	apple.position = apple_position
-	apple.z_index = -1
-	apple.show()
-	print_debug("apple spawned")
-
+	
+	if is_instance_valid(app_tpl):
+		food_needed = false
+		apple = app_tpl.duplicate()
+		add_child(apple)
+		var pos: Vector2 = generate_food_location()
+		while check_food_location(pos):
+			pos = generate_food_location()
+		apple_position = pos
+		apple.position = apple_position
+		apple.z_index = -1
+		apple.show()
+		print_debug("apple spawned")
+	else:
+		pass
 func generate_food_location():
 	var x_pos = (randi_range( roundi(wall.top_left_corner.x / SceneManger.cell_size), roundi(wall.bottom_right_corner.x / SceneManger.cell_size))) * SceneManger.cell_size
 	var y_pos = (randi_range( roundi(wall.top_left_corner.y / SceneManger.cell_size), roundi(wall.bottom_right_corner.y / SceneManger.cell_size))) * SceneManger.cell_size

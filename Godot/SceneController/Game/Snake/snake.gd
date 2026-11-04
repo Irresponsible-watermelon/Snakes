@@ -62,6 +62,8 @@ func _ready():
 	snake_elongate(Vector2((50 * scale_needed),(100 * scale_needed)))
 	snake_elongate(Vector2(50 * scale_needed,150 * scale_needed))
 	
+	on_food_eaten()
+	
 	walls_dict = walls.walls_dict
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
