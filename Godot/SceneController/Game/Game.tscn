@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://7pbukn2s7yw5" path="res://SceneController/Game/Game.gd" id="1_1c8af"]
 [ext_resource type="PackedScene" uid="uid://b381g51uua3xa" path="res://SceneController/Game/Snake/snake.tscn" id="2_s1owg"]
 [ext_resource type="Script" uid="uid://bnm6n8cs2y8wx" path="res://SceneController/Game/Walls/walls.gd" id="3_v310c"]
-[ext_resource type="PackedScene" uid="uid://daojfp6lky2hv" path="res://SceneController/Game/Food/apple.tscn" id="4_4jq6i"]
 [ext_resource type="Script" uid="uid://b35xvp2f4e6vv" path="res://SceneController/Game/Food/apple_spawner.gd" id="5_11yct"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_pbw6q"]
@@ -50,20 +49,10 @@ texture = SubResource("PlaceholderTexture2D_v1gob")
 position = Vector2(-300, 0)
 texture = SubResource("PlaceholderTexture2D_jw32o")
 
-[node name="Food" type="Node" parent="." unique_id=903751541]
+[node name="Food" type="Node2D" parent="." unique_id=603362600]
 
-[node name="Apple" parent="Food" unique_id=1843909988 instance=ExtResource("4_4jq6i")]
-z_index = 1
-
-[node name="Apple" parent="Food/Apple" index="0" unique_id=1243729888]
-visible = false
-
-[node name="AppleSpawner" type="Node" parent="Food" unique_id=316563984 node_paths=PackedStringArray("wall", "snake", "global", "app_spr")]
+[node name="AppleSpawner" type="Node" parent="Food" unique_id=316563984 node_paths=PackedStringArray("wall", "snake", "global")]
 script = ExtResource("5_11yct")
 wall = NodePath("../../Walls")
-food_scene = ExtResource("4_4jq6i")
 snake = NodePath("../../Snake")
 global = NodePath("../..")
-app_spr = NodePath("../Apple/Apple")
-
-[editable path="Food/Apple"]

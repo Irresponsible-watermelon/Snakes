@@ -2,35 +2,42 @@ class_name AppleSpawner
 extends Node
 
 @export var wall: Walls
-@export var food_scene: PackedScene
 @export var snake: Snake
 @export var global: Node
-@export var app_spr: Sprite2D
 
 var apple_position: Vector2
-@onready var tex_size: float = app_spr.texture.get_height()
+var texture = load("res://Assets/Apple sprites/Green Apple 50x50 pxlart.png")
+@onready var tex_size: float = texture.get_height()
 var scale_needed: float
 var apple: Node2D
 var food_needed: bool = true
 var spawn_count: int = 0
+var app_tpl: Sprite2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	app_tpl = Sprite2D.new()
+	app_tpl.hide()
+	add_sibling.call_deferred(app_tpl)
+	app_tpl.texture = texture
+	app_tpl.scale = Vector2(scale_needed, scale_needed)
+	
 	if food_needed:
 		scale_needed = float(SceneManger.cell_size / tex_size)
 		spawn_food()
-		food_needed = false
 
 func spawn_food():
-	apple = food_scene.instantiate()
+	food_needed = false
+	apple = app_tpl.duplicate()
+	add_sibling.call_deferred(apple)
 	var pos: Vector2 = generate_food_location()
 	while check_food_location(pos):
 		pos = generate_food_location()
-	add_child(apple)
-	apple.scale = Vector2(scale_needed, scale_needed)
 	apple_position = pos
 	apple.position = apple_position
 	apple.z_index = -1
+	apple.show()
+	print_debug("apple spawned")
 
 func generate_food_location():
 	var x_pos = (randi_range( roundi(wall.top_left_corner.x / SceneManger.cell_size), roundi(wall.bottom_right_corner.x / SceneManger.cell_size))) * SceneManger.cell_size
