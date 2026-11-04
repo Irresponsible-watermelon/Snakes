@@ -4,12 +4,12 @@ extends Node
 @export var wall: Walls
 @export var food_scene: PackedScene
 @export var snake: Snake
-@export var global: Game
+@export var global: Node
 @export var app_spr: Sprite2D
 
 var apple_position: Vector2
-@onready var tex_size = app_spr.texture.get_height()
-var scale_needed: int
+@onready var tex_size: float = app_spr.texture.get_height()
+var scale_needed: float
 var apple: Node2D
 var food_needed: bool = true
 var spawn_count: int = 0

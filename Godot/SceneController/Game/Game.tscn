@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://bnm6n8cs2y8wx" path="res://SceneController/Game/Walls/walls.gd" id="3_v310c"]
 [ext_resource type="PackedScene" uid="uid://daojfp6lky2hv" path="res://SceneController/Game/Food/apple.tscn" id="4_4jq6i"]
 [ext_resource type="Script" uid="uid://b35xvp2f4e6vv" path="res://SceneController/Game/Food/apple_spawner.gd" id="5_11yct"]
-[ext_resource type="PackedScene" uid="uid://bp66ks31q2y65" path="res://SceneController/Game/pause/pause.tscn" id="6_s1owg"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_pbw6q"]
 size = Vector2(600, 50)
@@ -59,15 +58,12 @@ z_index = 1
 [node name="Apple" parent="Food/Apple" index="0" unique_id=1243729888]
 visible = false
 
-[node name="AppleSpawner" type="Node" parent="Food" unique_id=316563984 node_paths=PackedStringArray("wall", "snake", "app_spr")]
+[node name="AppleSpawner" type="Node" parent="Food" unique_id=316563984 node_paths=PackedStringArray("wall", "snake", "global", "app_spr")]
 script = ExtResource("5_11yct")
 wall = NodePath("../../Walls")
 food_scene = ExtResource("4_4jq6i")
 snake = NodePath("../../Snake")
-global = Object(Node2D,"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"oversampling_with_scale":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":ExtResource("1_1c8af"),"pause":null)
-
+global = NodePath("../..")
 app_spr = NodePath("../Apple/Apple")
-
-[node name="PauseMenu" parent="." unique_id=1465565726 instance=ExtResource("6_s1owg")]
 
 [editable path="Food/Apple"]

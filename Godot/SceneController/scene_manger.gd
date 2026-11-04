@@ -16,7 +16,7 @@ var start: Control
 var death_scene = preload("res://SceneController/Death_Screen/death_screen.tscn")
 var death: Control
 
-var cell_size: int = 100
+var cell_size: float = 100
 var cells_across: int = 13 # must be odd
 var score: int = 0
 var survival_time = 0
@@ -165,3 +165,14 @@ func del_start():
 	if is_instance_valid(start):
 		start.queue_free()
 		start = null
+
+#score handling
+
+func score_on_apple_eaten():
+	SceneManger.survival_time = 0
+	SceneManger.score += roundi(max((SceneManger.difficulty * 2) + (SceneManger.true_cps * 50) , 100))
+	
+func survival_score():
+	SceneManger.survival_time += 1
+	if SceneManger.survival_time <= 5:
+		SceneManger.score += roundi(max(SceneManger.difficulty * 2, 1))

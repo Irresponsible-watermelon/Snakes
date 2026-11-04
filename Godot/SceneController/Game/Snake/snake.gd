@@ -23,29 +23,33 @@ var scale_needed: int
 
 @onready var snake_parts:Node = $SnakeParts
 
-var global = SceneManger
-@onready var body_segment_size = global.cell_size
+@onready var body_segment_size = SceneManger.cell_size
 @export var walls: Walls
 
 
 
 @onready var apple_spawner = $"../Food/AppleSpawner"
 @onready var apple_needed = apple_spawner.food_needed
+
 var walls_dict
 
 var move_direction = Vector2.UP
 var pending_move_direction = Vector2.UP
-var cells_per_second = 1
-var wait_time = float(1 / cells_per_second)
+var cells_per_second: float = 1
+var wait_time = float(float(1) / cells_per_second)
 var has_collisioned: bool = false
 var snake_dead:bool
+var timer: Timer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 
 	#setup timer
-	var timer = Timer.new()
-	timer.wait_time = wait_time 
+	timer = Timer.new()
+	add_sibling.call_deferred(timer)
+	timer.wait_time = wait_time
+	timer.autostart = true
+	timer.timeout.connect(on_timeout)
 	
 	scale_needed = int(body_segment_size / tex_size)
 	head = Sprite2D.new()
@@ -57,12 +61,10 @@ func _ready():
 	body_parts.append(head)
 	snake_elongate(Vector2((50 * scale_needed),(100 * scale_needed)))
 	snake_elongate(Vector2(50 * scale_needed,150 * scale_needed))
-	timer.timeout.connect(on_timeout)
-	timer.wait_time = wait_time
 	
 	walls_dict = walls.walls_dict
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _input(event):
@@ -77,6 +79,7 @@ func _input(event):
 
 #on_game_tick
 func on_timeout():
+	print_debug("on_timeout triggered")
 	#define variables
 	move_direction = pending_move_direction
 	grow_position = body_parts[-1].position
@@ -95,13 +98,14 @@ func on_timeout():
 	#events on survival
 	if not has_collisioned:
 		move_to_position(new_head_position)
-		Game.survival_score()
+		SceneManger.survival_score()
 	elif has_collisioned:
 		snake_dead = true
 #functions library
 
 #Thinking functions
 func new_head_pos_finder():
+	print_debug("new_head_pos_finder triggered")
 	var new_head_position = body_parts[0].position
 	
 	if move_direction == Vector2.UP:
@@ -114,34 +118,39 @@ func new_head_pos_finder():
 		new_head_position.x += body_segment_size
 	return new_head_position
 
-func head_selector(head: Sprite2D, move_direction: Vector2):
-	if move_direction == Vector2.UP:
-		head.texture = head_up_texture
-	elif move_direction == Vector2.DOWN:
-		head.texture = head_down_texture
-	elif move_direction == Vector2.LEFT:
-		head.texture = head_left_texture
-	elif move_direction ==  Vector2.RIGHT:
-		head.texture = head_right_texture
+func head_selector(fn_head: Sprite2D, fn_move_direction: Vector2):
+	print_debug("head_selector triggered")
+	if fn_move_direction == Vector2.UP:
+		fn_head.texture = head_up_texture
+	elif fn_move_direction == Vector2.DOWN:
+		fn_head.texture = head_down_texture
+	elif fn_move_direction == Vector2.LEFT:
+		fn_head.texture = head_left_texture
+	elif fn_move_direction ==  Vector2.RIGHT:
+		fn_head.texture = head_right_texture
+	head.texture = fn_head.texture
 
 #event handlers
-func snake_elongate(grow_position):
+func snake_elongate(fn_grow_position):
+	print_debug("snake_elongate triggered")
 	var part = Sprite2D.new()
 	part.centered = true
 	part.scale = Vector2 (scale_needed, scale_needed)
 	part.texture = body_texture
-	part.position = grow_position
+	part.position = fn_grow_position
 	snake_parts.add_child(part)
 	body_parts.append(part)
 	
 func on_food_eaten():
+	print_debug("on_food_eaten triggered")
 	apple_needed = true
-	global.score_on_apple_eaten()
+	SceneManger.score_on_apple_eaten()
 	apple_spawner.remove_food()
 	apple_spawner.spawn_food()
 	snake_elongate(grow_position)
 	
 func move_to_position(new_head_position):
+	print_debug("move_to_position triggered")
 	var previous_positions: Array[Vector2] = []
 	
 	for part in body_parts:
@@ -156,6 +165,7 @@ func move_to_position(new_head_position):
 
 #collision detectors
 func is_snake_inself(new_head_position):
+	print_debug("is_snake_inself triggered")
 	var is_inself = false
 	for x in range(1, body_parts.size()):
 		if body_parts[x].position == new_head_position:
@@ -165,6 +175,7 @@ func is_snake_inself(new_head_position):
 	return is_inself
 	
 func check_wall_collision(new_head_position: Vector2):
+	print_debug("check_wall_collision triggered")
 	if (new_head_position.x == walls_dict["left"].position.x) and move_direction == Vector2.LEFT:
 		has_collisioned = true
 		return true
@@ -181,4 +192,5 @@ func check_wall_collision(new_head_position: Vector2):
 		return false
 		
 func is_food_eaten(new_head_position: Vector2) -> bool:
+	print_debug("is_food_eaten triggered")
 	return apple_spawner.apple_position == new_head_position

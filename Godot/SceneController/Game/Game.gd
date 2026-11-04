@@ -1,26 +1,18 @@
 extends Node2D
 
-func score_on_apple_eaten():
-	SceneManger.survival_time = 0
-	SceneManger.score += roundi(max((SceneManger.difficulty * 2) + (SceneManger.true_cps * 50) , 100))
-	
-func survival_score():
-	SceneManger.survival_time += 1
-	if SceneManger.survival_time <= 5:
-		SceneManger.score += roundi(max(SceneManger.difficulty * 2, 1))
-
 #Pause_Menu handler
 var is_paused: bool
 signal esc_pressed(is_paused: bool)
 var pause_scene = preload("res://SceneController/Game/pause/pause.tscn")
-@export var pause: Control
+var pause: Control
 
 func _ready():
 	print("starting up")
-	button_setup()
+	load_show_pause()
 	pause_hide_pause(SceneManger.type.BOTH)
 
 func _input(event: InputEvent):
+	print_debug("is paused", is_paused)
 	if event.is_action_pressed("Esc") and not is_paused:
 		load_show_pause()
 		esc_pressed.emit(is_paused)
@@ -34,30 +26,27 @@ func load_show_pause():
 	if not is_instance_valid(pause):
 		pause = pause_scene.instantiate()
 		add_child(pause)
-		is_paused = false
+		is_paused = true
+		button_setup()
 	
 	elif is_instance_valid(pause):
 		pause.process_mode = Node.PROCESS_MODE_ALWAYS
 		pause.show()
-		is_paused = false
+		is_paused = true
 
 func pause_hide_pause(kind):
-	print("function triggered")
-	match kind:
-		SceneManger.type.PAUSE:
-			kind = SceneManger.type.PAUSE
-		SceneManger.type.HIDE:
-			kind = SceneManger.type.HIDE
-		SceneManger.type.BOTH: 
-			kind = SceneManger.type.BOTH
-	
+	print("pause hide pause triggered")
+	print("Kind received: ", kind)
+	print("Pause valid: ", is_instance_valid(pause))
 	if is_instance_valid(pause):
 		if kind == SceneManger.type.PAUSE or kind == SceneManger.type.BOTH: 
 			pause.process_mode = Node.PROCESS_MODE_ALWAYS
-			is_paused = true
+			is_paused = false
+			print_debug("pause hide pause suspended")
 		if kind == SceneManger.type.HIDE or kind == SceneManger.type.BOTH:
 			pause.hide()
-			is_paused = true
+			is_paused = false
+			print_debug("pause hide pause hidden")
 
 func del_pause():
 	if is_instance_valid(pause):
