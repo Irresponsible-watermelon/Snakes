@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b8v5qj3x1vxd8"]
 
-[ext_resource type="Script" uid="uid://bkv4odqvl3stc" path="res://SceneController/scene_manger.gd" id="1_62kil"]
+[ext_resource type="Script" uid="uid://d0gngub1nhyyl" path="res://SceneController/scene_controller.gd" id="1_5sh25"]
 
 [node name="SceneController" type="Node" unique_id=1885958401]
-script = ExtResource("1_62kil")
+script = ExtResource("1_5sh25")

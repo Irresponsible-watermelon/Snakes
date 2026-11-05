@@ -7,15 +7,9 @@ enum type {
 }
 
 var is_options_open: bool = false
-var options_menu = preload("res://SceneController/options/options.tscn")
-var options: Control
-var game_scene: PackedScene
-var game: Node2D
-var start_scene = preload("res://SceneController/Start_menu/start_menu.tscn")
-var start: Control
-var death_scene = preload("res://SceneController/Death_Screen/death_screen.tscn")
-var death: Control
-
+var is_game_open: bool = true
+var is_start_open: bool
+var is_death_open: bool
 var cell_size: float = 100
 var cells_across: int = 13 # must be odd
 var score: int = 0
@@ -23,148 +17,9 @@ var survival_time = 0
 var difficulty: int
 var true_cps: int = 0
 
-
-@onready var game_temp = Game
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("SHOW LOAD GAME CALLED")
-	print("SCRIPT EXISTS: ", FileAccess.file_exists("res://SceneController/Game/Game.gd"))
-	#passes new pause state after esc pressing
-	game_temp.esc_pressed.connect(on_esc_pressed)
-	show_load_game()
-
-
-func on_esc_pressed(is_paused: bool):
-	if is_paused:
-		pause_hide_game(type.BOTH)
-	elif not is_paused:
-		show_load_game()
-		pause_hide_options(type.BOTH)
-
-#scene loaders
-
-func show_load_game():
-	print("SHOW LOAD GAME CALLED")
-
-	if not is_instance_valid(game):
-		game_scene = load("res://SceneController/Game/Game.tscn")
-
-		if game_scene == null:
-			print("ERROR: Game scene failed to load")
-			return
-
-		game = game_scene.instantiate()
-		add_child(game)
-
-	game.process_mode = Node.PROCESS_MODE_ALWAYS
-	game.show()
-
-func show_load_options():
-	if not is_instance_valid(options):
-		options = options_menu.instantiate()
-		add_child(options)
-	elif is_instance_valid(options):
-		options.show()
-		options.process_mode = Node.PROCESS_MODE_ALWAYS
-
-func show_load_start():
-	if not is_instance_valid(start):
-		start = start_scene.instantiate()
-		add_child(start)
-	elif is_instance_valid(start):
-		start.process_mode = Node.PROCESS_MODE_ALWAYS
-		start.show()
-
-func show_load_death():
-	if not is_instance_valid(death):
-		death = death_scene.instantiate()
-		add_child(death)
-	elif is_instance_valid(death):
-		death.process_mode = Node.PROCESS_MODE_ALWAYS
-		death.show()
-
-#scene pausers & Hiders
-
-func pause_hide_game(kind):
-	
-	match kind:
-		type.PAUSE:
-			kind = type.PAUSE
-		type.HIDE:
-			kind = type.HIDE
-		type.BOTH: 
-			kind = type.BOTH
-	
-	if is_instance_valid(game) and not get_node_or_null("Game") == null:
-		
-		if kind == type.HIDE or kind == type.BOTH:
-			game.hide()
-		elif kind == type.PAUSE or kind == type.BOTH:
-			game.process_mode = Node.PROCESS_MODE_DISABLED
-
-func pause_hide_start(kind):
-	match kind:
-		type.PAUSE:
-			kind = type.PAUSE
-		type.HIDE:
-			kind = type.HIDE
-		type.BOTH: 
-			kind = type.BOTH
-	
-	if is_instance_valid(start):
-		if kind == type.HIDE or kind == type.BOTH:
-			start.hide()
-		if kind == type.PAUSE or kind == type.BOTH:
-			start.process_mode = Node.PROCESS_MODE_DISABLED
-
-func pause_hide_options(kind):
-	match kind:
-		type.PAUSE:
-			kind = type.PAUSE
-		type.HIDE:
-			kind = type.HIDE
-		type.BOTH: 
-			kind = type.BOTH
-			
-	if is_instance_valid(options):
-		if kind == type.HIDE or kind == type.BOTH:
-			options.hide()
-		if kind == type.PAUSE or kind == type.BOTH:
-			options.process_mode = Node.PROCESS_MODE_DISABLED
-		
-func pause_hide_death(kind):
-	
-	match kind:
-		type.PAUSE:
-			kind = type.PAUSE
-		type.HIDE:
-			kind = type.HIDE
-		type.BOTH: 
-			kind = type.BOTH
-	
-	if is_instance_valid(death):
-		if kind == type.HIDE or kind == type.BOTH:
-			death.hide()
-		if kind == type.PAUSE or kind == type.BOTH:
-			death.process_mode = Node.PROCESS_MODE_DISABLED
-
-#scene deleters
-
-func del_options():
-	if is_instance_valid(options):
-		options.queue_free()
-		options = null
-
-func del_game():
-	if is_instance_valid(game):
-		game.queue_free()
-		game = null
-		
-func del_start():
-	if is_instance_valid(start):
-		start.queue_free()
-		start = null
+	pass
 
 #score handling
 

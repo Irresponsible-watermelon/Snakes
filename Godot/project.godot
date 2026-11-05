@@ -17,7 +17,6 @@ config/icon="res://Assets/icon.svg"
 
 [autoload]
 
-Game="*uid://7pbukn2s7yw5"
 SceneManger="*uid://bkv4odqvl3stc"
 
 [display]

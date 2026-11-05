@@ -25,10 +25,8 @@ var scale_needed: int
 
 @onready var body_segment_size = SceneManger.cell_size
 @export var walls: Walls
+@export var apple_spawner: Node
 
-
-
-@onready var apple_spawner = $"../Food/AppleSpawner"
 @onready var apple_needed = apple_spawner.food_needed
 
 var walls_dict
@@ -62,8 +60,6 @@ func _ready():
 	snake_elongate(Vector2((50 * scale_needed),(100 * scale_needed)))
 	snake_elongate(Vector2(50 * scale_needed,150 * scale_needed))
 	
-	on_food_eaten()
-	
 	walls_dict = walls.walls_dict
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -91,8 +87,7 @@ func on_timeout():
 	#Check events
 	check_wall_collision(new_head_position) 
 	is_snake_inself(new_head_position)
-	if is_food_eaten(new_head_position):
-		on_food_eaten()
+	is_food_eaten(new_head_position)
 	
 	#direct head
 	head_selector(head, move_direction)
@@ -145,7 +140,7 @@ func snake_elongate(fn_grow_position):
 	
 func on_food_eaten():
 	print_debug("on_food_eaten triggered")
-	apple_needed = true
+	apple_needed = false
 	SceneManger.score_on_apple_eaten()
 	apple_spawner.remove_food()
 	apple_spawner.spawn_food()
@@ -163,7 +158,7 @@ func move_to_position(new_head_position):
 	body_parts[0].position = new_head_position
 	if apple_eaten:
 		snake_elongate(grow_position)
-		apple_eaten = false
+		apple_eaten = true
 
 #collision detectors
 func is_snake_inself(new_head_position):
@@ -195,4 +190,9 @@ func check_wall_collision(new_head_position: Vector2):
 		
 func is_food_eaten(new_head_position: Vector2) -> bool:
 	print_debug("is_food_eaten triggered")
-	return apple_spawner.apple_position == new_head_position
+	if apple_spawner.apple_position == new_head_position and not apple_needed:
+		apple_needed = true
+		on_food_eaten()
+		return true
+	else:
+		return false

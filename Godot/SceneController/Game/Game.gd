@@ -7,7 +7,11 @@ var pause_scene = preload("res://SceneController/Game/pause/pause.tscn")
 var pause: Control
 
 func _ready():
-	print("starting up")
+	print("GAME INSTANCE CREATED")
+	print("Instance ID: ", get_instance_id())
+	print("Node path: ", get_path())
+	
+	
 	load_show_pause()
 	pause_hide_pause(SceneManger.type.BOTH)
 

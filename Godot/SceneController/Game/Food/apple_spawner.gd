@@ -16,11 +16,14 @@ var app_tpl: Sprite2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print_debug("apple_spawner init")
+	scale_needed = float(SceneManger.cell_size / tex_size)
 	app_tpl = Sprite2D.new()
 	app_tpl.hide()
 	add_child(app_tpl)
 	app_tpl.texture = texture
 	app_tpl.scale = Vector2(scale_needed, scale_needed)
+	spawn_food()
 
 func spawn_food():
 	
