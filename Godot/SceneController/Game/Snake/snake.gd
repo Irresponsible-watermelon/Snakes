@@ -47,6 +47,7 @@ func _ready():
 	add_sibling.call_deferred(timer)
 	timer.wait_time = wait_time
 	timer.autostart = true
+	timer.process_mode =Node.PROCESS_MODE_PAUSABLE
 	timer.timeout.connect(on_timeout)
 	
 	scale_needed = int(body_segment_size / tex_size)

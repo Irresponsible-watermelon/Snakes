@@ -3,4 +3,5 @@
 [ext_resource type="Script" uid="uid://d0gngub1nhyyl" path="res://SceneController/scene_controller.gd" id="1_5sh25"]
 
 [node name="SceneController" type="Node" unique_id=1885958401]
+process_mode = 3
 script = ExtResource("1_5sh25")

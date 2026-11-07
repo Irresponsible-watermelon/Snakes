@@ -17,10 +17,13 @@ size = Vector2(50, 600)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jw32o"]
 size = Vector2(50, 600)
 
-[node name="Game" type="Node2D" unique_id=1107367377]
+[node name="Game" type="Node2D" unique_id=1107367377 node_paths=PackedStringArray("snake")]
+process_mode = 3
 script = ExtResource("1_1c8af")
+snake = NodePath("Snake")
 
 [node name="Snake" parent="." unique_id=189533688 node_paths=PackedStringArray("walls", "apple_spawner") instance=ExtResource("2_s1owg")]
+process_mode = 1
 z_index = 1
 position = Vector2(50, 50)
 walls = NodePath("../Walls")
@@ -30,6 +33,7 @@ apple_spawner = NodePath("../Food/AppleSpawner")
 zoom = Vector2(0.5, 0.5)
 
 [node name="Walls" type="Node" parent="." unique_id=621466389 node_paths=PackedStringArray("global")]
+process_mode = 3
 script = ExtResource("3_v310c")
 global = NodePath("..")
 
@@ -51,8 +55,10 @@ position = Vector2(-300, 0)
 texture = SubResource("PlaceholderTexture2D_jw32o")
 
 [node name="Food" type="Node2D" parent="." unique_id=603362600]
+process_mode = 3
 
 [node name="AppleSpawner" type="Node" parent="Food" unique_id=316563984 node_paths=PackedStringArray("wall", "snake", "global")]
+process_mode = 3
 script = ExtResource("5_11yct")
 wall = NodePath("../../Walls")
 snake = NodePath("../../Snake")

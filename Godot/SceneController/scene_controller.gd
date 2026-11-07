@@ -13,16 +13,6 @@ var death: Control
 func _ready() -> void:
 	#passes new pause state after esc pressing
 	show_load_game()
-	game.esc_pressed.connect(on_esc_pressed)
-
-
-
-func on_esc_pressed(is_paused: bool):
-	if is_paused:
-		pause_hide_game(SceneManger.type.BOTH)
-	elif not is_paused:
-		show_load_game()
-		pause_hide_options(SceneManger.type.BOTH)
 
 #scene loaders
 

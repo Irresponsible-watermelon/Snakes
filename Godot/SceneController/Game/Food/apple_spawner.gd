@@ -32,11 +32,13 @@ func spawn_food():
 		apple = app_tpl.duplicate()
 		add_child(apple)
 		var pos: Vector2 = generate_food_location()
-		while check_food_location(pos):
+		while check_food_location(pos) == true:
 			pos = generate_food_location()
+			print_debug("Food location bad")
 		apple_position = pos
 		apple.position = apple_position
-		apple.z_index = -1
+		apple.z_index = 2
+		apple.process_mode = Node.PROCESS_MODE_ALWAYS
 		apple.show()
 		print_debug("apple spawned")
 	else:
@@ -48,10 +50,8 @@ func generate_food_location():
 
 func check_food_location(pos):
 	var is_location_bad = false
-	var x_pos = pos.x
-	var y_pos = pos.y
 	for part in snake.body_parts:
-		if (part.position.x == x_pos) and (part.position.y == y_pos):
+		if (part.global_position.round() == pos.round()):
 			is_location_bad = true
 			return is_location_bad
 	return is_location_bad
