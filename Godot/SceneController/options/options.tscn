@@ -82,7 +82,7 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -990.0
 offset_right = 1010.0
-offset_bottom = 1075.0
+offset_bottom = 1124.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -90,7 +90,7 @@ grow_vertical = 2
 propagate_maximum_size = false
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 6
+size_flags_vertical = 2
 alignment = 1
 
 [node name="DSMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=79997454]
@@ -230,3 +230,187 @@ layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
 placeholder_text = "50"
+
+[node name="ATMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1402602402]
+layout_mode = 2
+theme_override_constants/margin_top = 100
+
+[node name="AT Panel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin" unique_id=1798978516]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel" unique_id=1145670074]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -40.0
+offset_right = 500.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer" unique_id=880762543]
+layout_mode = 2
+text = "Select whether to use a sprited or custom coloured square apple:"
+horizontal_alignment = 1
+
+[node name="ACTContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer" unique_id=1861964557]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/ACTContainer" unique_id=1063597036]
+layout_mode = 2
+text = "Sprited"
+vertical_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/ACTContainer" unique_id=1311585015]
+layout_mode = 2
+action_mode = 0
+
+[node name="Label2" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/ACTContainer" unique_id=2015410413]
+layout_mode = 2
+text = "Coloured"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer" unique_id=1326319066]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="ACPContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer" unique_id=1227167844]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer/ACPContainer" unique_id=600543793]
+layout_mode = 2
+text = "Click to pick an apple colour:"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer/ACPContainer" unique_id=845572325]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+
+[node name="SCMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=874165853]
+layout_mode = 2
+theme_override_constants/margin_top = 175
+
+[node name="SCPanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin" unique_id=1248227867]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel" unique_id=700756554]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -48.0
+offset_right = 500.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ACTInstrMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=611575822]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTInstrMargin" unique_id=994658719]
+layout_mode = 2
+text = "Select whether to use a sprited or custom coloured  snake:"
+horizontal_alignment = 1
+
+[node name="ACTMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=30951231]
+layout_mode = 2
+
+[node name="ACTContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin" unique_id=31614526]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin/ACTContainer" unique_id=2105966747]
+layout_mode = 2
+text = "Sprited"
+vertical_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin/ACTContainer" unique_id=1267539863]
+layout_mode = 2
+action_mode = 0
+
+[node name="Label2" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin/ACTContainer" unique_id=1897966385]
+layout_mode = 2
+text = "Coloured"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BFMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=290164546]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="BFContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin" unique_id=1465903476]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin/BFContainer" unique_id=1203854952]
+layout_mode = 2
+text = "Click to pick a body fill colour:"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin/BFContainer" unique_id=1303471706]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+
+[node name="BOMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=2110939144]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="BFContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin" unique_id=738592781]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin/BFContainer" unique_id=7146506]
+layout_mode = 2
+text = "Click to pick a body outline colour:"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin/BFContainer" unique_id=758604037]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+
+[node name="HFMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=510061198]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="HFContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin" unique_id=1062357577]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin/HFContainer" unique_id=387380208]
+layout_mode = 2
+text = "Click to pick a head fill colour:"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin/HFContainer" unique_id=883813305]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+
+[node name="HOMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=1245770727]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="HOContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin" unique_id=1593244865]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin/HOContainer" unique_id=1415876567]
+layout_mode = 2
+text = "Click to pick a head outline colour:"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin/HOContainer" unique_id=160600548]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
