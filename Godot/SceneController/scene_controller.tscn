@@ -1,10 +1,7 @@
 [gd_scene format=3 uid="uid://b8v5qj3x1vxd8"]
 
 [ext_resource type="Script" uid="uid://d0gngub1nhyyl" path="res://SceneController/scene_controller.gd" id="1_5sh25"]
-[ext_resource type="PackedScene" uid="uid://4bgj6y6bmw57" path="res://SceneController/options/options.tscn" id="2_62kil"]
 
 [node name="SceneController" type="Node" unique_id=1885958401]
 process_mode = 3
 script = ExtResource("1_5sh25")
-
-[node name="Options" parent="." unique_id=699900910 instance=ExtResource("2_62kil")]

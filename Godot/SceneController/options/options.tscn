@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d2cucvh3gre0f" path="res://SceneController/options/options.gd" id="1_ly21u"]
 [ext_resource type="Texture2D" uid="uid://bc3t1xdj1ysju" path="res://Assets/Apple sprites/Green Apple 50x50 pxlart.png" id="2_4grug"]
 
-[node name="Options" type="Panel" unique_id=699900910]
+[node name="Options" type="Panel" unique_id=699900910 node_paths=PackedStringArray("diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd")]
 anchors_preset = -1
 offset_left = -1000.0
 offset_top = -600.0
@@ -14,6 +14,18 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_ly21u")
+diff_slider_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffSlider")
+map_size_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer/LineEdit")
+cell_size_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin/CellSizePanel/VBoxContainer/LineEdit")
+bg_col_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer/ACPContainer/ColorPickerButton")
+bd_col_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer2/ACPContainer/ColorPickerButton")
+ap_spr_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/ACTContainer/CheckButton")
+ap_col_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer/ACPContainer/ColorPickerButton")
+sn_spr_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin/ACTContainer/CheckButton")
+sn_fill_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin/BFContainer/ColorPickerButton")
+sn_bd_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin/BFContainer/ColorPickerButton")
+hd_fill_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin/HFContainer/ColorPickerButton")
+hd_bd_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin/HOContainer/ColorPickerButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1240270208]
 layout_mode = 1

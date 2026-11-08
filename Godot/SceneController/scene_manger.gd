@@ -18,6 +18,15 @@ var difficulty: int
 var true_cps: int = 0
 var apple_spr_tex: Resource
 var snake_spr_texs: Array[Resource]
+var background_col: Color
+var border_col: Color
+var is_ap_spr: bool
+var ap_col: Color
+var is_sn_spr: bool
+var bd_fill_col: Color
+var bd_bd_col: Color
+var hd_fill_col: Color
+var hd_bd_col: Color
 
 signal resource_refresh
 
