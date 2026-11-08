@@ -28,9 +28,20 @@ func show_load_game():
 
 		game = game_scene.instantiate()
 		add_child(game)
+		game.options_trigger.connect(on_options_trigger)
 
 	game.process_mode = Node.PROCESS_MODE_ALWAYS
 	game.show()
+
+#signal handlers
+func on_options_trigger():
+	if is_instance_valid(options) and not options.visible:
+		options.process_mode = Node.PROCESS_MODE_ALWAYS
+		show_load_options()
+	if is_instance_valid(options) and options.visible:
+		pause_hide_options(SceneManger.type.BOTH)
+
+#scene loaders
 
 func show_load_options():
 	if not is_instance_valid(options):

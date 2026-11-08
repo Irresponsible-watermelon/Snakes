@@ -1,9 +1,38 @@
 [gd_scene format=3 uid="uid://4bgj6y6bmw57"]
 
-[node name="Options" type="Control" unique_id=1318203368]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[ext_resource type="Script" uid="uid://d2cucvh3gre0f" path="res://SceneController/options/options.gd" id="1_ly21u"]
+
+[node name="Options" type="SubViewportContainer" unique_id=180224086]
+anchors_preset = -1
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ly21u")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=993414859]
+physics_interpolation_mode = 2
+handle_input_locally = false
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="CenterContainer" type="CenterContainer" parent="SubViewport" unique_id=1388584245]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SubViewport/CenterContainer" unique_id=311222937]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewport/CenterContainer/ScrollContainer" unique_id=1449555681]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewport/CenterContainer/ScrollContainer/MarginContainer" unique_id=306408673]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="SubViewport/CenterContainer" unique_id=328349181]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="SubViewport/CenterContainer/MarginContainer2" unique_id=566819526]
+layout_mode = 2
