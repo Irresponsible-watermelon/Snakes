@@ -71,6 +71,8 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="ScrollPanel" type="Panel" parent="VBoxContainer/SPMargin" unique_id=2053219591]
+show_behind_parent = true
+oversampling_with_scale = 2
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -231,9 +233,77 @@ size_flags_horizontal = 2
 size_flags_vertical = 4
 placeholder_text = "50"
 
-[node name="ATMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1402602402]
+[node name="MCMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1381256089]
 layout_mode = 2
 theme_override_constants/margin_top = 100
+
+[node name="MCPanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin" unique_id=332649413]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel" unique_id=888376693]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -40.0
+offset_right = 500.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer" unique_id=1692916887]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(1.1, 1.1)
+text = "Customise Map details below:"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer" unique_id=2081032655]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="ACPContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer" unique_id=324585612]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer/ACPContainer" unique_id=872270729]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7647059, 0.7647059, 0.7647059, 1)
+text = "Click to pick a background colour:"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer/ACPContainer" unique_id=15968573]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+edit_alpha = false
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer" unique_id=1469840003]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="ACPContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer2" unique_id=531573493]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer2/ACPContainer" unique_id=129812511]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7647059, 0.7647059, 0.7647059, 1)
+text = "Click to pick a border colour:"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer2/ACPContainer" unique_id=1625685438]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="ATMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1402602402]
+layout_mode = 2
+theme_override_constants/margin_top = 125
 
 [node name="AT Panel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin" unique_id=1798978516]
 layout_mode = 2
@@ -257,6 +327,8 @@ alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer" unique_id=880762543]
 layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(1.1, 1.1)
 text = "Select whether to use a sprited or custom coloured square apple:"
 horizontal_alignment = 1
 
@@ -267,6 +339,7 @@ size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/ACTContainer" unique_id=1063597036]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
 text = "Sprited"
 vertical_alignment = 1
 
@@ -276,6 +349,7 @@ action_mode = 0
 
 [node name="Label2" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/ACTContainer" unique_id=2015410413]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
 text = "Coloured"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -290,11 +364,14 @@ size_flags_horizontal = 4
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer/ACPContainer" unique_id=600543793]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7647059, 0.7647059, 0.7647059, 1)
 text = "Click to pick an apple colour:"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer/ACPContainer" unique_id=845572325]
 custom_minimum_size = Vector2(50, 15)
 layout_mode = 2
+color = Color(0.1577059, 0.58334017, 0.45124257, 1)
+edit_alpha = false
 
 [node name="SCMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=874165853]
 layout_mode = 2
@@ -325,6 +402,8 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTInstrMargin" unique_id=994658719]
 layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(1.1, 1.1)
 text = "Select whether to use a sprited or custom coloured  snake:"
 horizontal_alignment = 1
 
@@ -338,6 +417,7 @@ size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin/ACTContainer" unique_id=2105966747]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
 text = "Sprited"
 vertical_alignment = 1
 
@@ -347,13 +427,14 @@ action_mode = 0
 
 [node name="Label2" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin/ACTContainer" unique_id=1897966385]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
 text = "Coloured"
 horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="BFMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=290164546]
 layout_mode = 2
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 5
 
 [node name="BFContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin" unique_id=1465903476]
 layout_mode = 2
@@ -361,11 +442,13 @@ size_flags_horizontal = 4
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin/BFContainer" unique_id=1203854952]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
 text = "Click to pick a body fill colour:"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin/BFContainer" unique_id=1303471706]
 custom_minimum_size = Vector2(50, 15)
 layout_mode = 2
+edit_alpha = false
 
 [node name="BOMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=2110939144]
 layout_mode = 2
@@ -377,11 +460,14 @@ size_flags_horizontal = 4
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin/BFContainer" unique_id=7146506]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
 text = "Click to pick a body outline colour:"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin/BFContainer" unique_id=758604037]
 custom_minimum_size = Vector2(50, 15)
 layout_mode = 2
+color = Color(1, 1, 1, 1)
+edit_alpha = false
 
 [node name="HFMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=510061198]
 layout_mode = 2
@@ -393,11 +479,13 @@ size_flags_horizontal = 4
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin/HFContainer" unique_id=387380208]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
 text = "Click to pick a head fill colour:"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin/HFContainer" unique_id=883813305]
 custom_minimum_size = Vector2(50, 15)
 layout_mode = 2
+edit_alpha = false
 
 [node name="HOMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=1245770727]
 layout_mode = 2
@@ -409,8 +497,11 @@ size_flags_horizontal = 4
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin/HOContainer" unique_id=1415876567]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
 text = "Click to pick a head outline colour:"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin/HOContainer" unique_id=160600548]
 custom_minimum_size = Vector2(50, 15)
 layout_mode = 2
+color = Color(1, 1, 1, 1)
+edit_alpha = false

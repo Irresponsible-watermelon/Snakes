@@ -4,6 +4,9 @@ var temp_snake_texs: Array[Resource]
 var temp_apple_tex: Resource
 
 # Called when the node enters the scene tree for the first time.
+
+
+
 func _ready() -> void:
 	pass # Replace with function body.
 
