@@ -90,6 +90,7 @@ grow_vertical = 2
 propagate_maximum_size = false
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 6
 alignment = 1
 
 [node name="DSMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=79997454]
@@ -122,7 +123,6 @@ theme_override_constants/margin_top = 10
 [node name="DiffInstrTxt" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffInstrMargin" unique_id=813749117]
 layout_mode = 2
 text = "Set Difficulty:"
-horizontal_alignment = 1
 
 [node name="DiffLabelMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer" unique_id=1092601854]
 layout_mode = 2
@@ -160,12 +160,13 @@ ticks_on_borders = true
 [node name="MSMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=377915293]
 layout_mode = 2
 theme_override_constants/margin_top = 100
+theme_override_constants/margin_bottom = -55
 
 [node name="MapSizePanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin" unique_id=1548746596]
 layout_mode = 2
 size_flags_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel" unique_id=384206129]
+[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel" unique_id=85114955]
 custom_minimum_size = Vector2(1000, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -184,3 +185,48 @@ alignment = 1
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer" unique_id=1750443941]
 layout_mode = 2
 text = "Map Size (Cells):"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer" unique_id=374672554]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+placeholder_text = "12"
+
+[node name="Notice" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer" unique_id=1825150263]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.53087825, 0.53087825, 0.53087825, 1)
+text = "Please note that these settings will only be applied if compatible with your display size."
+
+[node name="CSMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1755169665]
+layout_mode = 2
+theme_override_constants/margin_top = 100
+
+[node name="CellSizePanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin" unique_id=471841082]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin/CellSizePanel" unique_id=1907018874]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -40.0
+offset_right = 500.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin/CellSizePanel/VBoxContainer" unique_id=524756371]
+layout_mode = 2
+text = "Cell Size (Pixels):"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin/CellSizePanel/VBoxContainer" unique_id=1086591560]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+placeholder_text = "50"
