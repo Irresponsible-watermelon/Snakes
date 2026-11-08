@@ -10,16 +10,12 @@ enum CollisionDirection {
 }
 # variables soup
 var body_parts = []
-var body_texture = preload("res://Assets/Snake sprites/My_Snake_1/Body.png")
-var head_up_texture = preload("res://Assets/Snake sprites/My_Snake_1/Up.png")
-var head_down_texture = preload("res://Assets/Snake sprites/My_Snake_1/Down.png")
-var head_left_texture = preload("res://Assets/Snake sprites/My_Snake_1/Left.png")
-var head_right_texture = preload("res://Assets/Snake sprites/My_Snake_1/Right.png")
 var head: Sprite2D
 var grow_position: Vector2
 var apple_eaten = false
-var tex_size = body_texture.get_height()
+var tex_size: int
 var scale_needed: int
+var snake_spr_texs: Array[Resource]
 
 @onready var snake_parts:Node = $SnakeParts
 
@@ -50,12 +46,15 @@ func _ready():
 	timer.process_mode =Node.PROCESS_MODE_PAUSABLE
 	timer.timeout.connect(on_timeout)
 	
+	load_resources()
+	SceneManger.resource_refresh.connect(load_resources)
+	
 	scale_needed = int(body_segment_size / tex_size)
 	head = Sprite2D.new()
 	head.centered = true
 	head.scale = Vector2(scale_needed,scale_needed)
 	head.position = Vector2((50 * scale_needed),(50 * scale_needed))
-	head.texture = head_up_texture
+	head.texture = snake_spr_texs[1]
 	snake_parts.add_child(head)
 	body_parts.append(head)
 	snake_elongate(Vector2((50 * scale_needed),(100 * scale_needed)))
@@ -119,13 +118,13 @@ func new_head_pos_finder():
 func head_selector(fn_head: Sprite2D, fn_move_direction: Vector2):
 	print_debug("head_selector triggered")
 	if fn_move_direction == Vector2.UP:
-		fn_head.texture = head_up_texture
+		fn_head.texture = snake_spr_texs[1]
 	elif fn_move_direction == Vector2.DOWN:
-		fn_head.texture = head_down_texture
+		fn_head.texture = snake_spr_texs[2]
 	elif fn_move_direction == Vector2.LEFT:
-		fn_head.texture = head_left_texture
+		fn_head.texture = snake_spr_texs[3]
 	elif fn_move_direction ==  Vector2.RIGHT:
-		fn_head.texture = head_right_texture
+		fn_head.texture = snake_spr_texs[4]
 	head.texture = fn_head.texture
 
 #event handlers
@@ -134,7 +133,7 @@ func snake_elongate(fn_grow_position):
 	var part = Sprite2D.new()
 	part.centered = true
 	part.scale = Vector2 (scale_needed, scale_needed)
-	part.texture = body_texture
+	part.texture = snake_spr_texs[0]
 	part.position = fn_grow_position
 	snake_parts.add_child(part)
 	body_parts.append(part)
@@ -160,7 +159,11 @@ func move_to_position(new_head_position):
 	if apple_eaten:
 		snake_elongate(grow_position)
 		apple_eaten = true
-
+		
+func load_resources():
+	snake_spr_texs = SceneManger.snake_spr_texs
+	tex_size = snake_spr_texs[0].get_height()
+	#Bod, UDLR
 #collision detectors
 func is_snake_inself(new_head_position):
 	print_debug("is_snake_inself triggered")

@@ -6,7 +6,7 @@ var is_paused: bool = false
 signal esc_pressed(is_paused: bool)#
 signal options_trigger
 var pause_tscn = preload("res://SceneController/Game/pause/pause.tscn")
-var pause_node: Control 
+var pause_node: Control
 
 func _ready():
 	print("GAME INSTANCE CREATED")

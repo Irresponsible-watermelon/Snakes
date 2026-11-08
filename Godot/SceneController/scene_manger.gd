@@ -16,11 +16,15 @@ var score: int = 0
 var survival_time = 0
 var difficulty: int
 var true_cps: int = 0
+var apple_spr_tex: Resource
+var snake_spr_texs: Array[Resource]
+
+signal resource_refresh
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
-
+	snake_spr_texs = [preload("res://Assets/Snake sprites/My_Snake_1/Body.png"), preload("res://Assets/Snake sprites/My_Snake_1/Up.png"), preload("res://Assets/Snake sprites/My_Snake_1/Down.png"), preload("res://Assets/Snake sprites/My_Snake_1/Left.png"), preload("res://Assets/Snake sprites/My_Snake_1/Right.png")]
+	apple_spr_tex = preload("res://Assets/Apple sprites/Green Apple 50x50 pxlart.png")
 #score handling
 
 func score_on_apple_eaten():

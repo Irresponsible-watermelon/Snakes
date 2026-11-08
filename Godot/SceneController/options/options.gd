@@ -1,5 +1,7 @@
 extends Panel
 
+var temp_snake_texs: Array[Resource]
+var temp_apple_tex: Resource
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -9,3 +11,8 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
+
+func on_resources_updated():
+	SceneManger.apple_spr_tex = temp_apple_tex
+	SceneManger.snake_spr_texs = temp_snake_texs
+	SceneManger.resource_refresh.emit()

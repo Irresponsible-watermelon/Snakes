@@ -6,8 +6,8 @@ extends Node
 @export var global: Node
 
 var apple_position: Vector2
-var texture = load("res://Assets/Apple sprites/Green Apple 50x50 pxlart.png")
-@onready var tex_size: float = texture.get_height()
+var texture: Resource
+var tex_size: float
 var scale_needed: float
 var food_needed: bool
 var apple: Node2D
@@ -17,6 +17,9 @@ var app_tpl: Sprite2D
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print_debug("apple_spawner init")
+	load_resources()
+	SceneManger.resource_refresh.connect(load_resources)
+	
 	scale_needed = float(SceneManger.cell_size / tex_size)
 	app_tpl = Sprite2D.new()
 	app_tpl.hide()
@@ -60,3 +63,8 @@ func remove_food():
 	if is_instance_valid(apple):
 		apple.queue_free()
 		apple = null
+
+func load_resources():
+	texture = SceneManger.apple_spr_tex
+	tex_size = texture.get_height()
+	
