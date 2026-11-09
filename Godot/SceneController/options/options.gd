@@ -1,8 +1,8 @@
 extends Panel
 
 @export var diff_slider_nd: HSlider
-@export var map_size_nd: TextEdit
-@export var cell_size_nd: TextEdit
+@export var map_size_nd: LineEdit
+@export var cell_size_nd: LineEdit
 @export var bg_col_nd: ColorPickerButton
 @export var bd_col_nd: ColorPickerButton
 @export var ap_spr_nd: CheckButton
@@ -23,6 +23,9 @@ var sn_fl_in: Color
 var sn_bd_in: Color
 var hd_fl_in: Color
 var hd_bd_in: Color
+var head_tex_in: Resource
+var body_tex_in: Resource
+var snake_texs_in: Array[Resource]
 
 func _ready() -> void:
 	connect_signals()
@@ -109,7 +112,7 @@ func ap_sprtd_handler(checked: bool):
 
 func ap_col_handler(color: Color):
 	ap_col_in = color
-	SceneManger.ap_col = to_tex(ap_col_in, ap_col_in)
+	SceneManger.apple_col_tex = to_tex(ap_col_in, ap_col_in)
 	option_updated()
 
 func sn_spr_handler(checked: bool):
@@ -118,23 +121,23 @@ func sn_spr_handler(checked: bool):
 
 func sn_fill_handler(color: Color):
 	sn_fl_in = color
-	SceneManger.bd_col_tx = to_tex(sn_fl_in, sn_bd_in)
-	option_updated()
+	body_tex_in = to_tex(sn_fl_in, sn_bd_in)
+	snake_array()
 
 func sn_bd_handler(color: Color):
 	sn_bd_in = color
-	SceneManger.bd_col_tx = to_tex(sn_fl_in, sn_bd_in)
-	option_updated()
+	body_tex_in = to_tex(sn_fl_in, sn_bd_in)
+	snake_array()
 
 func hd_fill_handler(color: Color):
 	hd_fl_in = color
-	SceneManger.hd_fill_col = to_tex(hd_fl_in, hd_bd_in)
-	option_updated()
+	head_tex_in = to_tex(hd_fl_in, hd_bd_in)
+	snake_array()
 
 func hd_bd_handler(color: Color):
 	hd_bd_in = color
-	SceneManger.hd_bd_col_tx = to_tex(hd_fl_in, hd_bd_in)
-	option_updated()
+	head_tex_in = to_tex(hd_fl_in, hd_bd_in)
+	snake_array()
 	
 func snake_dialog_handler(path):
 	var required_files = [
@@ -173,3 +176,13 @@ func to_tex(fl_col: Color, bd_col: Color):
 	
 	var col_tex: Texture2D = ImageTexture.create_from_image(tex_image)
 	return col_tex
+
+func snake_array():
+	snake_texs_in = []
+	snake_texs_in.append(body_tex_in)
+	var counter: int = 0
+	while counter < 4:
+		snake_texs_in.append(head_tex_in)
+		counter += 1
+	SceneManger.snake_col_texs = snake_texs_in
+	option_updated()

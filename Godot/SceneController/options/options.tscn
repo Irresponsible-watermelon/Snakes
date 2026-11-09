@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://dyscluxshvjma" path="res://SceneController/options/file_dialog.gd" id="3_1nqdw"]
 
 [node name="Options" type="Panel" unique_id=699900910 node_paths=PackedStringArray("diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd", "file_dia_nd", "error_dia_nd")]
+z_index = 25
 anchors_preset = -1
 offset_left = -1000.0
 offset_top = -600.0
@@ -31,15 +32,18 @@ file_dia_nd = NodePath("FileDialog")
 error_dia_nd = NodePath("AcceptDialog")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1240270208]
+propagate_maximum_size = false
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -1000.0
-offset_right = 1000.0
+offset_right = 425.0
+offset_bottom = -350.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.4, 1.4)
 
 [node name="HPMargin" type="MarginContainer" parent="VBoxContainer" unique_id=773930532]
 layout_mode = 2
@@ -173,11 +177,13 @@ vertical_alignment = 1
 [node name="DiffSlider" type="HSlider" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer" unique_id=1863106252]
 layout_mode = 2
 max_value = 10.0
+value = 5.0
 tick_count = 3
 ticks_on_borders = true
 
 [node name="MSMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=377915293]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_bottom = -55
 
@@ -210,6 +216,7 @@ layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
 placeholder_text = "13"
+expand_to_text_length = true
 
 [node name="Notice" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer" unique_id=1825150263]
 layout_mode = 2
@@ -218,6 +225,7 @@ text = "Please note that these settings will only be applied if compatible with 
 
 [node name="CSMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1755169665]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 100
 
 [node name="CellSizePanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin" unique_id=471841082]
@@ -249,6 +257,7 @@ layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
 placeholder_text = "50"
+expand_to_text_length = true
 
 [node name="MCMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1381256089]
 layout_mode = 2
@@ -320,6 +329,7 @@ edit_alpha = false
 
 [node name="ATMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1402602402]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 125
 
 [node name="AT Panel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin" unique_id=1798978516]
@@ -410,6 +420,7 @@ text = "Select PNG"
 
 [node name="SCMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=874165853]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 200
 
 [node name="SCPanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin" unique_id=1248227867]
