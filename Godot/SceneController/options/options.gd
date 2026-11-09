@@ -1,8 +1,5 @@
 extends Panel
 
-var temp_snake_texs: Array[Resource]
-var temp_apple_tex: Resource
-
 @export var diff_slider_nd: HSlider
 @export var map_size_nd: TextEdit
 @export var cell_size_nd: TextEdit
@@ -27,19 +24,14 @@ var sn_bd_in: Color
 var hd_fl_in: Color
 var hd_bd_in: Color
 
-# Called when the node enters the scene tree for the first time.
-
-
 func _ready() -> void:
 	connect_signals()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-
-
 func connect_signals():
+	if not is_instance_valid(map_size_nd):
+		push_error("map_size_nd is NULL!")
+		return
+	
 	diff_slider_nd.drag_ended.connect(diff_slider_handler)
 	map_size_nd.text_changed.connect(map_size_handler)
 	cell_size_nd.text_changed.connect(cell_size_handler)
@@ -90,6 +82,7 @@ func map_size_handler(text):
 		option_updated()
 	elif not map_valid:
 		map_size_nd.text = str(SceneManger.cells_across)
+		print_debug(reject_reason)
 
 func cell_size_handler(text):
 	var cell_valid: bool = true

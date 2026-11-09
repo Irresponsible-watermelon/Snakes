@@ -209,7 +209,7 @@ text = "Map Size (Cells):"
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
-placeholder_text = "12"
+placeholder_text = "13"
 
 [node name="Notice" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer" unique_id=1825150263]
 layout_mode = 2

@@ -13,6 +13,9 @@ var death: Control
 func _ready() -> void:
 	#passes new pause state after esc pressing
 	show_load_game()
+	show_load_options()
+	pause_hide_options(SceneManger.type.BOTH)
+	signal_setup()
 
 #scene loaders
 
@@ -28,19 +31,20 @@ func show_load_game():
 
 		game = game_scene.instantiate()
 		add_child(game)
-		game.options_trigger.connect(on_options_trigger)
 
 	game.process_mode = Node.PROCESS_MODE_ALWAYS
 	game.show()
 
 #signal handlers
-func on_options_trigger():
-	if is_instance_valid(options) and not options.visible:
+func on_options_trigger(new_state):
+	if new_state == true:
 		options.process_mode = Node.PROCESS_MODE_ALWAYS
 		show_load_options()
-	if is_instance_valid(options) and options.visible:
+	elif new_state == false:
 		pause_hide_options(SceneManger.type.BOTH)
 
+func signal_setup():
+	SceneManger.options_state.connect(on_options_trigger)
 #scene loaders
 
 func show_load_options():

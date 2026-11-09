@@ -14,9 +14,6 @@ func _ready() -> void:
 	use_native_dialog = true
 	access = FileDialog.ACCESS_FILESYSTEM
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 func apple_sprite_select():
 	title = "Select an apple sprite"

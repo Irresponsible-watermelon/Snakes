@@ -36,8 +36,10 @@ var ap_col_tx: Color
 var is_sn_spr: bool
 var bd_col_tx: Color
 var hd_col_tex: Color
+var is_options: bool = false
 
 signal resource_refresh
+signal options_state(state: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -3,8 +3,7 @@ extends Node2D
 @export var snake: Snake
 #Pause_Menu handler
 var is_paused: bool = false
-signal esc_pressed(is_paused: bool)#
-signal options_trigger
+signal esc_pressed(is_paused: bool)
 var pause_tscn = preload("res://SceneController/Game/pause/pause.tscn")
 var pause_node: Control
 
@@ -66,16 +65,20 @@ func button_setup():
 		pause_node.get_node("SubViewport/Esc/Button").pressed.connect(on_close_button)
 		pause_node.get_node("SubViewport/middle buttons/Resume/Resume").pressed.connect(on_resume_button)
 		pause_node.get_node("SubViewport/middle buttons/Quit/QuitButton").pressed.connect(on_quit_button)
-		pause_node.get_node("SubViewport/middle buttons/MenuButton/MenuButton").pressed.connect(on_menu_button)
+		pause_node.get_node("SubViewport/middle buttons/MenuButton/MenuButton").pressed.connect(on_options_button)
 
 func on_close_button():
 	unpause(SceneManger.type.BOTH)
-	if is_instance_valid(SceneManger.options) and (SceneManger.options.process_mode == Node.PROCESS_MODE_ALWAYS or SceneManger.options.visible == true):
-		SceneManger.pause_hide_options(SceneManger.type.BOTH)
-		
+	if SceneManger.is_options:
+		SceneManger.options_state.emit(false)
+
 func on_resume_button():
-	unpause(SceneManger.type.BOTH)
+	on_close_button()
+
 func on_quit_button():
 	get_tree().quit()
-func on_menu_button():
-	options_trigger.emit()
+
+func on_options_button():
+	print_debug("options button pressed")
+	if SceneManger.is_options == false:
+		SceneManger.options_state.emit(true)
