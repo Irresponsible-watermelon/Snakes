@@ -16,17 +16,26 @@ var score: int = 0
 var survival_time = 0
 var difficulty: int
 var true_cps: int = 0
+
+var apple_def_tex: Resource
+var snake_def_texs: Array[Resource]
+
 var apple_spr_tex: Resource
 var snake_spr_texs: Array[Resource]
+
+var apple_col_tex: Resource
+var snake_col_texs: Array[Resource]
+
+var apple_use_tex: Resource
+var snake_use_texs: Array[Resource]
+
 var background_col: Color
 var border_col: Color
 var is_ap_spr: bool
-var ap_col: Color
+var ap_col_tx: Color
 var is_sn_spr: bool
-var bd_fill_col: Color
-var bd_bd_col: Color
-var hd_fill_col: Color
-var hd_bd_col: Color
+var bd_col_tx: Color
+var hd_col_tex: Color
 
 signal resource_refresh
 

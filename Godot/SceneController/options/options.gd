@@ -15,25 +15,29 @@ var temp_apple_tex: Resource
 @export var sn_bd_nd: ColorPickerButton
 @export var hd_fill_nd: ColorPickerButton
 @export var hd_bd_nd: ColorPickerButton
+@export var file_dia_nd: FileDialog
+@export var error_dia_nd: AcceptDialog
 
 var diff_in: int
 var map_size_in: int
 var cell_size_in: int
+var ap_col_in: Color
+var sn_fl_in: Color
+var sn_bd_in: Color
+var hd_fl_in: Color
+var hd_bd_in: Color
+
 # Called when the node enters the scene tree for the first time.
 
 
 func _ready() -> void:
-	pass # Replace with function body.
+	connect_signals()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
 
-func on_resources_updated():
-	SceneManger.apple_spr_tex = temp_apple_tex
-	SceneManger.snake_spr_texs = temp_snake_texs
-	SceneManger.resource_refresh.emit()
 
 func connect_signals():
 	diff_slider_nd.drag_ended.connect(diff_slider_handler)
@@ -48,13 +52,27 @@ func connect_signals():
 	sn_bd_nd.color_changed.connect(sn_bd_handler)
 	hd_fill_nd.color_changed.connect(hd_fill_handler)
 	hd_bd_nd.color_changed.connect(hd_bd_handler)
+	file_dia_nd.dir_selected.connect(snake_dialog_handler)
+	file_dia_nd.file_selected.connect(apple_dialog_handler)
 
 func option_updated():
 	pass
+	if not SceneManger.is_ap_spr:
+		SceneManger.apple_use_tex = SceneManger.apple_col_tex
+	elif SceneManger.is_ap_spr:
+		SceneManger.apple_use_tex = SceneManger.apple_spr_tex
+	
+	if not SceneManger.is_sn_spr:
+		SceneManger.snake_use_texs = SceneManger.snake_col_texs
+	elif SceneManger.is_sn_spr:
+		SceneManger.snake_use_texs = SceneManger.snake_spr_texs
+		
+	SceneManger.resource_refresh.emit()
+
 #input handlers
 func diff_slider_handler(value_changed: bool):
 	if value_changed:
-		diff_in = diff_slider_nd.get_value()
+		SceneManger.difficulty = diff_slider_nd.get_value()
 		option_updated()
 
 func map_size_handler(text):
@@ -97,7 +115,8 @@ func ap_sprtd_handler(checked: bool):
 	option_updated()
 
 func ap_col_handler(color: Color):
-	SceneManger.ap_col = color
+	ap_col_in = color
+	SceneManger.ap_col = to_tex(ap_col_in, ap_col_in)
 	option_updated()
 
 func sn_spr_handler(checked: bool):
@@ -105,17 +124,59 @@ func sn_spr_handler(checked: bool):
 	option_updated()
 
 func sn_fill_handler(color: Color):
-	SceneManger.bd_fill_col = color
+	sn_fl_in = color
+	SceneManger.bd_col_tx = to_tex(sn_fl_in, sn_bd_in)
 	option_updated()
 
 func sn_bd_handler(color: Color):
-	SceneManger.bd_bd_col = color
+	sn_bd_in = color
+	SceneManger.bd_col_tx = to_tex(sn_fl_in, sn_bd_in)
 	option_updated()
 
 func hd_fill_handler(color: Color):
-	SceneManger.hd_fill_col = color
+	hd_fl_in = color
+	SceneManger.hd_fill_col = to_tex(hd_fl_in, hd_bd_in)
 	option_updated()
 
 func hd_bd_handler(color: Color):
-	SceneManger.hd_bd_col = color
+	hd_bd_in = color
+	SceneManger.hd_bd_col_tx = to_tex(hd_fl_in, hd_bd_in)
 	option_updated()
+	
+func snake_dialog_handler(path):
+	var required_files = [
+		"Body.png",
+		"Up.png",
+		"Down.png",
+		"Left.png",
+		"Right.png"
+	]
+	var generated_files: Array[Resource]
+	var failed: bool
+	
+	for file in required_files:
+		var file_path = path.path_join(file)
+		if not FileAccess.file_exists(file_path):
+			error_dia_nd.popup_centered()
+			failed = true
+			return
+		else:
+			generated_files.append(load(file_path))
+	if not failed:
+		SceneManger.snake_spr_texs = generated_files
+		option_updated()
+
+func apple_dialog_handler(path):
+	SceneManger.apple_spr_tex = load(path)
+	option_updated()
+
+func to_tex(fl_col: Color, bd_col: Color):
+	var img_rect: Rect2i
+	img_rect.size = Vector2i(46, 46)
+	img_rect.position = Vector2i(2, 2)
+	var tex_image = Image.create(50, 50, false, Image.FORMAT_RGBA8)
+	tex_image.fill(bd_col)
+	tex_image.fill_rect(img_rect, fl_col)
+	
+	var col_tex: Texture2D = ImageTexture.create_from_image(tex_image)
+	return col_tex

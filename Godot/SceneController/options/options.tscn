@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://d2cucvh3gre0f" path="res://SceneController/options/options.gd" id="1_ly21u"]
 [ext_resource type="Texture2D" uid="uid://bc3t1xdj1ysju" path="res://Assets/Apple sprites/Green Apple 50x50 pxlart.png" id="2_4grug"]
+[ext_resource type="Script" uid="uid://dyscluxshvjma" path="res://SceneController/options/file_dialog.gd" id="3_1nqdw"]
 
-[node name="Options" type="Panel" unique_id=699900910 node_paths=PackedStringArray("diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd")]
+[node name="Options" type="Panel" unique_id=699900910 node_paths=PackedStringArray("diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd", "file_dia_nd", "error_dia_nd")]
 anchors_preset = -1
 offset_left = -1000.0
 offset_top = -600.0
@@ -26,6 +27,8 @@ sn_fill_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxCo
 sn_bd_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin/BFContainer/ColorPickerButton")
 hd_fill_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin/HFContainer/ColorPickerButton")
 hd_bd_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin/HOContainer/ColorPickerButton")
+file_dia_nd = NodePath("FileDialog")
+error_dia_nd = NodePath("AcceptDialog")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1240270208]
 layout_mode = 1
@@ -99,6 +102,8 @@ offset_right = 1010.0
 offset_bottom = 1124.0
 grow_horizontal = 2
 grow_vertical = 2
+follow_focus = true
+draw_focus_border = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer" unique_id=449559505]
 propagate_maximum_size = false
@@ -385,9 +390,27 @@ layout_mode = 2
 color = Color(0.1577059, 0.58334017, 0.45124257, 1)
 edit_alpha = false
 
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer" unique_id=1110622233]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="ACPContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer2" unique_id=1126026682]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer2/ACPContainer" unique_id=252577765]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7647059, 0.7647059, 0.7647059, 1)
+text = "Click to pick an apple sprite:"
+
+[node name="ColorPickerButton" type="Button" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer2/ACPContainer" unique_id=69338137]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+text = "Select PNG"
+
 [node name="SCMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=874165853]
 layout_mode = 2
-theme_override_constants/margin_top = 175
+theme_override_constants/margin_top = 200
 
 [node name="SCPanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin" unique_id=1248227867]
 layout_mode = 2
@@ -517,3 +540,40 @@ custom_minimum_size = Vector2(50, 15)
 layout_mode = 2
 color = Color(1, 1, 1, 1)
 edit_alpha = false
+
+[node name="SFMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=37405184]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="HOContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/SFMargin" unique_id=783056864]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/SFMargin/HOContainer" unique_id=1247319906]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7649579, 0.76495796, 0.76495796, 1)
+text = "Click to pick a snake sprite set:"
+
+[node name="ColorPickerButton" type="Button" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/SFMargin/HOContainer" unique_id=1290831808]
+custom_minimum_size = Vector2(50, 15)
+layout_mode = 2
+text = "Select Folder"
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1487466978 node_paths=PackedStringArray("apple_sprt_btn", "snake_sprt_btn", "options_nd")]
+oversampling_override = 1.0
+title = "Open a File or Directory"
+initial_position = 1
+ok_button_text = "Import"
+file_mode = 3
+use_native_dialog = true
+script = ExtResource("3_1nqdw")
+apple_sprt_btn = NodePath("../VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer2/ACPContainer/ColorPickerButton")
+snake_sprt_btn = NodePath("../VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/SFMargin/HOContainer/ColorPickerButton")
+options_nd = NodePath("..")
+
+[node name="AcceptDialog" type="AcceptDialog" parent="." unique_id=1618348480]
+oversampling_override = 1.0
+title = "Error!"
+position = Vector2i(-175, -50)
+size = Vector2i(350, 100)
+dialog_text = "The selected snake sprite folder is not valid"
