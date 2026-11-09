@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bc3t1xdj1ysju" path="res://Assets/Apple sprites/Green Apple 50x50 pxlart.png" id="2_4grug"]
 [ext_resource type="Script" uid="uid://dyscluxshvjma" path="res://SceneController/options/file_dialog.gd" id="3_1nqdw"]
 
-[node name="Options" type="Panel" unique_id=699900910 node_paths=PackedStringArray("diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd", "file_dia_nd", "error_dia_nd")]
+[node name="Options" type="Panel" unique_id=699900910 node_paths=PackedStringArray("close_button", "diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd", "file_dia_nd", "error_dia_nd")]
 z_index = 25
 anchors_preset = -1
 offset_left = -1000.0
@@ -16,6 +16,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_ly21u")
+close_button = NodePath("VBoxContainer/HPMargin/HeaderPanel/Button")
 diff_slider_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffSlider")
 map_size_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer/LineEdit")
 cell_size_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin/CellSizePanel/VBoxContainer/LineEdit")

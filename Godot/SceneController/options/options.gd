@@ -1,5 +1,6 @@
 extends Panel
 
+@export var close_button: Button
 @export var diff_slider_nd: HSlider
 @export var map_size_nd: LineEdit
 @export var cell_size_nd: LineEdit
@@ -31,13 +32,11 @@ func _ready() -> void:
 	connect_signals()
 
 func connect_signals():
-	if not is_instance_valid(map_size_nd):
-		push_error("map_size_nd is NULL!")
-		return
 	
+	close_button.button_up.connect(close_button_handler)
 	diff_slider_nd.drag_ended.connect(diff_slider_handler)
-	map_size_nd.text_changed.connect(map_size_handler)
-	cell_size_nd.text_changed.connect(cell_size_handler)
+	map_size_nd.text_submitted.connect(map_size_handler)
+	cell_size_nd.text_submitted.connect(cell_size_handler)
 	bg_col_nd.color_changed.connect(bg_col_handler)
 	bd_col_nd.color_changed.connect(bd_col_handler)
 	ap_spr_nd.toggled.connect(ap_sprtd_handler)
@@ -77,7 +76,7 @@ func map_size_handler(text):
 	if (map_size_in & 2) == 0:
 		map_valid = false
 		reject_reason = "Must be odd"
-	if (map_size_in * SceneManger.cell_size) > get_viewport().height:
+	if (map_size_in * SceneManger.cell_size) > get_viewport().get_visible_rect().size.y:
 		map_valid = false
 		reject_reason = "Too large"
 	if map_valid:
@@ -90,7 +89,7 @@ func map_size_handler(text):
 func cell_size_handler(text):
 	var cell_valid: bool = true
 	cell_size_in = int(text)
-	if (cell_size_in * SceneManger.cellscells_across) > get_viewport().height:
+	if (cell_size_in * SceneManger.cells_across) > get_viewport().get_visible_rect().size.y:
 		cell_valid = false
 	if cell_valid:
 		SceneManger.cell_size = cell_size_in
@@ -166,6 +165,8 @@ func apple_dialog_handler(path):
 	SceneManger.apple_spr_tex = load(path)
 	option_updated()
 
+func close_button_handler():
+	SceneManger.options_state.emit(false)
 func to_tex(fl_col: Color, bd_col: Color):
 	var img_rect: Rect2i
 	img_rect.size = Vector2i(46, 46)
