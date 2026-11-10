@@ -1,4 +1,4 @@
-extends Panel
+extends Control
 
 @export var close_button: Button
 @export var diff_slider_nd: HSlider
@@ -50,22 +50,14 @@ func connect_signals():
 	file_dia_nd.file_selected.connect(apple_dialog_handler)
 
 func option_updated():
-	pass
-	if not SceneManger.is_ap_spr:
-		SceneManger.apple_use_tex = SceneManger.apple_col_tex
-	elif SceneManger.is_ap_spr:
-		SceneManger.apple_use_tex = SceneManger.apple_spr_tex
-	
-	if not SceneManger.is_sn_spr:
-		SceneManger.snake_use_texs = SceneManger.snake_col_texs
-	elif SceneManger.is_sn_spr:
-		SceneManger.snake_use_texs = SceneManger.snake_spr_texs
-		
-	SceneManger.resource_refresh.emit()
+	SceneManger.options_update.emit()
 
+func resource_refresh():
+	SceneManger.resource_refresh.emit()
 #input handlers
 func diff_slider_handler(value_changed: bool):
 	if value_changed:
+		@warning_ignore("narrowing_conversion")
 		SceneManger.difficulty = diff_slider_nd.get_value()
 		option_updated()
 
@@ -103,20 +95,21 @@ func bg_col_handler(color: Color):
 
 func bd_col_handler(color: Color):
 	SceneManger.border_col = color
-	option_updated()
+	SceneManger.border_update.emit()
+	
 
 func ap_sprtd_handler(checked: bool):
 	SceneManger.is_ap_spr =! checked
-	option_updated()
+	resource_refresh()
 
 func ap_col_handler(color: Color):
 	ap_col_in = color
 	SceneManger.apple_col_tex = to_tex(ap_col_in, ap_col_in)
-	option_updated()
+	resource_refresh()
 
 func sn_spr_handler(checked: bool):
 	SceneManger.is_sn_spr =! checked
-	option_updated()
+	resource_refresh()
 
 func sn_fill_handler(color: Color):
 	sn_fl_in = color
@@ -159,14 +152,15 @@ func snake_dialog_handler(path):
 			generated_files.append(load(file_path))
 	if not failed:
 		SceneManger.snake_spr_texs = generated_files
-		option_updated()
+		resource_refresh()
 
 func apple_dialog_handler(path):
 	SceneManger.apple_spr_tex = load(path)
-	option_updated()
+	resource_refresh()
 
 func close_button_handler():
 	SceneManger.options_state.emit(false)
+
 func to_tex(fl_col: Color, bd_col: Color):
 	var img_rect: Rect2i
 	img_rect.size = Vector2i(46, 46)
@@ -186,4 +180,4 @@ func snake_array():
 		snake_texs_in.append(head_tex_in)
 		counter += 1
 	SceneManger.snake_col_texs = snake_texs_in
-	option_updated()
+	resource_refresh()

@@ -1,18 +1,23 @@
 extends Node2D
 
 @export var snake: Snake
+@export var bg_col_rect: ColorRect
 #Pause_Menu handler
 var is_paused: bool
 signal esc_pressed(is_paused: bool)
 var pause_tscn = preload("res://SceneController/Game/pause/pause.tscn")
 var pause_node: Control
 
+
 func _ready():
 	print("GAME INSTANCE CREATED")
 	print("Instance ID: ", get_instance_id())
 	print("Node path: ", get_path())
+	SceneManger.border_update.connect(queue_redraw)
+	SceneManger.options_update.connect(on_options_update)
 	pause()
 	unpause(SceneManger.type.BOTH)
+	on_options_update()
 
 func _input(event: InputEvent):
 	if event.is_action_pressed("Esc"):
@@ -23,6 +28,9 @@ func _input(event: InputEvent):
 			SceneManger.options_state.emit(false)
 		elif not is_paused:
 			pause()
+
+func on_options_update():
+	bg_col_rect.color = SceneManger.background_col
 #pause menu scene handlers
 
 func pause():
@@ -83,3 +91,7 @@ func on_options_button():
 	print_debug("options button pressed")
 	if SceneManger.is_options == false:
 		SceneManger.options_state.emit(true)
+
+func _draw():
+	for rect in SceneManger.border_rect_list:
+		draw_rect(rect, SceneManger.border_col)

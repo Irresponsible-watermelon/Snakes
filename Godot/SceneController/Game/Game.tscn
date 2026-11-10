@@ -17,10 +17,11 @@ size = Vector2(50, 600)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jw32o"]
 size = Vector2(50, 600)
 
-[node name="Game" type="Node2D" unique_id=1107367377 node_paths=PackedStringArray("snake")]
+[node name="Game" type="Node2D" unique_id=1107367377 node_paths=PackedStringArray("snake", "bg_col_rect")]
 process_mode = 3
 script = ExtResource("1_1c8af")
 snake = NodePath("Snake")
+bg_col_rect = NodePath("ColorRect")
 
 [node name="Snake" parent="." unique_id=189533688 node_paths=PackedStringArray("walls", "apple_spawner") instance=ExtResource("2_s1owg")]
 process_mode = 1
@@ -63,3 +64,15 @@ script = ExtResource("5_11yct")
 wall = NodePath("../../Walls")
 snake = NodePath("../../Snake")
 global = NodePath("../..")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1395347113]
+z_index = -5
+custom_minimum_size = Vector2(2570, 1450)
+propagate_maximum_size = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

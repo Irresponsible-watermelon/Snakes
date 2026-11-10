@@ -4,9 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://bc3t1xdj1ysju" path="res://Assets/Apple sprites/Green Apple 50x50 pxlart.png" id="2_4grug"]
 [ext_resource type="Script" uid="uid://dyscluxshvjma" path="res://SceneController/options/file_dialog.gd" id="3_1nqdw"]
 
-[node name="Options" type="Panel" unique_id=699900910 node_paths=PackedStringArray("close_button", "diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd", "file_dia_nd", "error_dia_nd")]
+[node name="Options" type="Control" unique_id=189116222 node_paths=PackedStringArray("close_button", "diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd", "file_dia_nd", "error_dia_nd")]
 z_index = 25
-anchors_preset = -1
+texture_repeat = 2
+layout_mode = 3
 offset_left = -1000.0
 offset_top = -600.0
 offset_right = 1000.0
@@ -581,7 +582,7 @@ use_native_dialog = true
 script = ExtResource("3_1nqdw")
 apple_sprt_btn = NodePath("../VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer2/ACPContainer/ColorPickerButton")
 snake_sprt_btn = NodePath("../VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/SFMargin/HOContainer/ColorPickerButton")
-options_nd = NodePath("..")
+options_nd = NodePath("")
 
 [node name="AcceptDialog" type="AcceptDialog" parent="." unique_id=1618348480]
 oversampling_override = 1.0
@@ -589,3 +590,14 @@ title = "Error!"
 position = Vector2i(-175, -50)
 size = Vector2i(350, 100)
 dialog_text = "The selected snake sprite folder is not valid"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=911155836]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.11, 0.11, 0.11, 0.87058824)

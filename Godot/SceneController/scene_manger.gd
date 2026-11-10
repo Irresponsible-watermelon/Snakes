@@ -16,6 +16,7 @@ var score: int = 0
 var survival_time = 0
 var difficulty: int
 var true_cps: int = 0
+var border_rect_list: Array[Rect2]
 
 var apple_def_tex: Resource
 var snake_def_texs: Array[Resource]
@@ -29,14 +30,16 @@ var snake_col_texs: Array[Resource]
 var apple_use_tex: Resource
 var snake_use_texs: Array[Resource]
 
-var background_col: Color
-var border_col: Color
+var background_col: Color = Color(0,0,0,1)
+var border_col: Color = Color(0.163, 0.108, 0.77, 1.0)
 var is_ap_spr: bool
 var is_sn_spr: bool
 var is_options: bool = false
 
 signal resource_refresh
 signal options_state(state: bool)
+signal options_update
+signal border_update
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -48,6 +51,8 @@ func _ready() -> void:
 func signal_test():
 	resource_refresh.emit()
 	options_state.emit(false)
+	options_update.emit()
+	border_update.emit()
 #score handling
 
 func score_on_apple_eaten():
