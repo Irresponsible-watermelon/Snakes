@@ -15,7 +15,6 @@ var grow_position: Vector2
 var apple_eaten = false
 var tex_size: int
 var scale_needed: int
-var snake_spr_texs: Array[Resource]
 
 @onready var snake_parts:Node = $SnakeParts
 
@@ -54,7 +53,7 @@ func _ready():
 	head.centered = true
 	head.scale = Vector2(scale_needed,scale_needed)
 	head.position = Vector2((50 * scale_needed),(50 * scale_needed))
-	head.texture = snake_spr_texs[1]
+	head.texture = SceneManger.snake_use_texs[1]
 	snake_parts.add_child(head)
 	body_parts.append(head)
 	snake_elongate(Vector2((50 * scale_needed),(100 * scale_needed)))
@@ -117,13 +116,13 @@ func new_head_pos_finder():
 func head_selector(fn_head: Sprite2D, fn_move_direction: Vector2):
 	print_debug("head_selector triggered")
 	if fn_move_direction == Vector2.UP:
-		fn_head.texture = snake_spr_texs[1]
+		fn_head.texture = SceneManger.snake_use_texs[1]
 	elif fn_move_direction == Vector2.DOWN:
-		fn_head.texture = snake_spr_texs[2]
+		fn_head.texture = SceneManger.snake_use_texs[2]
 	elif fn_move_direction == Vector2.LEFT:
-		fn_head.texture = snake_spr_texs[3]
+		fn_head.texture = SceneManger.snake_use_texs[3]
 	elif fn_move_direction ==  Vector2.RIGHT:
-		fn_head.texture = snake_spr_texs[4]
+		fn_head.texture = SceneManger.snake_use_texs[4]
 	head.texture = fn_head.texture
 
 #event handlers
@@ -132,7 +131,7 @@ func snake_elongate(fn_grow_position):
 	var part = Sprite2D.new()
 	part.centered = true
 	part.scale = Vector2 (scale_needed, scale_needed)
-	part.texture = snake_spr_texs[0]
+	part.texture = SceneManger.snake_use_texs[0]
 	part.position = fn_grow_position
 	snake_parts.add_child(part)
 	body_parts.append(part)
@@ -167,10 +166,10 @@ func move_to_position(new_positions: Array[Vector2]):
 		apple_eaten = false
 
 func load_resources():
-	snake_spr_texs = SceneManger.snake_spr_texs
-	tex_size = snake_spr_texs[0].get_height()
+	tex_size = SceneManger.snake_use_texs[0].get_height()
 	#Bod, UDLR
-
+	for x in range(1, body_parts.size()):
+		body_parts[x].texture = SceneManger.snake_use_texs[0]
 #collision detectors
 func is_snake_inself(new_bod_position: Array[Vector2]):
 	print_debug("is_snake_inself triggered")
