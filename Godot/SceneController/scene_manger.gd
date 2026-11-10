@@ -21,43 +21,37 @@ var cps_int: float = 0
 var is_start: bool = false
 var border_rect_list: Array[Rect2]
 
-var apple_def_tex: Resource
-var snake_def_texs: Array[Resource]
+var snake_spr_texs: Array[Resource] = [preload("res://Assets/Snake sprites/My_Snake_1/Body.png"), preload("res://Assets/Snake sprites/My_Snake_1/Up.png"), preload("res://Assets/Snake sprites/My_Snake_1/Down.png"), preload("res://Assets/Snake sprites/My_Snake_1/Left.png"), preload("res://Assets/Snake sprites/My_Snake_1/Right.png")]
+var apple_spr_tex: Resource = preload("res://Assets/Apple sprites/Green Apple 50x50 pxlart.png")
 
-var apple_spr_tex: Resource
-var snake_spr_texs: Array[Resource]
+var snake_def_texs: Array[Resource] = snake_spr_texs
+var apple_def_tex: Resource = apple_spr_tex
 
 var apple_col_tex: Resource
 var snake_col_texs: Array[Resource]
 
-var apple_use_tex: Resource
-var snake_use_texs: Array[Resource]
+var apple_use_tex: Resource = apple_def_tex
+var snake_use_texs: Array[Resource] = snake_def_texs
 
 var background_col: Color = Color(0,0,0,1)
 var border_col: Color = Color(0.163, 0.108, 0.77, 1.0)
-var is_ap_spr: bool
-var is_sn_spr: bool
+var is_ap_spr: bool = true
+var is_sn_spr: bool = true
 var is_options: bool = false
 
-signal resource_refresh
 signal options_state(state: bool)
 signal options_update
+signal settings_push
 signal border_update
 signal difficulty_update
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	snake_spr_texs = [preload("res://Assets/Snake sprites/My_Snake_1/Body.png"), preload("res://Assets/Snake sprites/My_Snake_1/Up.png"), preload("res://Assets/Snake sprites/My_Snake_1/Down.png"), preload("res://Assets/Snake sprites/My_Snake_1/Left.png"), preload("res://Assets/Snake sprites/My_Snake_1/Right.png")]
-	apple_spr_tex = preload("res://Assets/Apple sprites/Green Apple 50x50 pxlart.png")
-	snake_def_texs = snake_spr_texs
-	apple_def_tex = apple_spr_tex
-	snake_use_texs = snake_def_texs
-	apple_use_tex = apple_def_tex
 	process_difficulty()
 	options_update.connect(on_options_update)
 
 func signal_test():
-	resource_refresh.emit()
+	settings_push.emit()
 	options_state.emit(false)
 	options_update.emit()
 	border_update.emit()
@@ -126,10 +120,10 @@ func on_options_update():
 func which_texs():
 	if is_ap_spr:
 		apple_use_tex = apple_spr_tex
-	elif not is_ap_spr:
+	elif not is_ap_spr and apple_col_tex:
 		apple_use_tex = apple_col_tex
 	if is_sn_spr:
 		snake_use_texs = snake_spr_texs
-	elif is_sn_spr:
+	elif not is_sn_spr and snake_col_texs:
 		snake_use_texs = snake_col_texs
-	resource_refresh.emit()
+	settings_push.emit()

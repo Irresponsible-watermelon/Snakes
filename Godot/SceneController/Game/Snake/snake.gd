@@ -45,8 +45,8 @@ func _ready():
 	timer.process_mode =Node.PROCESS_MODE_PAUSABLE
 	timer.timeout.connect(on_timeout)
 	
-	load_resources()
-	SceneManger.resource_refresh.connect(load_resources)
+	load_settings()
+	SceneManger.settings_push.connect(load_settings)
 	
 	scale_needed = int(body_segment_size / tex_size)
 	head = Sprite2D.new()
@@ -165,11 +165,14 @@ func move_to_position(new_positions: Array[Vector2]):
 		snake_elongate(grow_position)
 		apple_eaten = false
 
-func load_resources():
+func load_settings():
 	tex_size = SceneManger.snake_use_texs[0].get_height()
 	#Bod, UDLR
-	for x in range(1, body_parts.size()):
-		body_parts[x].texture = SceneManger.snake_use_texs[0]
+	for x in range(0, body_parts.size()):
+		if not x == 0:
+			body_parts[x].texture = SceneManger.snake_use_texs[0]
+		elif x == 0:
+			body_parts[x].texture = SceneManger.snake_use_texs[1]
 #collision detectors
 func is_snake_inself(new_bod_position: Array[Vector2]):
 	print_debug("is_snake_inself triggered")

@@ -52,8 +52,6 @@ func connect_signals():
 func option_updated():
 	SceneManger.options_update.emit()
 
-func resource_refresh():
-	SceneManger.resource_refresh.emit()
 #input handlers
 func diff_slider_handler(value_changed: bool):
 	if value_changed:
@@ -96,20 +94,23 @@ func bg_col_handler(color: Color):
 func bd_col_handler(color: Color):
 	SceneManger.border_col = color
 	SceneManger.border_update.emit()
-	
 
 func ap_sprtd_handler(checked: bool):
-	SceneManger.is_ap_spr =! checked
-	resource_refresh()
+	if checked:
+		SceneManger.is_ap_spr = false
+	elif not checked:
+		SceneManger.is_ap_spr = true
+	print_debug("is_ap_spr ", SceneManger.is_ap_spr)
+	option_updated()
 
 func ap_col_handler(color: Color):
 	ap_col_in = color
 	SceneManger.apple_col_tex = to_tex(ap_col_in, ap_col_in)
-	resource_refresh()
+	option_updated()
 
 func sn_spr_handler(checked: bool):
 	SceneManger.is_sn_spr =! checked
-	resource_refresh()
+	option_updated()
 
 func sn_fill_handler(color: Color):
 	sn_fl_in = color
@@ -130,7 +131,7 @@ func hd_bd_handler(color: Color):
 	hd_bd_in = color
 	head_tex_in = to_tex(hd_fl_in, hd_bd_in)
 	snake_array()
-	
+
 func snake_dialog_handler(path):
 	var required_files = [
 		"Body.png",
@@ -152,11 +153,11 @@ func snake_dialog_handler(path):
 			generated_files.append(load(file_path))
 	if not failed:
 		SceneManger.snake_spr_texs = generated_files
-		resource_refresh()
+		option_updated()
 
 func apple_dialog_handler(path):
 	SceneManger.apple_spr_tex = load(path)
-	resource_refresh()
+	option_updated()
 
 func close_button_handler():
 	SceneManger.options_state.emit(false)
@@ -180,4 +181,4 @@ func snake_array():
 		snake_texs_in.append(head_tex_in)
 		counter += 1
 	SceneManger.snake_col_texs = snake_texs_in
-	resource_refresh()
+	option_updated()
