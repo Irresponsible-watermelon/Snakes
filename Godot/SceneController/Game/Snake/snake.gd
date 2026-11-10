@@ -82,11 +82,12 @@ func on_timeout():
 	move_direction = pending_move_direction
 	grow_position = body_parts[-1].position
 	
-	var new_head_position = new_head_pos_finder()
+	var new_head_position: Vector2 = new_head_pos_finder()
+	var new_bod_position: Array[Vector2] = generate_new_position(new_head_position)
 	
 	#Check events
 	check_wall_collision(new_head_position) 
-	is_snake_inself(new_head_position)
+	is_snake_inself(new_bod_position)
 	is_food_eaten(new_head_position)
 	
 	#direct head
@@ -94,7 +95,7 @@ func on_timeout():
 	
 	#events on survival
 	if not has_collisioned:
-		move_to_position(new_head_position)
+		move_to_position(new_bod_position)
 		SceneManger.survival_score()
 	elif has_collisioned:
 		snake_dead = true
@@ -140,36 +141,40 @@ func snake_elongate(fn_grow_position):
 	
 func on_food_eaten():
 	print_debug("on_food_eaten triggered")
+	apple_eaten = true
 	apple_needed = false
 	SceneManger.score_on_apple_eaten()
 	apple_spawner.remove_food()
 	apple_spawner.spawn_food()
-	snake_elongate(grow_position)
 	
-func move_to_position(new_head_position):
-	print_debug("move_to_position triggered")
+func generate_new_position(new_head_position: Vector2):
 	var previous_positions: Array[Vector2] = []
-	
+	var new_positions: Array[Vector2] = []
+	new_positions.append(new_head_position)
 	for part in body_parts:
 		previous_positions.append(part.position)
 	for x in range(1, body_parts.size()):
-		body_parts[x].position = previous_positions[x - 1]
+		new_positions.append(previous_positions[x - 1])
+	return new_positions
 	
-	body_parts[0].position = new_head_position
+func move_to_position(new_positions: Array[Vector2]):
+	
+	for x in range(0, new_positions.size()):
+		body_parts[x].position = new_positions[x]
 	if apple_eaten:
 		snake_elongate(grow_position)
-		apple_eaten = true
+		apple_eaten = false
 		
 func load_resources():
 	snake_spr_texs = SceneManger.snake_spr_texs
 	tex_size = snake_spr_texs[0].get_height()
 	#Bod, UDLR
 #collision detectors
-func is_snake_inself(new_head_position):
+func is_snake_inself(new_bod_position: Array[Vector2]):
 	print_debug("is_snake_inself triggered")
 	var is_inself = false
-	for x in range(1, body_parts.size()):
-		if body_parts[x].position == new_head_position:
+	for x in range(1, new_bod_position.size()):
+		if new_bod_position[x] == new_bod_position[0]:
 			is_inself = true
 			has_collisioned = true
 			return is_inself

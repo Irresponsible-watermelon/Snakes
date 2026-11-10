@@ -2,7 +2,7 @@ extends Node2D
 
 @export var snake: Snake
 #Pause_Menu handler
-var is_paused: bool = false
+var is_paused: bool
 signal esc_pressed(is_paused: bool)
 var pause_tscn = preload("res://SceneController/Game/pause/pause.tscn")
 var pause_node: Control
@@ -15,14 +15,14 @@ func _ready():
 	unpause(SceneManger.type.BOTH)
 
 func _input(event: InputEvent):
-	print_debug("is paused", is_paused)
-	if event.is_action_pressed("Esc") and not is_paused:
-		pause()
-		esc_pressed.emit(is_paused)
-	elif event.is_action_pressed("Esc") and is_paused:
-		unpause(SceneManger.type.BOTH)
-		esc_pressed.emit(is_paused)
-
+	if event.is_action_pressed("Esc"):
+		print_debug("is paused", is_paused)
+		if is_paused:
+			unpause(SceneManger.type.BOTH)
+			esc_pressed.emit(is_paused)
+			SceneManger.options_state.emit(false)
+		elif not is_paused:
+			pause()
 #pause menu scene handlers
 
 func pause():
@@ -36,8 +36,8 @@ func pause():
 	
 	elif is_instance_valid(pause_node):
 		get_tree().paused = true
-		pause_node.show()
 		is_paused = true
+		pause_node.show()
 
 func unpause(kind):
 	print("pause hide pause triggered")
@@ -46,6 +46,7 @@ func unpause(kind):
 	if is_instance_valid(pause_node):
 		if kind == SceneManger.type.PAUSE or kind == SceneManger.type.BOTH: 
 			get_tree().paused = false
+			is_paused = false
 		if kind == SceneManger.type.HIDE or kind == SceneManger.type.BOTH:
 			pause_node.hide()
 			is_paused = false

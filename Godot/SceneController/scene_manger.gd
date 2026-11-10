@@ -42,6 +42,12 @@ signal options_state(state: bool)
 func _ready() -> void:
 	snake_spr_texs = [preload("res://Assets/Snake sprites/My_Snake_1/Body.png"), preload("res://Assets/Snake sprites/My_Snake_1/Up.png"), preload("res://Assets/Snake sprites/My_Snake_1/Down.png"), preload("res://Assets/Snake sprites/My_Snake_1/Left.png"), preload("res://Assets/Snake sprites/My_Snake_1/Right.png")]
 	apple_spr_tex = preload("res://Assets/Apple sprites/Green Apple 50x50 pxlart.png")
+	snake_def_texs = snake_spr_texs
+	apple_def_tex = apple_spr_tex
+
+func signal_test():
+	resource_refresh.emit()
+	options_state.emit(false)
 #score handling
 
 func score_on_apple_eaten():

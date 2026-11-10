@@ -38,7 +38,6 @@ func show_load_game():
 #signal handlers
 func on_options_trigger(new_state):
 	if new_state == true:
-		options.process_mode = Node.PROCESS_MODE_ALWAYS
 		show_load_options()
 	elif new_state == false:
 		pause_hide_options(SceneManger.type.BOTH)
@@ -60,6 +59,7 @@ func show_load_options():
 	elif is_instance_valid(options):
 		options.show()
 		options.process_mode = Node.PROCESS_MODE_ALWAYS
+		SceneManger.is_options = true
 
 func show_load_start():
 	if not is_instance_valid(start):
@@ -125,6 +125,7 @@ func pause_hide_options(kind):
 			options.hide()
 		if kind == SceneManger.type.PAUSE or kind == SceneManger.type.BOTH:
 			options.process_mode = Node.PROCESS_MODE_DISABLED
+		SceneManger.is_options = false
 		
 func pause_hide_death(kind):
 	
