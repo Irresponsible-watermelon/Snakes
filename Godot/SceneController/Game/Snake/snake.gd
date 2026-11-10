@@ -29,16 +29,16 @@ var walls_dict
 
 var move_direction = Vector2.UP
 var pending_move_direction = Vector2.UP
-var cells_per_second: float = 1
-var wait_time = float(float(1) / cells_per_second)
+var wait_time = float(float(1) / SceneManger.true_cps)
 var has_collisioned: bool = false
 var snake_dead:bool
 var timer: Timer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-
+	
 	#setup timer
+	SceneManger.difficulty_update.connect(on_wait_update)
 	timer = Timer.new()
 	add_sibling.call_deferred(timer)
 	timer.wait_time = wait_time
@@ -61,9 +61,6 @@ func _ready():
 	snake_elongate(Vector2(50 * scale_needed,150 * scale_needed))
 	
 	walls_dict = walls.walls_dict
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
 
 func _input(event):
 	if (event.is_action_pressed("ui_up") or event.is_action_pressed("Up")) and (move_direction != Vector2.DOWN):
@@ -97,6 +94,7 @@ func on_timeout():
 	if not has_collisioned:
 		move_to_position(new_bod_position)
 		SceneManger.survival_score()
+		print_debug("true_cps: ", SceneManger.true_cps)
 	elif has_collisioned:
 		snake_dead = true
 #functions library
@@ -138,7 +136,7 @@ func snake_elongate(fn_grow_position):
 	part.position = fn_grow_position
 	snake_parts.add_child(part)
 	body_parts.append(part)
-	
+
 func on_food_eaten():
 	print_debug("on_food_eaten triggered")
 	apple_eaten = true
@@ -147,6 +145,9 @@ func on_food_eaten():
 	apple_spawner.remove_food()
 	apple_spawner.spawn_food()
 	
+	SceneManger.true_cps += SceneManger.cps_int
+	on_wait_update()
+
 func generate_new_position(new_head_position: Vector2):
 	var previous_positions: Array[Vector2] = []
 	var new_positions: Array[Vector2] = []
@@ -156,7 +157,7 @@ func generate_new_position(new_head_position: Vector2):
 	for x in range(1, body_parts.size()):
 		new_positions.append(previous_positions[x - 1])
 	return new_positions
-	
+
 func move_to_position(new_positions: Array[Vector2]):
 	
 	for x in range(0, new_positions.size()):
@@ -164,11 +165,12 @@ func move_to_position(new_positions: Array[Vector2]):
 	if apple_eaten:
 		snake_elongate(grow_position)
 		apple_eaten = false
-		
+
 func load_resources():
 	snake_spr_texs = SceneManger.snake_spr_texs
 	tex_size = snake_spr_texs[0].get_height()
 	#Bod, UDLR
+
 #collision detectors
 func is_snake_inself(new_bod_position: Array[Vector2]):
 	print_debug("is_snake_inself triggered")
@@ -179,7 +181,7 @@ func is_snake_inself(new_bod_position: Array[Vector2]):
 			has_collisioned = true
 			return is_inself
 	return is_inself
-	
+
 func check_wall_collision(new_head_position: Vector2):
 	print_debug("check_wall_collision triggered")
 	if (new_head_position.x == walls_dict["left"].position.x) and move_direction == Vector2.LEFT:
@@ -196,7 +198,7 @@ func check_wall_collision(new_head_position: Vector2):
 		return true
 	else:
 		return false
-		
+
 func is_food_eaten(new_head_position: Vector2) -> bool:
 	print_debug("is_food_eaten triggered")
 	if apple_spawner.apple_position == new_head_position and not apple_needed:
@@ -205,3 +207,7 @@ func is_food_eaten(new_head_position: Vector2) -> bool:
 		return true
 	else:
 		return false
+
+func on_wait_update():
+	wait_time = float(float(1) / SceneManger.true_cps)
+	timer.wait_time = wait_time
