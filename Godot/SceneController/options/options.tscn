@@ -8,6 +8,7 @@
 z_index = 25
 texture_repeat = 2
 layout_mode = 3
+anchors_preset = 0
 offset_left = -1000.0
 offset_top = -600.0
 offset_right = 1000.0
@@ -572,7 +573,7 @@ custom_minimum_size = Vector2(50, 15)
 layout_mode = 2
 text = "Select Folder"
 
-[node name="FileDialog" type="FileDialog" parent="." unique_id=1487466978 node_paths=PackedStringArray("apple_sprt_btn", "snake_sprt_btn", "options_nd")]
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1487466978 node_paths=PackedStringArray("apple_sprt_btn", "snake_sprt_btn")]
 oversampling_override = 1.0
 title = "Open a File or Directory"
 initial_position = 1
@@ -582,7 +583,6 @@ use_native_dialog = true
 script = ExtResource("3_1nqdw")
 apple_sprt_btn = NodePath("../VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer2/ACPContainer/ColorPickerButton")
 snake_sprt_btn = NodePath("../VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/SFMargin/HOContainer/ColorPickerButton")
-options_nd = NodePath("")
 
 [node name="AcceptDialog" type="AcceptDialog" parent="." unique_id=1618348480]
 oversampling_override = 1.0
