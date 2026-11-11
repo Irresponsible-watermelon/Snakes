@@ -20,8 +20,8 @@ var border_rect_list: Array[Rect2]
 
 var exe_file = OS.get_executable_path()
 var launcher_dir = exe_file.get_base_dir().get_base_dir()
-var assets_dir = launcher_dir.path_join("/Assets")
-var config_dir = assets_dir.path_join("/config.json")
+var assets_dir = launcher_dir.path_join("Assets")
+var config_dir = assets_dir.path_join("config.json")
 
 var snake_spr_texs: Array[Resource] = [preload("res://Assets/Snake sprites/My_Snake_1/Body.png"), preload("res://Assets/Snake sprites/My_Snake_1/Up.png"), preload("res://Assets/Snake sprites/My_Snake_1/Down.png"), preload("res://Assets/Snake sprites/My_Snake_1/Left.png"), preload("res://Assets/Snake sprites/My_Snake_1/Right.png")]
 var apple_spr_tex: Resource = preload("res://Assets/Apple sprites/Green Apple 50x50 pxlart.png")
@@ -40,7 +40,7 @@ var is_options: bool = false
 #variables that need to be saved
 
 var apple_col_tex: Resource
-var snake_col_texs: Array[Resource]
+var snake_col_texs: Array[Resource] = [null, null]
 var difficulty: int = 3
 
 var cell_size: float = 100
@@ -192,15 +192,21 @@ func load_settings():
 	else:
 		push_error("Save file invalid")
 
+#expect not to work until build
 func save_settings():
 	var file: FileAccess = FileAccess.open(config_dir, FileAccess.WRITE)
-	var apple_col_tex_string: String = tex_to_base64(apple_col_tex)
-	var snake_col_tex_string_0: String = tex_to_base64(snake_col_texs[0])
-	var snake_col_tex_string_1: String = tex_to_base64(snake_col_texs[1])
+	var apple_col_tex_string: String = ""
+	var snake_col_tex_string_0: String = ""
+	var snake_col_tex_string_1: String = ""
+	if apple_col_tex:
+		apple_col_tex_string = tex_to_base64(apple_col_tex)
+	if snake_col_texs:
+		snake_col_tex_string_0 = tex_to_base64(snake_col_texs[0])
+		snake_col_tex_string_1 = tex_to_base64(snake_col_texs[1])
 	
 	var data = {
 		"apple_col_tex_string": apple_col_tex_string,
-		"snake_col_tex_tex_string_0": snake_col_tex_string_0,
+		"snake_col_tex_string_0": snake_col_tex_string_0,
 		"snake_col_tex_string_1": snake_col_tex_string_1,
 		"difficulty": difficulty,
 		"cell_size": cell_size,
@@ -214,20 +220,23 @@ func save_settings():
 	file.close()
 
 func tex_to_base64(texture: Texture2D):
-	var image: Image = texture.get_image()
+	var encoded_image: String
+	if texture:
+		var image: Image = texture.get_image()
 	
-	var png_bytes: PackedByteArray = image.save_png_to_buffer()
-	var encoded_image: String = Marshalls.raw_to_base64(png_bytes)
-	
+		var png_bytes: PackedByteArray = image.save_png_to_buffer()
+		encoded_image = Marshalls.raw_to_base64(png_bytes)
+	else:
+		encoded_image = ""
 	return encoded_image
 
 func base64_to_tex(base64: String):
 	var png_bytes: PackedByteArray = Marshalls.base64_to_raw(base64)
 	
 	var image = Image.new()
-	image.load_png_from_buffer(png_bytes)
+	var error = image.load_png_from_buffer(png_bytes)
 	
-	if not image == OK:
+	if not error == OK:
 		push_error("Unable to decode image")
 	
 	var texture = ImageTexture.create_from_image(image)
