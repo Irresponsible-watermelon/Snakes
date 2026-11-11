@@ -30,6 +30,9 @@ var snake_texs_in: Array[Resource]
 
 func _ready() -> void:
 	connect_signals()
+	diff_slider_nd.value = SceneManger.difficulty
+	ap_spr_nd.button_pressed = ! SceneManger.is_ap_spr
+	sn_spr_nd.button_pressed = ! SceneManger.is_sn_spr
 
 func connect_signals():
 	

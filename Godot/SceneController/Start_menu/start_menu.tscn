@@ -1,9 +1,53 @@
 [gd_scene format=3 uid="uid://bjtmrmq4q7myy"]
 
-[node name="start_menu" type="Control" unique_id=858246148]
+[ext_resource type="Script" uid="uid://dw0yig4cki2gl" path="res://SceneController/Start_menu/start_menu.gd" id="1_6jyvt"]
+
+[node name="start_menu" type="Control" unique_id=858246148 node_paths=PackedStringArray("start_button", "options_button", "quit_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_6jyvt")
+start_button = NodePath("VBoxContainer/StartMargin/StartPanel/StartButton")
+options_button = NodePath("VBoxContainer/OptionsMargin/OptionsPanel/OptionsButton")
+quit_button = NodePath("VBoxContainer/QuitMargin/QuitPanel/QuitButton")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=84871402]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StartMargin" type="MarginContainer" parent="VBoxContainer" unique_id=2066560366]
+layout_mode = 2
+
+[node name="StartPanel" type="Panel" parent="VBoxContainer/StartMargin" unique_id=366915450]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer/StartMargin/StartPanel" unique_id=922998919]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="OptionsMargin" type="MarginContainer" parent="VBoxContainer" unique_id=1303562638]
+layout_mode = 2
+
+[node name="OptionsPanel" type="Panel" parent="VBoxContainer/OptionsMargin" unique_id=1118558612]
+layout_mode = 2
+
+[node name="OptionsButton" type="Button" parent="VBoxContainer/OptionsMargin/OptionsPanel" unique_id=2079573215]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="QuitMargin" type="MarginContainer" parent="VBoxContainer" unique_id=1431500685]
+layout_mode = 2
+
+[node name="QuitPanel" type="Panel" parent="VBoxContainer/QuitMargin" unique_id=135994308]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="VBoxContainer/QuitMargin/QuitPanel" unique_id=1033148574]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0

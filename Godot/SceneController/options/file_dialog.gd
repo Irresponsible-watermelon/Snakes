@@ -4,9 +4,7 @@ extends FileDialog
 @export var snake_sprt_btn: Button
 @export var options_nd: Panel
 
-var exe_file = OS.get_executable_path()
-var launcher_dir = exe_file.get_base_dir().get_base_dir()
-var assets_dir = launcher_dir.path_join("/Assets")
+var assets_dir = SceneManger.assets_dir
 var apples_dir = assets_dir.path_join("/Apple sprites")
 var snakes_dir = assets_dir.path_join("/Snake sprites")
 # Called when the node enters the scene tree for the first time.

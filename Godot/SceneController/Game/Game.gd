@@ -85,7 +85,7 @@ func on_resume_button():
 	on_close_button()
 
 func on_quit_button():
-	get_tree().quit()
+	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 func on_options_button():
 	print_debug("options button pressed")

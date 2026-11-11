@@ -42,8 +42,30 @@ func on_options_trigger(new_state):
 	elif new_state == false:
 		pause_hide_options(SceneManger.type.BOTH)
 
+func on_game_start():
+	# instantiate game
+	show_load_game()
+
+func on_game_end():
+	#reset some vars, preserving any as neccesarry
+	#store score?
+	
+	show_load_start()
+	del_game()
+	pass
+
+func on_game_restart():
+	#do game end stuff
+	#do game start stuff
+	#maintain scene and do not delete
+	pass
+
 func signal_setup():
 	SceneManger.options_state.connect(on_options_trigger)
+	SceneManger.game_start.connect(on_game_start)
+	SceneManger.game_end.connect(on_game_end)
+	SceneManger.game_restart.connect(on_game_restart)
+
 #scene loaders
 
 func show_load_options():
