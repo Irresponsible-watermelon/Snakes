@@ -133,27 +133,47 @@ func hd_bd_handler(color: Color):
 	snake_array()
 
 func snake_dialog_handler(path):
-	var required_files = [
+	var required_files_a = [
 		"Body.png",
 		"Up.png",
 		"Down.png",
 		"Left.png",
 		"Right.png"
 	]
-	var generated_files: Array[Resource]
-	var failed: bool
+	var required_files_b = [
+		"Body.png",
+		"Head.png"
+	] 
+	var generated_files: Array[Resource] = []
+	var is_a: bool
+	var is_b: bool
 	
-	for file in required_files:
+	for file in required_files_a:
 		var file_path = path.path_join(file)
 		if not FileAccess.file_exists(file_path):
-			error_dia_nd.popup_centered()
-			failed = true
-			return
+			is_a = false
 		else:
-			generated_files.append(load(file_path))
-	if not failed:
+			is_a = true
+			if file == required_files_a[0]:
+				generated_files.append(load(file_path))
+			elif (file == required_files_a[1]):
+				generated_files.append(load(file_path))
+	
+	if not is_a:
+		generated_files = []
+		for file in required_files_b:
+			var file_path = path.path_join(file)
+			if not FileAccess.file_exists(file_path):
+				is_b = false
+			else:
+				is_b = true
+				generated_files.append(load(file_path))
+	
+	if is_a or is_b:
 		SceneManger.snake_spr_texs = generated_files
 		option_updated()
+	else:
+		error_dia_nd.popup_centered()
 
 func apple_dialog_handler(path):
 	SceneManger.apple_spr_tex = load(path)

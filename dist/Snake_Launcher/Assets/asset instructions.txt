@@ -4,4 +4,12 @@ To upload your own snake sprites, copy a folder into 'Snake sprites' containing 
 'Up.png' , 'Down.png', 'Left.png', 'Right.png', 'Body.png'
 
 These images should represent the snake head pointing up, down, left, and right, alongside one for the rest of its body.
-You can then select a folder containing a set ofp pngs formatting in this way using the ingame dialogue.
+You can then select a folder containing a set of pngs formatted in this way using the ingame dialogue.
+
+If you are playing the Godot version only, you can alternatively upload custom sprites formatted in the following manner:
+
+Copy a folder into 'Snake sprites' containing square png images of the same dimensions facing the up direction, named the following:
+'Body.png' 'Up.png'
+
+This subfolder of 'Snake sprites' can then be selected using the ingame dialogue to use the sprites.
+Note that body sprites changing direction is currently only supported in the Godot version of the game.

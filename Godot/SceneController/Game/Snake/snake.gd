@@ -29,8 +29,8 @@ var scale_needed: int
 
 var walls_dict
 
-var move_direction = Vector2.UP
-var pending_move_direction = Vector2.UP
+var move_direction:Vector2 = Vector2.UP
+var pending_move_direction:Vector2 = Vector2.UP
 var wait_time = float(float(1) / SceneManger.true_cps)
 var has_collisioned: bool = false
 var snake_dead:bool
@@ -95,8 +95,6 @@ func on_timeout():
 	is_snake_inself(new_bod_position)
 	is_food_eaten(new_head_position)
 	
-	#direct head
-	head_selector(head, move_direction)
 	
 	#events on survival
 	if not has_collisioned:
@@ -123,30 +121,19 @@ func new_head_pos_finder():
 		new_head_position.x += body_segment_size
 	return new_head_position
 
-func head_selector(fn_head: Sprite2D, fn_move_direction: Vector2):
-	print_debug("head_selector triggered")
-	if fn_move_direction == Vector2.UP:
-		fn_head.texture = SceneManger.snake_use_texs[1]
-	elif fn_move_direction == Vector2.DOWN:
-		fn_head.texture = SceneManger.snake_use_texs[2]
-	elif fn_move_direction == Vector2.LEFT:
-		fn_head.texture = SceneManger.snake_use_texs[3]
-	elif fn_move_direction ==  Vector2.RIGHT:
-		fn_head.texture = SceneManger.snake_use_texs[4]
-	head.texture = fn_head.texture
-
 #event handlers
 func snake_elongate(fn_grow_position):
 	print_debug("snake_elongate triggered")
 	var part = Sprite2D.new()
 	part.centered = true
 	part.scale = Vector2 (scale_needed, scale_needed)
-	part.texture = local_textures[0]
 	part.position = fn_grow_position
 	snake_parts.add_child(part)
 	body_parts.append(part)
 	move_dir_array.append(move_dir_array[-1])
-	is_corner_array.append(is_corner_array[-1])
+	match_part_to_tex(-1)
+	
+	is_corner_array.append(false)
 
 func on_food_eaten():
 	print_debug("on_food_eaten triggered")
@@ -191,17 +178,7 @@ func load_settings():
 	
 	#Bod, UDLR
 	for x in range(0, body_parts.size()):
-		if not x == 0:
-			if move_dir_array[x] == Vector2.UP:
-				body_parts[x].texture = local_textures[0]
-			elif move_dir_array[x] == Vector2.DOWN:
-				body_parts[x].texture = local_textures[1]
-			elif move_dir_array[x] == Vector2.LEFT:
-				body_parts[x].texture = local_textures[2]
-			elif move_dir_array[x] == Vector2.RIGHT:
-				body_parts[x].texture = local_textures[3]
-		elif x == 0:
-			head_selector(body_parts[0], move_direction)
+		match_part_to_tex(x)
 #collision detectors
 func is_snake_inself(new_bod_position: Array[Vector2]):
 	print_debug("is_snake_inself triggered")
@@ -247,28 +224,40 @@ func move_dir_manager():
 	var old_dir_array: Array[Vector2] = move_dir_array.duplicate()
 	var old_corner_array: Array[bool] = is_corner_array.duplicate()
 	move_dir_array[0] = move_direction
+	match_part_to_tex(0)
 	
 	for x in range(1, (is_corner_array.size())):
 		is_corner_array[x] = old_corner_array[x-1]
 		move_dir_array[x] = old_dir_array[x-1]
-	
-	print("Before update: ", is_corner_array)
-	print("Old directions: ", old_dir_array)
-	print("Old corners: ", old_corner_array)
+	is_corner_array[-1] = false
 
 	for x in range(1, move_dir_array.size()):
-		if (is_corner_array[x] == false) or (x == move_dir_array.size() - 1):
-			if move_dir_array[x] == Vector2.UP:
+		if not is_corner_array[x]:
+			match_part_to_tex(x)
+
+func match_part_to_tex(x: int):
+	if x == 0:
+		match move_dir_array[x]:
+			Vector2.UP:
+				body_parts[x].texture = local_textures[4]
+			Vector2.DOWN:
+				body_parts[x].texture = local_textures[5]
+			Vector2.LEFT:
+				body_parts[x].texture = local_textures[6]
+			Vector2.RIGHT:
+				body_parts[x].texture = local_textures[7]
+	elif (x == -1 or x == is_corner_array.size() - 1) and not body_parts[x-1].texture == null and not body_parts[x-1] == body_parts[0]:
+		body_parts[x].texture = body_parts[x-1].texture
+	else:
+		match move_dir_array[x]:
+			Vector2.UP:
 				body_parts[x].texture = local_textures[0]
-			elif move_dir_array[x] == Vector2.DOWN:
+			Vector2.DOWN:
 				body_parts[x].texture = local_textures[1]
-			elif move_dir_array[x] == Vector2.LEFT:
+			Vector2.LEFT:
 				body_parts[x].texture = local_textures[2]
-			elif move_dir_array[x] == Vector2.RIGHT:
+			Vector2.RIGHT:
 				body_parts[x].texture = local_textures[3]
-	
-	print("After update: ", is_corner_array)
-	print("New directions: ", move_dir_array)
 
 func tex_rotate(texture: Texture, direction_desired: Vector2):
 	var tex_img: Image = texture.get_image()
