@@ -22,6 +22,7 @@ func _ready():
 	tex_size = texture.get_height()
 	scale_needed = float(SceneManger.cell_size / tex_size)
 	SceneManger.settings_push.connect(load_resources)
+	SceneManger.options_update.connect(rescale)
 	
 	app_tpl = Sprite2D.new()
 	app_tpl.hide()
@@ -69,3 +70,7 @@ func load_resources():
 	apple.texture = texture
 	tex_size = texture.get_height()
 	
+func rescale():
+	scale_needed = float(SceneManger.cell_size / tex_size)
+	apple.scale = Vector2(scale_needed, scale_needed)
+	app_tpl.scale = Vector2(scale_needed, scale_needed)

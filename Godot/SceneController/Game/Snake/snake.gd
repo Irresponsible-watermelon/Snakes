@@ -17,7 +17,8 @@ var head: Sprite2D
 var grow_position: Vector2
 var apple_eaten = false
 var tex_size: int
-var scale_needed: int
+var scale_needed: float
+var is_options_pending: bool
 
 @onready var snake_parts:Node = $SnakeParts
 
@@ -50,19 +51,20 @@ func _ready():
 	
 	load_settings()
 	SceneManger.settings_push.connect(load_settings)
+	SceneManger.options_update.connect(on_options_update)
 	
-	scale_needed = int(body_segment_size / tex_size)
+	scale_needed = float(body_segment_size / tex_size)
 	head = Sprite2D.new()
 	head.centered = true
 	head.scale = Vector2(scale_needed,scale_needed)
-	head.position = Vector2((50 * scale_needed),(50 * scale_needed))
+	head.position = Vector2((SceneManger.cell_size),(SceneManger.cell_size))
 	head.texture = SceneManger.snake_use_texs[1]
 	snake_parts.add_child(head)
 	body_parts.append(head)
 	move_dir_array.append(Vector2.UP)
 	is_corner_array.append(false)
-	snake_elongate(Vector2((50 * scale_needed),(100 * scale_needed)))
-	snake_elongate(Vector2(50 * scale_needed,150 * scale_needed))
+	snake_elongate(Vector2((SceneManger.cell_size),(SceneManger.cell_size * 2 )))
+	snake_elongate(Vector2(SceneManger.cell_size, SceneManger.cell_size * 3))
 	
 	walls_dict = walls.walls_dict
 
@@ -79,6 +81,7 @@ func _input(event):
 #on_game_tick
 func on_timeout():
 	print_debug("on_timeout triggered")
+	size_push()
 	#define variables
 	if not move_direction == pending_move_direction:
 		is_corner_array[0] = true
@@ -94,7 +97,7 @@ func on_timeout():
 	check_wall_collision(new_head_position) 
 	is_snake_inself(new_bod_position)
 	is_food_eaten(new_head_position)
-	
+	debug()
 	
 	#events on survival
 	if not has_collisioned:
@@ -270,3 +273,21 @@ func tex_rotate(texture: Texture, direction_desired: Vector2):
 		tex_img.rotate_90(COUNTERCLOCKWISE)
 	rotated_tex = ImageTexture.create_from_image(tex_img)
 	return rotated_tex
+
+func on_options_update():
+	body_segment_size = SceneManger.cell_size
+	is_options_pending = true
+
+func size_push():
+	if is_options_pending:
+		scale_needed = float(body_segment_size / tex_size)
+		
+		for part in body_parts:
+			part.position = Vector2(part.position.x * scale_needed, part.position.y * scale_needed)
+			part.scale = Vector2(scale_needed, scale_needed)
+		
+		is_options_pending = false
+
+func debug():
+	for part in body_parts:
+		pass

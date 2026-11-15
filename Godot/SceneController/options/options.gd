@@ -66,10 +66,10 @@ func map_size_handler(text):
 	var map_valid: bool = true
 	var reject_reason: String
 	map_size_in = int(text)
-	if (map_size_in & 2) == 0:
+	if (map_size_in % 2) == 0:
 		map_valid = false
 		reject_reason = "Must be odd"
-	if (map_size_in * SceneManger.cell_size) > get_viewport().get_visible_rect().size.y:
+	if (map_size_in * SceneManger.cell_size) > (get_viewport().get_visible_rect().size.y * 2):
 		map_valid = false
 		reject_reason = "Too large"
 	if map_valid:
@@ -82,7 +82,7 @@ func map_size_handler(text):
 func cell_size_handler(text):
 	var cell_valid: bool = true
 	cell_size_in = int(text)
-	if (cell_size_in * SceneManger.cells_across) > get_viewport().get_visible_rect().size.y:
+	if (cell_size_in * SceneManger.cells_across) > (get_viewport().get_visible_rect().size.y * 2) :
 		cell_valid = false
 	if cell_valid:
 		SceneManger.cell_size = cell_size_in

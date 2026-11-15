@@ -224,7 +224,8 @@ expand_to_text_length = true
 [node name="Notice" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer" unique_id=1825150263]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.53087825, 0.53087825, 0.53087825, 1)
-text = "Please note that these settings will only be applied if compatible with your display size."
+text = "Please note that these settings will only be applied if compatible with your display size.
+Map size must be odd. Default settings are 13, 100."
 
 [node name="CSMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1755169665]
 layout_mode = 2
@@ -259,7 +260,7 @@ text = "Cell Size (Pixels):"
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
-placeholder_text = "50"
+placeholder_text = "100"
 expand_to_text_length = true
 
 [node name="MCMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1381256089]

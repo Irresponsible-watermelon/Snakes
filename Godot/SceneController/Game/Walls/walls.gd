@@ -18,9 +18,12 @@ func on_options_update():
 	est_border_shape()
 
 func est_walls():
+	map_size = (SceneManger.cells_across * SceneManger.cell_size) + SceneManger.cell_size
+	
 	var walls_distance = map_size
 	var walls = get_tree().get_nodes_in_group("Walls") as Array[Node2D]
 	var scale_needed: float = (float(map_size) / float(600))
+	
 	var scale_vec: Vector2 = Vector2(scale_needed,scale_needed)
 	for wall in walls:
 		if wall.position.x < 0:
@@ -45,7 +48,8 @@ func est_walls():
 	bottom_right_corner = Vector2((walls_dict["right"].position.x - SceneManger.cell_size), (walls_dict["bottom"].position.y - SceneManger.cell_size))
 	
 	for node in walls:
-		node.hide()
+		#node.hide()
+		pass
 
 func est_border_shape():
 	var border_rects: Array[Rect2]
