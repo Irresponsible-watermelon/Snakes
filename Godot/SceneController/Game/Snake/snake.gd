@@ -16,8 +16,10 @@ var local_textures: Array[Texture] = []
 var head: Sprite2D
 var grow_position: Vector2
 var apple_eaten = false
-var tex_size: int
-var scale_needed: float
+var head_tex_size: int
+var bod_tex_size: int
+var head_scale_needed: float
+var bod_scale_needed: float
 var is_options_pending: bool
 
 @onready var snake_parts:Node = $SnakeParts
@@ -53,10 +55,10 @@ func _ready():
 	SceneManger.settings_push.connect(load_settings)
 	SceneManger.options_update.connect(on_options_update)
 	
-	scale_needed = float(body_segment_size / tex_size)
+	head_scale_needed = float(body_segment_size / head_tex_size)
 	head = Sprite2D.new()
 	head.centered = true
-	head.scale = Vector2(scale_needed,scale_needed)
+	head.scale = Vector2(head_scale_needed,head_scale_needed)
 	head.position = Vector2((SceneManger.cell_size),(SceneManger.cell_size))
 	head.texture = SceneManger.snake_use_texs[1]
 	snake_parts.add_child(head)
@@ -129,7 +131,7 @@ func snake_elongate(fn_grow_position):
 	print_debug("snake_elongate triggered")
 	var part = Sprite2D.new()
 	part.centered = true
-	part.scale = Vector2 (scale_needed, scale_needed)
+	part.scale = Vector2 (bod_scale_needed, bod_scale_needed)
 	part.position = fn_grow_position
 	snake_parts.add_child(part)
 	body_parts.append(part)
@@ -168,7 +170,9 @@ func move_to_position(new_positions: Array[Vector2]):
 		apple_eaten = false
 
 func load_settings():
-	tex_size = SceneManger.snake_use_texs[0].get_height()
+	head_tex_size = SceneManger.snake_use_texs[1].get_height()
+	bod_tex_size = SceneManger.snake_use_texs[0].get_height()
+	
 	local_textures = []
 	local_textures.append(SceneManger.snake_use_texs[0])
 	local_textures.append(tex_rotate(SceneManger.snake_use_texs[0], Vector2.DOWN))
@@ -280,14 +284,14 @@ func on_options_update():
 
 func size_push():
 	if is_options_pending:
-		scale_needed = float(body_segment_size / tex_size)
+		head_scale_needed = float(body_segment_size / head_tex_size)
 		
-		for part in body_parts:
-			part.position = Vector2(part.position.x * scale_needed, part.position.y * scale_needed)
-			part.scale = Vector2(scale_needed, scale_needed)
+		for x in range(0, body_parts.size()):
+			if x == 0:
+				body_parts[0].position = Vector2(body_parts[0].position.x * head_scale_needed, body_parts[0].position.y * head_scale_needed)
+				body_parts[0].scale = Vector2(head_scale_needed, head_scale_needed)
+			else:
+				body_parts[x].position = Vector2(body_parts[x].position.x * bod_scale_needed, body_parts[x].position.y * bod_scale_needed)
+				body_parts[x].scale = Vector2(bod_scale_needed, bod_scale_needed)
 		
 		is_options_pending = false
-
-func debug():
-	for part in body_parts:
-		pass
