@@ -1,7 +1,31 @@
 [gd_scene format=3 uid="uid://chogiui80jxh1"]
 
+[ext_resource type="Script" uid="uid://dayytyho7p2sm" path="res://SceneController/Death_Screen/death_screen.gd" id="1_3hv35"]
+
 [node name="Death_Screen" type="Control" unique_id=620477804]
 layout_mode = 3
 anchors_preset = 0
+offset_left = -1280.0
+offset_top = -720.0
+offset_right = 1280.0
+offset_bottom = 720.0
+script = ExtResource("1_3hv35")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1049199371]
+rotation = -3.068977
+anchor_mode = 0
+zoom = Vector2(0.5, 0.5)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1461456155]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.2, 0.7882353)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1418744292]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0

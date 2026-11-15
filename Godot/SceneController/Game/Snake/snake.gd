@@ -55,7 +55,7 @@ func _ready():
 	load_settings()
 	SceneManger.settings_push.connect(load_settings)
 	SceneManger.options_update.connect(on_options_update)
-	SceneManger.game_end.connect(on_game_end)
+	SceneManger.death_open.connect(on_death_open)
 	
 	head_scale_needed = float(body_segment_size / head_tex_size)
 	bod_scale_needed = float(SceneManger.cell_size / bod_tex_size)
@@ -299,7 +299,7 @@ func size_push():
 		
 		is_options_pending = false
 
-func on_game_end():
+func on_death_open():
 	has_collisioned = true
 
 func debug():
