@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dayytyho7p2sm" path="res://SceneController/Death_Screen/death_screen.gd" id="1_3hv35"]
 
-[node name="Death_Screen" type="Control" unique_id=620477804]
+[node name="Death_Screen" type="Control" unique_id=620477804 node_paths=PackedStringArray("death_message_nd", "hs_pan", "hs_counter_nd", "hs_popup_nd")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -1280.0
@@ -10,6 +10,12 @@ offset_top = -720.0
 offset_right = 1280.0
 offset_bottom = 720.0
 script = ExtResource("1_3hv35")
+death_message_nd = NodePath("VBoxConMargin/VBoxContainer/DMMargin/DMMargin/Label")
+hs_pan = NodePath("VBoxConMargin/VBoxContainer/HSMargin/HSPanel")
+hs_counter_nd = NodePath("VBoxConMargin/VBoxContainer/HSMargin/HSPanel/Label")
+hs_popup_nd = NodePath("VBoxConMargin/VBoxContainer/HSMargin/HSPanel/Sticker")
+metadata/_edit_horizontal_guides_ = [-261.0]
+metadata/_edit_vertical_guides_ = [-300.0]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1049199371]
 rotation = -3.068977
@@ -25,7 +31,107 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.2, 0.2, 0.2, 0.7882353)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1418744292]
-layout_mode = 0
-offset_right = 40.0
+[node name="VBoxConMargin" type="MarginContainer" parent="." unique_id=2113567613]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
 offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 300
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxConMargin" unique_id=1418744292]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="YDMargin" type="MarginContainer" parent="VBoxConMargin/VBoxContainer" unique_id=516964677]
+layout_mode = 2
+
+[node name="YDPanel" type="Panel" parent="VBoxConMargin/VBoxContainer/YDMargin" unique_id=1577583886]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxConMargin/VBoxContainer/YDMargin/YDPanel" unique_id=1054899113]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -36.0
+offset_right = 36.0
+offset_bottom = 23.0
+grow_horizontal = 2
+rotation = 0.0034236014
+offset_transform_enabled = true
+offset_transform_scale = Vector2(6, 6)
+offset_transform_visual_only = false
+text = "You died!"
+
+[node name="DMMargin" type="MarginContainer" parent="VBoxConMargin/VBoxContainer" unique_id=1527976599]
+layout_mode = 2
+theme_override_constants/margin_top = 100
+
+[node name="DMMargin" type="Panel" parent="VBoxConMargin/VBoxContainer/DMMargin" unique_id=1685663105]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxConMargin/VBoxContainer/DMMargin/DMMargin" unique_id=1004433474]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -36.0
+offset_right = 36.0
+offset_bottom = 23.0
+grow_horizontal = 2
+rotation = 0.0034236014
+offset_transform_enabled = true
+offset_transform_scale = Vector2(2, 2)
+offset_transform_visual_only = false
+theme_override_colors/font_color = Color(0.62456536, 0.46743947, 0.240051, 1)
+text = "Oh Well, these things happen."
+autowrap_trim_flags = 128
+
+[node name="HSMargin" type="MarginContainer" parent="VBoxConMargin/VBoxContainer" unique_id=1652781686]
+layout_mode = 2
+theme_override_constants/margin_top = 100
+
+[node name="HSPanel" type="Panel" parent="VBoxConMargin/VBoxContainer/HSMargin" unique_id=1529736236]
+custom_minimum_size = Vector2(500, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxConMargin/VBoxContainer/HSMargin/HSPanel" unique_id=1325874423]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.0039821146
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -3)
+offset_transform_scale = Vector2(2, 2)
+offset_transform_visual_only = false
+text = "Highscore: "
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_trim_flags = 128
+
+[node name="Sticker" type="Label" parent="VBoxConMargin/VBoxContainer/HSMargin/HSPanel" unique_id=764184756]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = -15.0
+offset_right = 40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+rotation = 0.34906584
+pivot_offset_ratio = Vector2(0.5, 1)
+theme_override_colors/font_color = Color(3.4571466, 0, 1.3912643, 1)
+text = "New highscore!!!"
