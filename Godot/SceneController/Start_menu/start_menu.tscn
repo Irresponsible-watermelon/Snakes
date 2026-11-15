@@ -4,50 +4,112 @@
 
 [node name="start_menu" type="Control" unique_id=858246148 node_paths=PackedStringArray("start_button", "options_button", "quit_button")]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 script = ExtResource("1_6jyvt")
 start_button = NodePath("VBoxContainer/StartMargin/StartPanel/StartButton")
 options_button = NodePath("VBoxContainer/OptionsMargin/OptionsPanel/OptionsButton")
 quit_button = NodePath("VBoxContainer/QuitMargin/QuitPanel/QuitButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=84871402]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(150, 0)
+propagate_maximum_size = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -90.0
+offset_right = 100.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 90
+alignment = 1
 
 [node name="StartMargin" type="MarginContainer" parent="VBoxContainer" unique_id=2066560366]
 layout_mode = 2
 
 [node name="StartPanel" type="Panel" parent="VBoxContainer/StartMargin" unique_id=366915450]
 layout_mode = 2
+offset_transform_visual_only = false
 
 [node name="StartButton" type="Button" parent="VBoxContainer/StartMargin/StartPanel" unique_id=922998919]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -15.5
+offset_right = 35.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(2.5, 2.5)
+offset_transform_visual_only = false
+text = "Start"
 
 [node name="OptionsMargin" type="MarginContainer" parent="VBoxContainer" unique_id=1303562638]
 layout_mode = 2
 
 [node name="OptionsPanel" type="Panel" parent="VBoxContainer/OptionsMargin" unique_id=1118558612]
+propagate_maximum_size = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="OptionsButton" type="Button" parent="VBoxContainer/OptionsMargin/OptionsPanel" unique_id=2079573215]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -23.0
+offset_top = -15.5
+offset_right = 23.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(2.5, 2.5)
+offset_transform_visual_only = false
+text = "Options"
 
 [node name="QuitMargin" type="MarginContainer" parent="VBoxContainer" unique_id=1431500685]
+propagate_maximum_size = false
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="QuitPanel" type="Panel" parent="VBoxContainer/QuitMargin" unique_id=135994308]
+propagate_maximum_size = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="QuitButton" type="Button" parent="VBoxContainer/QuitMargin/QuitPanel" unique_id=1033148574]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -15.5
+offset_right = 35.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(2.5, 2.5)
+offset_transform_visual_only = false
+text = "Quit
+"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1702293724]
+zoom = Vector2(0.5, 0.5)
