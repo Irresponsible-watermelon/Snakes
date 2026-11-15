@@ -8,6 +8,7 @@ enum CollisionDirection {
 	LEFT,
 	RIGHT,
 }
+
 # variables soup
 var body_parts: Array[Sprite2D] = []
 var move_dir_array: Array[Vector2] = []
@@ -54,6 +55,7 @@ func _ready():
 	load_settings()
 	SceneManger.settings_push.connect(load_settings)
 	SceneManger.options_update.connect(on_options_update)
+	SceneManger.game_end.connect(on_game_end)
 	
 	head_scale_needed = float(body_segment_size / head_tex_size)
 	bod_scale_needed = float(SceneManger.cell_size / bod_tex_size)
@@ -195,6 +197,7 @@ func is_snake_inself(new_bod_position: Array[Vector2]):
 		if new_bod_position[x] == new_bod_position[0]:
 			is_inself = true
 			has_collisioned = true
+			SceneManger.cause_of_death = SceneManger.CauseOfDeath.SELF
 			return is_inself
 	return is_inself
 
@@ -202,18 +205,16 @@ func check_wall_collision(new_head_position: Vector2):
 	print_debug("check_wall_collision triggered")
 	if (new_head_position.x == walls_dict["left"].position.x) and move_direction == Vector2.LEFT:
 		has_collisioned = true
-		return true
 	elif (new_head_position.y == walls_dict["top"].position.y) and move_direction == Vector2.UP:
 		has_collisioned = true
-		return true
 	elif new_head_position.y == walls_dict["bottom"].position.y and move_direction == Vector2.DOWN:
 		has_collisioned = true
 		return true
 	elif new_head_position.x == walls_dict["right"].position.x and move_direction == Vector2.RIGHT:
 		has_collisioned = true
-		return true
-	else:
-		return false
+	
+	if has_collisioned:
+		SceneManger.cause_of_death = SceneManger.CauseOfDeath.WALL
 
 func is_food_eaten(new_head_position: Vector2) -> bool:
 	print_debug("is_food_eaten triggered")
@@ -297,6 +298,9 @@ func size_push():
 				body_parts[x].scale = Vector2(bod_scale_needed, bod_scale_needed)
 		
 		is_options_pending = false
+
+func on_game_end():
+	has_collisioned = true
 
 func debug():
 	for part: Sprite2D in body_parts:

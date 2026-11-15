@@ -33,10 +33,9 @@ func _ready() -> void:
 	diff_slider_nd.value = SceneManger.difficulty
 	ap_spr_nd.button_pressed = ! SceneManger.is_ap_spr
 	sn_spr_nd.button_pressed = ! SceneManger.is_sn_spr
-
-func connect_signals():
 	
-	close_button.button_up.connect(close_button_handler)
+func connect_signals():
+	close_button.pressed.connect(close_button_handler)
 	diff_slider_nd.drag_ended.connect(diff_slider_handler)
 	map_size_nd.text_submitted.connect(map_size_handler)
 	cell_size_nd.text_submitted.connect(cell_size_handler)
@@ -183,6 +182,7 @@ func apple_dialog_handler(path):
 	option_updated()
 
 func close_button_handler():
+	print("BUTTON PRESSED")
 	SceneManger.options_state.emit(false)
 
 func to_tex(fl_col: Color, bd_col: Color):

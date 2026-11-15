@@ -25,12 +25,15 @@ render_target_update_mode = 4
 custom_minimum_size = Vector2(25, 50)
 offset_right = 102.0
 offset_bottom = 50.0
-offset_transform_position = Vector2(50, 25)
+offset_transform_enabled = true
+offset_transform_position = Vector2(25, 25)
 offset_transform_visual_only = false
 
 [node name="Button" type="Button" parent="SubViewport/Esc" unique_id=1093962830]
 z_index = 3000
 layout_mode = 2
+offset_transform_position = Vector2(15, 15)
+offset_transform_visual_only = false
 text = "Close"
 
 [node name="middle buttons" type="VBoxContainer" parent="SubViewport" unique_id=2080965177]
@@ -67,6 +70,30 @@ text = "Resume
 "
 
 [node name="HSeparator" type="HSeparator" parent="SubViewport/middle buttons" unique_id=1977190591 groups=["VSep"]]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Restart" type="Panel" parent="SubViewport/middle buttons" unique_id=1986535468]
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="SubViewport/middle buttons/Restart" unique_id=1094146176]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -15.5
+offset_right = 35.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Restart
+
+"
+
+[node name="HSeparator3" type="HSeparator" parent="SubViewport/middle buttons" unique_id=197986260 groups=["VSep"]]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
@@ -107,11 +134,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -21.0
+offset_left = -35.0
 offset_top = -15.5
-offset_right = 21.0
+offset_right = 35.0
 offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
-action_mode = 0
-text = "Quit"
+text = "Quit
+"

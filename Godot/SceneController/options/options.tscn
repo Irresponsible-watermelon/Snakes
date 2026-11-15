@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://4bgj6y6bmw57"]
 
 [ext_resource type="Script" uid="uid://d2cucvh3gre0f" path="res://SceneController/options/options.gd" id="1_ly21u"]
-[ext_resource type="Texture2D" uid="uid://bc3t1xdj1ysju" path="res://Assets/Apple sprites/Green Apple 50x50 pxlart.png" id="2_4grug"]
+[ext_resource type="Texture2D" uid="uid://bvvkfuj1sav8r" path="res://Assets/cross.png" id="2_1nqdw"]
 [ext_resource type="Script" uid="uid://dyscluxshvjma" path="res://SceneController/options/file_dialog.gd" id="3_1nqdw"]
 
 [node name="Options" type="Control" unique_id=189116222 node_paths=PackedStringArray("close_button", "diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd", "file_dia_nd", "error_dia_nd")]
@@ -17,6 +17,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 script = ExtResource("1_ly21u")
 close_button = NodePath("VBoxContainer/HPMargin/HeaderPanel/Button")
 diff_slider_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffSlider")
@@ -47,6 +48,7 @@ offset_bottom = -350.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1.4, 1.4)
+mouse_filter = 2
 
 [node name="HPMargin" type="MarginContainer" parent="VBoxContainer" unique_id=773930532]
 layout_mode = 2
@@ -58,6 +60,7 @@ theme_override_constants/margin_bottom = 10
 [node name="HeaderPanel" type="Panel" parent="VBoxContainer/HPMargin" unique_id=1169385357]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HPMargin/HeaderPanel" unique_id=1671279720]
 layout_mode = 1
@@ -77,16 +80,17 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -58.0
-offset_bottom = 58.0
+offset_left = -72.0
+offset_bottom = 72.0
 grow_horizontal = 0
-offset_transform_position = Vector2(-25, -25)
 action_mode = 0
-icon = ExtResource("2_4grug")
+icon = ExtResource("2_1nqdw")
+autowrap_trim_flags = 192
 icon_alignment = 1
 
 [node name="SPMargin" type="MarginContainer" parent="VBoxContainer" unique_id=1324404491]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 10

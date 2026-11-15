@@ -75,6 +75,7 @@ func button_setup():
 		pause_node.get_node("SubViewport/middle buttons/Resume/Resume").pressed.connect(on_resume_button)
 		pause_node.get_node("SubViewport/middle buttons/Quit/QuitButton").pressed.connect(on_quit_button)
 		pause_node.get_node("SubViewport/middle buttons/MenuButton/MenuButton").pressed.connect(on_options_button)
+		pause_node.get_node("SubViewport/middle buttons/Restart/RestartButton").pressed.connect(on_restart_button)
 
 func on_close_button():
 	unpause(SceneManger.type.BOTH)
@@ -92,6 +93,9 @@ func on_options_button():
 	if SceneManger.is_options == false:
 		SceneManger.options_state.emit(true)
 
+func on_restart_button():
+	SceneManger.cause_of_death = SceneManger.CauseOfDeath.RESTART
+	SceneManger.death_open.emit()
 func _draw():
 	for rect in SceneManger.border_rect_list:
 		draw_rect(rect, SceneManger.border_col)

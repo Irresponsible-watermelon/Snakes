@@ -5,6 +5,11 @@ enum type {
 	HIDE,
 	BOTH
 }
+enum CauseOfDeath {
+	RESTART,
+	WALL,
+	SELF
+}
 
 var is_options_open: bool = false
 var is_game_open: bool = true
@@ -17,6 +22,7 @@ var true_cps: float = 1
 var cps_int: float = 0
 var is_start: bool = false
 var border_rect_list: Array[Rect2]
+var cause_of_death: int
 
 var exe_file = OS.get_executable_path()
 var launcher_dir = exe_file.get_base_dir().get_base_dir()
@@ -60,7 +66,6 @@ signal difficulty_update
 signal game_start
 signal death_open
 signal game_end
-signal game_restart
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -83,7 +88,6 @@ func signal_test():
 	game_start.emit()
 	death_open.emit()
 	game_end.emit()
-	game_restart.emit()
 #score handling
 
 func score_on_apple_eaten():
