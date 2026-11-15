@@ -56,6 +56,7 @@ func _ready():
 	SceneManger.options_update.connect(on_options_update)
 	
 	head_scale_needed = float(body_segment_size / head_tex_size)
+	bod_scale_needed = float(SceneManger.cell_size / bod_tex_size)
 	head = Sprite2D.new()
 	head.centered = true
 	head.scale = Vector2(head_scale_needed,head_scale_needed)
@@ -285,6 +286,7 @@ func on_options_update():
 func size_push():
 	if is_options_pending:
 		head_scale_needed = float(body_segment_size / head_tex_size)
+		bod_scale_needed = float(SceneManger.cell_size / bod_tex_size)
 		
 		for x in range(0, body_parts.size()):
 			if x == 0:
@@ -295,3 +297,7 @@ func size_push():
 				body_parts[x].scale = Vector2(bod_scale_needed, bod_scale_needed)
 		
 		is_options_pending = false
+
+func debug():
+	for part: Sprite2D in body_parts:
+		print_debug("Part_pos:", part.position, "Part_scale:", part.scale, "Part_visible", part.visible)
