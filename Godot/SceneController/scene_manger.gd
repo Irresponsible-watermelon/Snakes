@@ -52,7 +52,7 @@ var difficulty: int = 3
 var cell_size: float = 100
 var cells_across: int = 13 # must be odd
 
-var ordered_score_list: Array[int]
+var ordered_score_list: Array[int] = [0]
 
 var is_ap_spr: bool = true
 var is_sn_spr: bool = true

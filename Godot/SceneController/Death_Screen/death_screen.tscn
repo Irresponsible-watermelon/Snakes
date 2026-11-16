@@ -2,18 +2,24 @@
 
 [ext_resource type="Script" uid="uid://dayytyho7p2sm" path="res://SceneController/Death_Screen/death_screen.gd" id="1_3hv35"]
 
-[node name="Death_Screen" type="Control" unique_id=620477804 node_paths=PackedStringArray("death_message_nd", "hs_pan", "hs_counter_nd", "hs_popup_nd")]
+[node name="Death_Screen" type="Control" unique_id=620477804 node_paths=PackedStringArray("death_message_nd", "hs_pan", "hs_counter_nd", "hs_popup_nd", "gs_counter_nd", "gs_pan", "menu_but_nd", "res_but_nd", "quit_but_nd")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -1280.0
 offset_top = -720.0
 offset_right = 1280.0
 offset_bottom = 720.0
+mouse_filter = 2
 script = ExtResource("1_3hv35")
 death_message_nd = NodePath("VBoxConMargin/VBoxContainer/DMMargin/DMMargin/Label")
 hs_pan = NodePath("VBoxConMargin/VBoxContainer/HSMargin/HSPanel")
 hs_counter_nd = NodePath("VBoxConMargin/VBoxContainer/HSMargin/HSPanel/Label")
 hs_popup_nd = NodePath("VBoxConMargin/VBoxContainer/HSMargin/HSPanel/Sticker")
+gs_counter_nd = NodePath("VBoxConMargin/VBoxContainer/GSMargin/GSPanel/Label")
+gs_pan = NodePath("VBoxConMargin/VBoxContainer/GSMargin/GSPanel")
+menu_but_nd = NodePath("VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer/MenuMargin/MenuButton")
+res_but_nd = NodePath("VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer/RBMargin/RestartButton")
+quit_but_nd = NodePath("VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer/QBMargin/Quitbutton")
 metadata/_edit_horizontal_guides_ = [-261.0]
 metadata/_edit_vertical_guides_ = [-300.0]
 
@@ -29,6 +35,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.2, 0.2, 0.2, 0.7882353)
 
 [node name="VBoxConMargin" type="MarginContainer" parent="." unique_id=2113567613]
@@ -40,10 +47,12 @@ offset_left = -20.0
 offset_right = 20.0
 offset_bottom = 40.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 300
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxConMargin" unique_id=1418744292]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 alignment = 1
 
@@ -94,29 +103,29 @@ autowrap_trim_flags = 128
 
 [node name="HSMargin" type="MarginContainer" parent="VBoxConMargin/VBoxContainer" unique_id=1652781686]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 100
 
 [node name="HSPanel" type="Panel" parent="VBoxConMargin/VBoxContainer/HSMargin" unique_id=1529736236]
-custom_minimum_size = Vector2(500, 50)
+custom_minimum_size = Vector2(30, 50)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxConMargin/VBoxContainer/HSMargin/HSPanel" unique_id=1325874423]
 layout_mode = 1
-anchors_preset = 14
+anchors_preset = 4
 anchor_top = 0.5
-anchor_right = 1.0
 anchor_bottom = 0.5
+offset_left = 53.0
 offset_top = -11.5
+offset_right = 139.0
 offset_bottom = 11.5
-grow_horizontal = 2
 grow_vertical = 2
-rotation = 0.0039821146
 offset_transform_enabled = true
 offset_transform_position = Vector2(0, -3)
 offset_transform_scale = Vector2(2, 2)
 offset_transform_visual_only = false
 text = "Highscore: "
-horizontal_alignment = 1
+horizontal_alignment = 3
 vertical_alignment = 1
 autowrap_trim_flags = 128
 
@@ -135,3 +144,74 @@ rotation = 0.34906584
 pivot_offset_ratio = Vector2(0.5, 1)
 theme_override_colors/font_color = Color(3.4571466, 0, 1.3912643, 1)
 text = "New highscore!!!"
+
+[node name="GSMargin" type="MarginContainer" parent="VBoxConMargin/VBoxContainer" unique_id=1092815962]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 30
+
+[node name="GSPanel" type="Panel" parent="VBoxConMargin/VBoxContainer/GSMargin" unique_id=885292839]
+custom_minimum_size = Vector2(30, 50)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBoxConMargin/VBoxContainer/GSMargin/GSPanel" unique_id=2007913141]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 34.0
+offset_top = -11.5
+offset_right = 82.0
+offset_bottom = 11.5
+grow_vertical = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -3)
+offset_transform_scale = Vector2(2, 2)
+offset_transform_visual_only = false
+text = "Score:"
+horizontal_alignment = 3
+vertical_alignment = 1
+autowrap_trim_flags = 128
+
+[node name="ButtonsContainer" type="MarginContainer" parent="VBoxConMargin/VBoxContainer" unique_id=2004044260]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(3, 3)
+offset_transform_visual_only = false
+theme_override_constants/margin_top = 200
+
+[node name="HBoxContainer" type="GridContainer" parent="VBoxConMargin/VBoxContainer/ButtonsContainer" unique_id=1238021904]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+columns = 3
+
+[node name="MenuMargin" type="MarginContainer" parent="VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer" unique_id=2005190110]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MenuButton" type="Button" parent="VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer/MenuMargin" unique_id=220878647]
+layout_mode = 2
+offset_transform_visual_only = false
+text = "Menu"
+
+[node name="RBMargin" type="MarginContainer" parent="VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer" unique_id=1975495558]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RestartButton" type="Button" parent="VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer/RBMargin" unique_id=1153218603]
+layout_mode = 2
+offset_transform_visual_only = false
+text = "Restart"
+
+[node name="QBMargin" type="MarginContainer" parent="VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer" unique_id=646227919]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Quitbutton" type="Button" parent="VBoxConMargin/VBoxContainer/ButtonsContainer/HBoxContainer/QBMargin" unique_id=1118050075]
+layout_mode = 2
+offset_transform_visual_only = false
+text = "Quit"

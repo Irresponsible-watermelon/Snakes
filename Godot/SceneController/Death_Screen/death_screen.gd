@@ -29,14 +29,21 @@ var death_message_index: int
 @export var hs_pan: Panel
 @export var hs_counter_nd: Label
 @export var hs_popup_nd: Label
-
+@export var gs_counter_nd: Label
+@export var gs_pan: Panel
+@export var menu_but_nd: Button
+@export var res_but_nd: Button
+@export var quit_but_nd: Button
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
+	signals_connect()
 	est_death_message()
+	est_score_and_highscore()
 
 func signals_connect():
-	pass
+	menu_but_nd.pressed.connect(on_menu_press)
+	res_but_nd.pressed.connect(on_restart_press)
+	quit_but_nd.pressed.connect(on_quit_press)
 
 func est_death_message():
 	var randint = randi_range(0, 10)
@@ -92,15 +99,31 @@ func est_score_and_highscore():
 	else:
 		hs_popup_nd.hide()
 	
-	hs_counter_nd.text = "High score" + SceneManger.ordered_score_list[0]
+	hs_counter_nd.text = str("High score: ", SceneManger.ordered_score_list[0])
+	hs_counter_nd.position.x += 15
+	gs_counter_nd.text = str("Score: ", cur_score)
+	gs_counter_nd.position.x += 15
+	@warning_ignore("narrowing_conversion")
+	hs_pan.size.x = maxi(hs_counter_nd.size.x, gs_counter_nd.size.x) + 30
+	gs_pan.size.x = hs_pan.size.x
+	
+func on_menu_press():
+	SceneManger.game_end.emit()
+
+func on_restart_press():
+	SceneManger.game_end.emit()
+	SceneManger.game_start.emit()
+
+func on_quit_press():
+	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 @warning_ignore("shadowed_variable")
 func sort(score_list: Array[int], score_in: int):
-	var sorted_list: Array[int]
+	var sorted_list: Array[int] = []
 	sorted_list = score_list
 	var is_new_hs: bool = false
 	var is_equal: bool = false
-	for x in range(0, score_list):
+	for x in range(0, score_list.size()):
 		if score_in >= score_list[x]:
 			sorted_list.append(score_in)
 			if score_in == score_list[x]:

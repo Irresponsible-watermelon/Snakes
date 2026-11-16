@@ -49,11 +49,10 @@ func on_game_start():
 
 func on_game_end():
 	#reset some vars, preserving any as neccesarry
-	#store score?
 	
 	show_load_start()
 	del_game()
-	pass
+	del_death()
 
 func on_death_open():
 	pause_hide_game(SceneManger.type.PAUSE)
@@ -180,6 +179,10 @@ func del_start():
 		start.queue_free()
 		start = null
 
+func del_death():
+	if is_instance_valid(death):
+		death.queue_free()
+		death = null
 #score handling
 
 func score_on_apple_eaten():
