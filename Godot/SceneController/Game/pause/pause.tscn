@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://bp66ks31q2y65"]
 
-[ext_resource type="Script" uid="uid://wrmgavxupcgi" path="res://SceneController/Game/pause/pause.gd" id="1_butei"]
-
 [node name="Pause" type="SubViewportContainer" unique_id=1465565726]
 process_mode = 2
 oversampling_with_scale = 2
@@ -17,7 +15,6 @@ offset_transform_enabled = true
 offset_transform_scale = Vector2(2, 2)
 offset_transform_visual_only = false
 mouse_target = true
-script = ExtResource("1_butei")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=592837377]
 process_mode = 2
