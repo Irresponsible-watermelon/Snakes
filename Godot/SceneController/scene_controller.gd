@@ -69,16 +69,19 @@ func signal_setup():
 func show_load_options():
 	if not is_instance_valid(options):
 		options = options_menu.instantiate()
-
+		options.process_mode = Node.PROCESS_MODE_ALWAYS
+		options.show()
 		print("Before adding to tree:")
 		print("Map size: ", options.map_size_nd)
 		add_child(options)
+		move_child(options, get_child_count() - 1)
 		print("After adding to tree:")
 		print("Map size: ", options.map_size_nd)
 		
 	elif is_instance_valid(options):
 		options.show()
 		options.process_mode = Node.PROCESS_MODE_ALWAYS
+		move_child(options, get_child_count() - 1)
 		SceneManger.is_options = true
 
 func show_load_start():

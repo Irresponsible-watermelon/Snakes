@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bp66ks31q2y65"]
 
+[ext_resource type="Script" uid="uid://wrmgavxupcgi" path="res://SceneController/Game/pause/pause.gd" id="1_butei"]
+
 [node name="Pause" type="SubViewportContainer" unique_id=1465565726]
 process_mode = 2
 oversampling_with_scale = 2
@@ -14,9 +16,11 @@ grow_vertical = 2
 offset_transform_enabled = true
 offset_transform_scale = Vector2(2, 2)
 offset_transform_visual_only = false
-mouse_filter = 2
+mouse_target = true
+script = ExtResource("1_butei")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=592837377]
+process_mode = 2
 physics_interpolation_mode = 2
 transparent_bg = true
 handle_input_locally = false
@@ -56,6 +60,7 @@ alignment = 1
 
 [node name="Resume" type="Panel" parent="SubViewport/middle buttons" unique_id=2016497493]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Resume" type="Button" parent="SubViewport/middle buttons/Resume" unique_id=486083116]
 layout_mode = 1
@@ -122,7 +127,6 @@ offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 2
-mouse_filter = 2
 toggle_mode = false
 action_mode = 1
 text = "Options

@@ -19,6 +19,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
+mouse_behavior_recursive = 2
 script = ExtResource("1_ly21u")
 close_button = NodePath("VBoxContainer/HPMargin/HeaderPanel/Button")
 diff_slider_nd = NodePath("VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffSlider")
@@ -53,6 +54,7 @@ mouse_filter = 2
 
 [node name="HPMargin" type="MarginContainer" parent="VBoxContainer" unique_id=773930532]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -102,6 +104,7 @@ show_behind_parent = true
 oversampling_with_scale = 2
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/SPMargin/ScrollPanel" unique_id=1999608778]
 layout_mode = 1
@@ -114,6 +117,7 @@ offset_right = 1010.0
 offset_bottom = 1124.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 follow_focus = true
 draw_focus_border = true
 
@@ -122,14 +126,17 @@ propagate_maximum_size = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="DSMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=79997454]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="DiffSliderPanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin" unique_id=180244468]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel" unique_id=1325015172]
 custom_minimum_size = Vector2(1000, 0)
@@ -145,10 +152,12 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="DiffInstrMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer" unique_id=2094692862]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="DiffInstrTxt" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffInstrMargin" unique_id=813749117]
@@ -157,10 +166,12 @@ text = "Set Difficulty:"
 
 [node name="DiffLabelMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer" unique_id=1092601854]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="EasyMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffLabelMargin" unique_id=136843487]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = -4
 
 [node name="Easy" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffLabelMargin/EasyMargin" unique_id=708623477]
@@ -174,6 +185,7 @@ horizontal_alignment = 1
 
 [node name="Hard Margin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffLabelMargin" unique_id=1914340]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_right = -10
 
 [node name="Hard" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/DSMargin/DiffSliderPanel/VBoxContainer/DiffLabelMargin/Hard Margin" unique_id=876474327]
@@ -198,6 +210,7 @@ theme_override_constants/margin_bottom = -55
 [node name="MapSizePanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin" unique_id=1548746596]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel" unique_id=85114955]
 custom_minimum_size = Vector2(1000, 0)
@@ -213,6 +226,7 @@ offset_right = 500.0
 offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MSMargin/MapSizePanel/VBoxContainer" unique_id=1750443941]
@@ -240,6 +254,7 @@ theme_override_constants/margin_top = 100
 [node name="CellSizePanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin" unique_id=471841082]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin/CellSizePanel" unique_id=1907018874]
 custom_minimum_size = Vector2(1000, 0)
@@ -255,6 +270,7 @@ offset_right = 500.0
 offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/CSMargin/CellSizePanel/VBoxContainer" unique_id=524756371]
@@ -270,11 +286,13 @@ expand_to_text_length = true
 
 [node name="MCMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer" unique_id=1381256089]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 100
 
 [node name="MCPanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin" unique_id=332649413]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel" unique_id=888376693]
 custom_minimum_size = Vector2(1000, 0)
@@ -290,6 +308,7 @@ offset_right = 500.0
 offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer" unique_id=1692916887]
@@ -301,11 +320,13 @@ horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer" unique_id=2081032655]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="ACPContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer" unique_id=324585612]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer/ACPContainer" unique_id=872270729]
 layout_mode = 2
@@ -319,11 +340,13 @@ edit_alpha = false
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer" unique_id=1469840003]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="ACPContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer2" unique_id=531573493]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/MCMargin/MCPanel/VBoxContainer/MarginContainer2/ACPContainer" unique_id=129812511]
 layout_mode = 2
@@ -344,6 +367,7 @@ theme_override_constants/margin_top = 125
 [node name="AT Panel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin" unique_id=1798978516]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel" unique_id=1145670074]
 custom_minimum_size = Vector2(1000, 0)
@@ -359,6 +383,7 @@ offset_right = 500.0
 offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer" unique_id=880762543]
@@ -372,6 +397,7 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/ACTContainer" unique_id=1063597036]
 layout_mode = 2
@@ -392,11 +418,13 @@ vertical_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer" unique_id=1326319066]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="ACPContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer" unique_id=1227167844]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer/ACPContainer" unique_id=600543793]
 layout_mode = 2
@@ -411,11 +439,13 @@ edit_alpha = false
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer" unique_id=1110622233]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="ACPContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer2" unique_id=1126026682]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/ATMargin/AT Panel/VBoxContainer/MarginContainer2/ACPContainer" unique_id=252577765]
 layout_mode = 2
@@ -435,6 +465,7 @@ theme_override_constants/margin_top = 200
 [node name="SCPanel" type="Panel" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin" unique_id=1248227867]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel" unique_id=700756554]
 custom_minimum_size = Vector2(1000, 0)
@@ -450,10 +481,12 @@ offset_right = 500.0
 offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="ACTInstrMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=611575822]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTInstrMargin" unique_id=994658719]
 layout_mode = 2
@@ -464,11 +497,13 @@ horizontal_alignment = 1
 
 [node name="ACTMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=30951231]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="ACTContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin" unique_id=31614526]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/ACTMargin/ACTContainer" unique_id=2105966747]
 layout_mode = 2
@@ -489,11 +524,13 @@ vertical_alignment = 1
 
 [node name="BFMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=290164546]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 5
 
 [node name="BFContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin" unique_id=1465903476]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BFMargin/BFContainer" unique_id=1203854952]
 layout_mode = 2
@@ -507,11 +544,13 @@ edit_alpha = false
 
 [node name="BOMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=2110939144]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="BFContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin" unique_id=738592781]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/BOMargin/BFContainer" unique_id=7146506]
 layout_mode = 2
@@ -526,11 +565,13 @@ edit_alpha = false
 
 [node name="HFMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=510061198]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="HFContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin" unique_id=1062357577]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HFMargin/HFContainer" unique_id=387380208]
 layout_mode = 2
@@ -544,11 +585,13 @@ edit_alpha = false
 
 [node name="HOMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=1245770727]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="HOContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin" unique_id=1593244865]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/HOMargin/HOContainer" unique_id=1415876567]
 layout_mode = 2
@@ -563,11 +606,13 @@ edit_alpha = false
 
 [node name="SFMargin" type="MarginContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer" unique_id=37405184]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="HOContainer" type="HBoxContainer" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/SFMargin" unique_id=783056864]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/SPMargin/ScrollPanel/ScrollContainer/VBoxContainer/SCMargin/SCPanel/VBoxContainer/SFMargin/HOContainer" unique_id=1247319906]
 layout_mode = 2

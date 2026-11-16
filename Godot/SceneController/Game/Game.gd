@@ -97,6 +97,7 @@ func on_restart_button():
 	SceneManger.cause_of_death = SceneManger.CauseOfDeath.RESTART
 	del_pause()
 	SceneManger.death_open.emit()
+	
 func _draw():
 	for rect in SceneManger.border_rect_list:
 		draw_rect(rect, SceneManger.border_col)
