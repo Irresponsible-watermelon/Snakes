@@ -9,7 +9,7 @@ For my first rendition, I made Snake in python using PyGame. I've learn the basi
 <img width="972" height="942" alt="Screenshot 2026-10-24 203158" src="https://github.com/user-attachments/assets/7f6ead83-7c35-45cb-9532-5097f01adc22" />
 
 <h2>Snakes - Godot Edition</h2>
-I have now started on making snake in Godot. I've managed to put together a very basic version of the game, but am definitely struggling to acheive the level of polish and customisation I was with Python, and am struggling to navigate the increased complexity of Godot. Out of the time I have spent on it this week, I feel I have been able to achieve much less than I could have in Python, and have had to spend alot more time debugging and rebuilding things. I can, however, see how it allows for more functionality, as many things that would require alot of manual coding in Python are build in features in Godot.
+I have now started on making snake in Godot. I've managed to put together a more polished version of the game, and I'm quite happy with the end result, however it definitely took more work than PyGame, but also allows for more complexity. I do like the fact that for most things, there is a set method and process of doing them, where in PyGame you could approach achieving something in alot more ways, which makes it easier to figure out how to get things to work. The Godot dictionary is also super useful, its greata having the tooltips and everything explained.
 
 <img width="1243" height="1080" alt="Screenshot 2026-11-02 001643" src="https://github.com/user-attachments/assets/f1d1964e-ee84-48f7-87ee-04aa53c091f5" />
 
