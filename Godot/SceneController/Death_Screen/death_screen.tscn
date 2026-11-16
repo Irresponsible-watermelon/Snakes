@@ -142,6 +142,9 @@ offset_bottom = 23.0
 grow_horizontal = 0
 rotation = 0.34906584
 pivot_offset_ratio = Vector2(0.5, 1)
+offset_transform_enabled = true
+offset_transform_scale = Vector2(2, 2)
+offset_transform_visual_only = false
 theme_override_colors/font_color = Color(3.4571466, 0, 1.3912643, 1)
 text = "New highscore!!!"
 

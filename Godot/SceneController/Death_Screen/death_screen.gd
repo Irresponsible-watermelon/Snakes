@@ -120,15 +120,19 @@ func on_quit_press():
 @warning_ignore("shadowed_variable")
 func sort(score_list: Array[int], score_in: int):
 	var sorted_list: Array[int] = []
-	sorted_list = score_list
 	var is_new_hs: bool = false
 	var is_equal: bool = false
+	var been_added: bool = false
 	for x in range(0, score_list.size()):
-		if score_in >= score_list[x]:
+		if score_in >= score_list[x] and not been_added:
 			sorted_list.append(score_in)
 			if score_in == score_list[x]:
 				is_equal = true
+			been_added = true
 		sorted_list.append(score_list[x])
+	if not been_added:
+		sorted_list.append(score_in)
+		been_added = true
 	if cur_score == sorted_list[0] and not is_equal:
 		is_new_hs = true
 	return [sorted_list, is_new_hs]

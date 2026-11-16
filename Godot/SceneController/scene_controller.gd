@@ -55,6 +55,7 @@ func on_game_end():
 	del_death()
 
 func on_death_open():
+	SceneManger.options_state.emit(false)
 	pause_hide_game(SceneManger.type.PAUSE)
 	show_load_death()
 

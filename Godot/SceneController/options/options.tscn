@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://dyscluxshvjma" path="res://SceneController/options/file_dialog.gd" id="3_1nqdw"]
 
 [node name="Options" type="Control" unique_id=189116222 node_paths=PackedStringArray("close_button", "diff_slider_nd", "map_size_nd", "cell_size_nd", "bg_col_nd", "bd_col_nd", "ap_spr_nd", "ap_col_nd", "sn_spr_nd", "sn_fill_nd", "sn_bd_nd", "hd_fill_nd", "hd_bd_nd", "file_dia_nd", "error_dia_nd")]
+process_mode = 3
 z_index = 25
 texture_repeat = 2
 layout_mode = 3

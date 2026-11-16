@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bp66ks31q2y65"]
 
 [node name="Pause" type="SubViewportContainer" unique_id=1465565726]
+process_mode = 2
 oversampling_with_scale = 2
 z_index = 20
 anchors_preset = -1
@@ -13,6 +14,7 @@ grow_vertical = 2
 offset_transform_enabled = true
 offset_transform_scale = Vector2(2, 2)
 offset_transform_visual_only = false
+mouse_filter = 2
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=592837377]
 physics_interpolation_mode = 2
@@ -28,6 +30,7 @@ offset_bottom = 50.0
 offset_transform_enabled = true
 offset_transform_position = Vector2(25, 25)
 offset_transform_visual_only = false
+mouse_filter = 2
 
 [node name="Button" type="Button" parent="SubViewport/Esc" unique_id=1093962830]
 z_index = 3000
@@ -48,6 +51,7 @@ offset_bottom = 36.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
+mouse_filter = 2
 alignment = 1
 
 [node name="Resume" type="Panel" parent="SubViewport/middle buttons" unique_id=2016497493]
@@ -72,9 +76,11 @@ text = "Resume
 [node name="HSeparator" type="HSeparator" parent="SubViewport/middle buttons" unique_id=1977190591 groups=["VSep"]]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Restart" type="Panel" parent="SubViewport/middle buttons" unique_id=1986535468]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="RestartButton" type="Button" parent="SubViewport/middle buttons/Restart" unique_id=1094146176]
 layout_mode = 1
@@ -96,9 +102,11 @@ text = "Restart
 [node name="HSeparator3" type="HSeparator" parent="SubViewport/middle buttons" unique_id=197986260 groups=["VSep"]]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="MenuButton" type="Panel" parent="SubViewport/middle buttons" unique_id=2092758338]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="MenuButton" type="MenuButton" parent="SubViewport/middle buttons/MenuButton" unique_id=2118044951]
 layout_mode = 1
@@ -114,6 +122,7 @@ offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 2
+mouse_filter = 2
 toggle_mode = false
 action_mode = 1
 text = "Options
@@ -123,9 +132,11 @@ flat = false
 [node name="HSeparator2" type="HSeparator" parent="SubViewport/middle buttons" unique_id=1183619992 groups=["VSep"]]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Quit" type="Panel" parent="SubViewport/middle buttons" unique_id=1805009922]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="QuitButton" type="Button" parent="SubViewport/middle buttons/Quit" unique_id=545320690]
 layout_mode = 1
