@@ -25,5 +25,7 @@ public class MapEdge : MonoBehaviour
         bottom_edge = BottomWall.transform.position.y - cell_size;
         left_edge = LeftWall.transform.position.x + cell_size;
         right_edge = RightWall.transform.position.x - cell_size;
+
+        transform.position = new Vector3(right_edge - left_edge, bottom_edge - top_edge, 0);
     }   
 }
