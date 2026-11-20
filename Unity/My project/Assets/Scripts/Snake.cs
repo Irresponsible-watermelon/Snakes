@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class Snake : MonoBehaviour
@@ -7,50 +8,66 @@ public class Snake : MonoBehaviour
 
 private Vector2 current_direction = Vector2.up;
 private Vector2 pending_direction = Vector2.up;
-private void FixedUpdate()
+[SerializeField] private float cps_count = 1;
+private float move_interval;
+private float moveTimer;
+// Startup
+private void Start()
     {
-        DirectionSet();
-        Move();
+        move_interval = 1 / cps_count;
     }
+// Process loop
+private void Update()
+{
+    DirectionSet();
+
+    moveTimer += Time.deltaTime;
+    if (moveTimer >= move_interval)
+    {
+        Move();
+        moveTimer -= move_interval;
+    }
+}
+
+// Frame loop
+private void FixedUpdate()
+{}
 
 private void DirectionSet()
-    {
-        if (Input.GetKeyDown(KeyCode.W) && current_direction != Vector2.down)
-        {
-            pending_direction = Vector2.up;
-        }
-        else if (Input.GetKeyDown(KeyCode.S) && current_direction != Vector2.up)
-        {
-            pending_direction = Vector2.down;
-        }
-        else if (Input.GetKeyDown(KeyCode.A) && current_direction != Vector2.right)
-        {
-            pending_direction = Vector2.left;
-        }
-        else if (Input.GetKeyDown(KeyCode.D) && current_direction != Vector2.left)
-        {
-            pending_direction = Vector2.right;
-        }
+{   
+    Keyboard keyboard = Keyboard.current;
+
+    if (keyboard == null)
+    {    return;
     }
 
-private void Move()
+    if (keyboard.wKey.wasPressedThisFrame && current_direction != Vector2.down)
     {
-        switch (current_direcction)
-        {
-            case Vector2.up:
-                self.transform.position.y += 1;
-                break;
-            case Vector2.down:
-                self.transform.position.y -= 1;
-                break;
-            case Vector2.left:
-                self.transform.position.x -= 1;
-                break;
-            case Vector2.right:
-                self.transform.position.x += 1;
-                break;
-        }
+        pending_direction = Vector2.up;
     }
+    else if (keyboard.sKey.wasPressedThisFrame && current_direction != Vector2.up)
+    {
+        pending_direction = Vector2.down;
+    }
+    else if (keyboard.aKey.wasPressedThisFrame && current_direction != Vector2.right)
+    {
+        pending_direction = Vector2.left;
+    }
+    else if (keyboard.dKey.wasPressedThisFrame && current_direction != Vector2.left)
+    {
+        pending_direction = Vector2.right;
+    }    
+}   
+
+private void Move()
+{
+    current_direction = pending_direction;
+
+    Vector3 position = transform.position;
+    position.x += pending_direction.x;
+    position.y += pending_direction.y;
+    transform.position = position;
+}
 
 }
 
