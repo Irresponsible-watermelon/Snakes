@@ -45,7 +45,7 @@ private void Update()
     DirectionSet();
     
 
-    if (!has_collided)
+    if (!has_collided && !GameManagerScript.Instance.is_paused)
     {
     moveTimer += Time.deltaTime;
     if (moveTimer >= move_interval)

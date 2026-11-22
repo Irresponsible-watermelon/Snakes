@@ -1,0 +1,26 @@
+.unity-button {
+}
+
+.Dyslexic-Button {
+    -unity-font-definition: url("project://database/Assets/Fonts/OpenDyslexic-Bold.otf?fileID=12800000&guid=bf06dc51a47c6ac44ae3baa461b87afc&type=3#OpenDyslexic-Bold");
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    scale: 2 2;
+    color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: rgba(48, 48, 48, 0.573);
+    background-color: rgba(48, 48, 48, 0.573);
+    border-left-color: rgba(48, 48, 48, 0);
+    border-right-color: rgba(48, 48, 48, 0);
+    border-top-color: rgba(48, 48, 48, 0);
+    border-bottom-color: rgba(48, 48, 48, 0);
+    cursor: url("project://database/Assets/textures/link.svg?fileID=6192944022281365145&guid=176d637510aa5d0458ef2fc535313f17&type=3#link");
+}
+
+.CenterPadding {
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}

@@ -1,0 +1,12 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UIEditor/USS.uss?fileID=7433441132597879392&amp;guid=7e8ea6bd70b867240a49f6b948593e41&amp;type=3#USS"/>
+    <ui:VisualElement enabled="true" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.878);">
+        <ui:Button text="Close" usage-hints="MaskContainer" double-click-selects-word="false" name="CloseButton" class="Dyslexic-Button" style="height: 35px; width: 70px; opacity: 0.9; border-bottom-right-radius: 5px; border-top-right-radius: 5px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; scale: 2 2; translate: 50px 50px; transform-origin: left top; white-space: pre; background-color: rgba(48, 48, 48, 0.573); border-left-color: rgba(48, 48, 48, 0); border-right-color: rgba(48, 48, 48, 0); border-top-color: rgba(48, 48, 48, 0); border-bottom-color: rgba(48, 48, 48, 0); -unity-font-definition: url(&quot;project://database/Assets/Fonts/OpenDyslexic-Bold.otf?fileID=12800000&amp;guid=bf06dc51a47c6ac44ae3baa461b87afc&amp;type=3#OpenDyslexic-Bold&quot;); color: rgb(255, 255, 255); letter-spacing: 0;"/>
+        <ui:VisualElement name="CenterButtonContainer" style="flex-grow: 1; align-items: stretch; justify-content: center; align-self: center; align-content: auto; -unity-slice-type: sliced; transform-origin: center; -unity-text-auto-size: none; white-space: normal; -unity-text-align: upper-left;">
+            <ui:Button text="Resume" name="ResumeButton" class="Dyslexic-Button CenterPadding" style="height: 35px; color: rgb(255, 255, 255);"/>
+            <ui:Button text="Options" name="OptionsButton" class="Dyslexic-Button CenterPadding" style="height: 35px; color: rgb(255, 255, 255);"/>
+            <ui:Button text="Restart" name="RestartButton" class="Dyslexic-Button CenterPadding" style="height: 35px; color: rgb(255, 255, 255);"/>
+            <ui:Button text="Quit" name="QuitButton" class="Dyslexic-Button CenterPadding" style="height: 35px; color: rgb(255, 255, 255);"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
