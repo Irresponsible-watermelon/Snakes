@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: 798627280}
   m_Layer: 0
   m_Name: SnakeObject
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -843,6 +843,7 @@ MonoBehaviour:
   map_box: {fileID: 1099407014}
   survival_counter: 0
   has_collided: 0
+  has_initialised: 0
 --- !u!1 &982786345
 GameObject:
   m_ObjectHideFlags: 0

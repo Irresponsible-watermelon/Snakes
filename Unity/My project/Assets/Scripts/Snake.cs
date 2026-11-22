@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using NUnit.Framework;
 using UnityEditor.PackageManager.UI;
+using UnityEngine.UIElements;
+using NUnit.Framework.Constraints;
 
 public class Snake : MonoBehaviour
 {
@@ -21,6 +23,7 @@ private List<Vector2> dir_array;
 private List<float> edges;
 public int survival_counter = 0;
 public bool has_collided = false;
+public bool has_initialised = false;
 // Startup
 private void Start()
     {
@@ -34,18 +37,22 @@ private void Start()
         dir_array.Add(Vector2.up);
         Grow(new Vector3(body_parts[0].transform.position.x, body_parts[0].transform.position.y - 1, 0));
         Grow(new Vector3(body_parts[1].transform.position.x, body_parts[1].transform.position.y - 1, 0));
+        has_initialised = true;
     }
 // Process loop
 private void Update()
 {
     DirectionSet();
+    
 
+    if (!has_collided)
+    {
     moveTimer += Time.deltaTime;
     if (moveTimer >= move_interval)
     {
         Move();
         moveTimer -= move_interval;
-    }
+    }}
 }
 
 // Frame loop
@@ -83,17 +90,34 @@ private void DirectionSet()
 }   
 
 private void Move()
-{   
+{  
     current_direction = pending_direction;
     dir_array[0] = current_direction;
     List<GameObject> sample_body_parts = new List<GameObject>(body_parts);
 
-    if (survival_counter <= 5)
+    // sort out head
+    Vector3 new_head_pos = (Vector3)sample_body_parts[0].transform.position;
+    new_head_pos += new Vector3(current_direction.x, current_direction.y, 0);
+    RotateObject(sample_body_parts[0].transform, current_direction);
+
+    has_collided = IsWallCollision(new_head_pos);
+    // check if head in snake
+    for (int i = 1; i < sample_body_parts.Count; i++)
         {
-            //GameManagerScript.Instance.SurvivalScore();
-            survival_counter++;
+            if (new_head_pos == sample_body_parts[i].transform.position)
+            {
+                has_collided = true;
+                print("Has_collided set true by snake in self");
+                break;
+            }
         }
 
+    if (survival_counter <= 5)
+        {
+            GameManagerScript.Instance.SurvivalScore();
+            survival_counter++;
+        }
+if (!has_collided){
     // Shift the direction array and corner flags down the body store direction seperate from body which only shows texture direction
     for (int i = dir_array.Count - 1; i > 0; i--)
     {   
@@ -113,7 +137,7 @@ private void Move()
     for (int i = body_parts.Count - 1; i > 0; i--)
     {
         Transform part = sample_body_parts[i].transform;
-        Transform previous = body_parts[i - 1].transform;
+        Transform previous = sample_body_parts[i - 1].transform;
 
         part.position = previous.position;
         if (i == is_corner.Count - 1)
@@ -126,32 +150,11 @@ private void Move()
         }
 
     }
+    sample_body_parts[0].transform.position = new_head_pos;
+    body_parts = new List<GameObject>(sample_body_parts);        
 
-    // sort out head
-    Transform head = sample_body_parts[0].transform;
-    head.position += new Vector3(current_direction.x, current_direction.y, 0);
-    RotateObject(head, current_direction);
-
-    if (head.position.y < edges[0] || head.position.y > edges[1] || head.position.x < edges[2] || head.position.x > edges[3])
-        {
-            has_collided = true;
-        }
-    for (int i = 0; i < body_parts.Count; i++)
-        {
-            if (head.position == sample_body_parts[i].transform.position)
-            {
-                has_collided = true;
-                break;
-            }
-        }
-
-    // if no collision make movement happen
-    if (!has_collided)
-        {
-        body_parts = new List<GameObject>(sample_body_parts);        
-        }
     
-}
+}}
 
 private void RotateObject(Transform obj, Vector2 direction)
 {
@@ -182,5 +185,18 @@ public void Grow(Vector3 position)
     is_corner.Add(false);
     dir_array.Add(dir_array[dir_array.Count - 1]);
 }
+
+private bool IsWallCollision(Vector3 pos)
+    {
+        if (pos.y > edges[0]) return true;
+        else if (pos.y < edges[1]) return true;
+        else if (pos.x < edges[2]) return true;
+        else if(pos.x > edges[3]) return true;
+        else return false;
+    }
+
+
+
+
 }
 

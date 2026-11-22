@@ -28,8 +28,8 @@ public class MapEdge : MonoBehaviour
             edge_positions.Add(0f);
         }
         
-        edge_positions[0] = top_edge = TopWall.transform.position.y + cell_size;
-        edge_positions[1] = bottom_edge = BottomWall.transform.position.y - cell_size;
+        edge_positions[0] = top_edge = TopWall.transform.position.y - cell_size;
+        edge_positions[1] = bottom_edge = BottomWall.transform.position.y + cell_size;
         edge_positions[2] = left_edge = LeftWall.transform.position.x + cell_size;
         edge_positions[3] = right_edge = RightWall.transform.position.x - cell_size;
 

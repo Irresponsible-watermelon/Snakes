@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Numerics;
 using UnityEngine;
 
@@ -9,8 +10,13 @@ public class Food : MonoBehaviour
     public UnityEngine.Vector3 food_pos;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created    
-    void Start()
+    private IEnumerator Start()
     {
+        Snake snakeScript = snake.GetComponent<Snake>();
+        
+        while (!snakeScript.has_initialised)
+            yield return null;
+        
         box_size = (int)edge.GetComponent<BoxCollider2D>().size.x;
         OnFoodNeeded();
     }
@@ -67,7 +73,7 @@ public class Food : MonoBehaviour
         if (other.tag == "Player")
         {
             OnFoodNeeded();
-            //GameManagerScript.Instance.FoodScore();
+            GameManagerScript.Instance.FoodScore();
             snake.GetComponent<Snake>().survival_counter = 0;
             snake.GetComponent<Snake>().Grow(snake.GetComponent<Snake>().body_parts[snake.GetComponent<Snake>().body_parts.Count - 1].transform.position);
         }
