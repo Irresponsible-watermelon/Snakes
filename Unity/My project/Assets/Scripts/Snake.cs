@@ -2,24 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using NUnit.Framework;
+using UnityEditor.PackageManager.UI;
 
 public class Snake : MonoBehaviour
 {
 
-public Vector2 current_direction = Vector2.up;
+public Vector2 current_direction {get ; private set; } = Vector2.up;
 private Vector2 pending_direction = Vector2.up;
-[SerializeField] private float cps_count = 1;
+public float cps_count = 1;
 private float move_interval;
 private float moveTimer;
-private List<GameObject> body_parts;
+public List<GameObject> body_parts {get; private set; }
 private List<bool> is_corner;
 private List<Vector2> dir_array;
-public GameObject body_part_prefab;
+[SerializeField] private GameObject body_part_prefab;
+[SerializeField] private GameObject map_box;
+private List<float> edges;
+public int survival_counter = 0;
+public bool has_collided = false;
 // Startup
 private void Start()
     {
         move_interval = 1 / cps_count;
         body_parts = new List<GameObject>();
+        edges = new List<float>(map_box.GetComponent<MapEdge>().edge_positions);
         is_corner = new List<bool>();
         dir_array = new List<Vector2>();
         body_parts.Add(this.gameObject);
@@ -76,10 +83,18 @@ private void DirectionSet()
 }   
 
 private void Move()
-{
+{   
     current_direction = pending_direction;
-
     dir_array[0] = current_direction;
+    List<GameObject> sample_body_parts = new List<GameObject>(body_parts);
+
+    if (survival_counter <= 5)
+        {
+            GameManagerScript.Instance.SurvivalScore();
+            survival_counter++;
+        }
+
+    // Shift the direction array and corner flags down the body store direction seperate from body which only shows texture direction
     for (int i = dir_array.Count - 1; i > 0; i--)
     {   
             Vector2 prev_dir = dir_array[i - 1];
@@ -94,9 +109,10 @@ private void Move()
     is_corner[0] = false;
     is_corner[is_corner.Count - 1] = false;
     
+    // Shift the body parts down the body and rotate them to match the direction of the previous part dependent on if the part is a corner or not
     for (int i = body_parts.Count - 1; i > 0; i--)
     {
-        Transform part = body_parts[i].transform;
+        Transform part = sample_body_parts[i].transform;
         Transform previous = body_parts[i - 1].transform;
 
         part.position = previous.position;
@@ -108,11 +124,32 @@ private void Move()
         {
             part.rotation = previous.rotation;
         }
+
     }
 
-    Transform head = body_parts[0].transform;
+    // sort out head
+    Transform head = sample_body_parts[0].transform;
     head.position += new Vector3(current_direction.x, current_direction.y, 0);
     RotateObject(head, current_direction);
+
+    if (head.position.y < edges[0] || head.position.y > edges[1] || head.position.x < edges[2] || head.position.x > edges[3])
+        {
+            has_collided = true;
+        }
+    for (int i = 0; i < body_parts.Count; )
+        {
+            if (head.position == sample_body_parts[i].transform.position)
+            {
+                has_collided = true;
+            }
+        }
+
+    // if no collision make movement happen
+    if (!has_collided)
+        {
+        body_parts = new List<GameObject>(sample_body_parts);        
+        }
+    
 }
 
 private void RotateObject(Transform obj, Vector2 direction)
@@ -136,9 +173,10 @@ private void RotateObject(Transform obj, Vector2 direction)
         }
 }
 
-private void Grow(Vector3 position)
+public void Grow(Vector3 position)
 {
     GameObject new_part = Instantiate(body_part_prefab, position, body_parts[body_parts.Count - 1].transform.rotation);
+    new_part.name = "Body Part " + body_parts.Count;
     body_parts.Add(new_part);
     is_corner.Add(false);
     dir_array.Add(dir_array[dir_array.Count - 1]);

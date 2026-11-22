@@ -4,6 +4,7 @@ using UnityEngine;
 public class Food : MonoBehaviour
 {   
     [SerializeField] private GameObject edge;
+    [SerializeField] private GameObject snake;
     private int box_size;
     public UnityEngine.Vector3 food_pos;
     
@@ -50,10 +51,25 @@ public class Food : MonoBehaviour
         {
             return true; // Food is outside the box
         }
-        else if (0 == 1) // Placeholder for food in snake body check
+        for (int i = 0; i < snake.GetComponent<Snake>().body_parts.Count; i++)
         {
-            return true; // Food is in snake body
+            if (snake.GetComponent<Snake>().body_parts[i].transform.position == pos)
+            {
+                return true; // Food is in snake body
+            }
         }
-        return false; // Placeholder return value
+        return false; // Food is in a valid position
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            OnFoodNeeded();
+            GameManagerScript.Instance.FoodScore();
+            snake.GetComponent<Snake>().survival_counter = 0;
+            snake.GetComponent<Snake>().Grow(snake.GetComponent<Snake>().body_parts[snake.GetComponent<Snake>().body_parts.Count - 1].transform.position);
+        }
+        else return;
     }
 }
