@@ -1,2 +1,13 @@
 fileFormatVersion: 2
 guid: 1e8550e0205d4ae45ae1fabc7507e7d7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - body_part_prefab: {instanceID: 0}
+  - map_box: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

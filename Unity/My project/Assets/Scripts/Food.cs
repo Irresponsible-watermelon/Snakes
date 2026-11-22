@@ -47,6 +47,7 @@ public class Food : MonoBehaviour
 
     bool IsFoodConflict(UnityEngine.Vector3 pos)
     {
+
         if (pos.x < -(box_size / 2) || pos.x > (box_size / 2) || pos.y < -(box_size / 2) || pos.y > (box_size / 2))
         {
             return true; // Food is outside the box
@@ -66,7 +67,7 @@ public class Food : MonoBehaviour
         if (other.tag == "Player")
         {
             OnFoodNeeded();
-            GameManagerScript.Instance.FoodScore();
+            //GameManagerScript.Instance.FoodScore();
             snake.GetComponent<Snake>().survival_counter = 0;
             snake.GetComponent<Snake>().Grow(snake.GetComponent<Snake>().body_parts[snake.GetComponent<Snake>().body_parts.Count - 1].transform.position);
         }

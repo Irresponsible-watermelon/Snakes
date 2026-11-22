@@ -59,8 +59,7 @@ private void DirectionSet()
     if (keyboard == null)
     {    return;
     }
-
-    if (keyboard.wKey.wasPressedThisFrame && current_direction != Vector2.down && current_direction != Vector2.up)
+    else if (keyboard.wKey.wasPressedThisFrame && current_direction != Vector2.down && current_direction != Vector2.up)
     {   
         pending_direction = Vector2.up;
         is_corner[0] = true;
@@ -79,7 +78,8 @@ private void DirectionSet()
     {
         pending_direction = Vector2.right;
         is_corner[0] = true;
-    }    
+    }
+    else return;       
 }   
 
 private void Move()
@@ -90,7 +90,7 @@ private void Move()
 
     if (survival_counter <= 5)
         {
-            GameManagerScript.Instance.SurvivalScore();
+            //GameManagerScript.Instance.SurvivalScore();
             survival_counter++;
         }
 

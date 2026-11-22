@@ -2,21 +2,17 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
-    public static GameManagerScript Instance { get; private set; }
+    private static GameManagerScript _instance;
+    public static GameManagerScript Instance { get => _instance; private set => _instance = value; }
     public int score {get; private set;} = 0;
     public int difficulty {get; private set;} = 1;
     public float true_cps {get; private set;} = 1.0f;
-    void Awake()
-    {
-       if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            Instance = this;
-        } 
-    }
+void Awake()
+{
+    Debug.Log("START BEGIN");
+    Instance = this;
+    Debug.Log("START END");
+}
 
     public void SurvivalScore()
     {
