@@ -10,8 +10,8 @@ public class Snake : MonoBehaviour
 
 public Vector2 current_direction {get ; private set; } = Vector2.up;
 private Vector2 pending_direction = Vector2.up;
-public float cps_count = 1;
-private float move_interval;
+public float cps_count;
+private float move_interval => 1f / cps_count;
 private float moveTimer;
 public List<GameObject> body_parts {get; private set; }
 private List<bool> is_corner;
@@ -24,7 +24,7 @@ public bool has_collided = false;
 // Startup
 private void Start()
     {
-        move_interval = 1 / cps_count;
+        cps_count = 1;
         body_parts = new List<GameObject>();
         edges = new List<float>(map_box.GetComponent<MapEdge>().edge_positions);
         is_corner = new List<bool>();
@@ -74,7 +74,7 @@ private void DirectionSet()
         pending_direction = Vector2.left;
         is_corner[0] = true;
     }
-    else if (keyboard.dKey.wasPressedThisFrame && current_direction != Vector2.left && current_direction != Vector2.right && current_direction != Vector2.left)
+    else if (keyboard.dKey.wasPressedThisFrame && current_direction != Vector2.left && current_direction != Vector2.right)
     {
         pending_direction = Vector2.right;
         is_corner[0] = true;
@@ -136,11 +136,12 @@ private void Move()
         {
             has_collided = true;
         }
-    for (int i = 0; i < body_parts.Count; )
+    for (int i = 0; i < body_parts.Count; i++)
         {
             if (head.position == sample_body_parts[i].transform.position)
             {
                 has_collided = true;
+                break;
             }
         }
 
