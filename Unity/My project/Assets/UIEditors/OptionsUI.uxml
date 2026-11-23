@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
->
-    
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS.uss?fileID=7433441132597879392&amp;guid=7e8ea6bd70b867240a49f6b948593e41&amp;type=3#USS"/>
+    <ui:VisualElement name="Area" style="flex-grow: 1; top: auto; left: auto; right: auto; bottom: auto; position: relative; width: 66%; height: 66%; align-self: center; align-content: auto; justify-content: space-around; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-items: auto; border-top-width: 0; border-bottom-width: 200px; flex-basis: auto;">
+        <ui:Label text="Options" class="Dyslexic-Button" style="align-items: center; align-self: center; align-content: flex-end; top: 185px;"/>
+        <ui:Button text="" name="CloseButton" icon-image="project://database/Assets/textures/cross.png?fileID=2800000&amp;guid=42f296eb66285ec438aa1ed2387afee0&amp;type=3#cross" selectable="false" style="margin-top: 80px; margin-right: 10px; background-color: rgba(255, 255, 255, 0); border-top-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; aspect-ratio: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; height: 83px; width: 83px; top: 50px;"/>
+        <ui:ScrollView vertical-scroller-visibility="Auto" name="ScrollView" style="align-self: center; flex-grow: 0; opacity: 0.95; width: 100%; height: 100%; top: 5%;"/>
+    </ui:VisualElement>
 </ui:UXML>
