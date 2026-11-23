@@ -35,6 +35,21 @@ def launch_snakeGd():
 
     subprocess.Popen([str(game_path)], cwd=app_dir)
 
+def launch_snakeUn():
+    if getattr(sys, "frozen", False):
+        app_dir = Path(Path(sys.executable).parent
+                       / "Snake_Game(Unity)")
+    else:
+        app_dir = Path(__file__).parent / "dist"
+
+    game_path = app_dir / "My_project.exe"
+
+    if not game_path.is_file():
+        messagebox.showerror("Game not found", f"Could not find:\n{game_path}")
+        return
+
+    subprocess.Popen([str(game_path)], cwd=app_dir)
+
 window = tk.Tk()
 window.title("Snake Lab Launcher")
 window.geometry("400x250")
@@ -63,6 +78,12 @@ Godot_button = ttk.Button(
     command=launch_snakeGd
 )
 Godot_button.pack(pady=10)
+
+Unity_button = ttk.Button(
+    window,
+    text="Launch Snake - Unity Edition",
+    command=launch_snakeUn
+)
 
 
 window.mainloop()

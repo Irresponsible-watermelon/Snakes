@@ -1,11 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
-using NUnit.Framework;
-using UnityEditor.PackageManager.UI;
-using UnityEngine.UIElements;
-using NUnit.Framework.Constraints;
 
 public class Snake : MonoBehaviour
 {
