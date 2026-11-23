@@ -84,6 +84,7 @@ Unity_button = ttk.Button(
     text="Launch Snake - Unity Edition",
     command=launch_snakeUn
 )
+Unity_button.pack(pady = 10)
 
 
 window.mainloop()
