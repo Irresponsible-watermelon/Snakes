@@ -1,6 +1,6 @@
 <h1>Snakes</h1>
 The purpose of this project is to get a handle of various different methods for making basic, 2D games, by trying to make the classic 'snake game' with each. My ultimate goal from this project is to try out a variety of different ways to make a game, and then use that knowledge to decide how I make my next project, which will be a larger 2D railfreight yard management game. <br><br>
-I will also be building a launcher through which the games can be accessed, and the ultimate aim of this project is to determine which engines/gamemaking tools I will using in future ones. I've just finished my PyGame version, and am currently looking at Godot. See the release builds for how to run the game, as some of the details differ slightly across releases. <br><br>
+I will also be building a launcher through which the games can be accessed, and the ultimate aim of this project is to determine which engines/gamemaking tools I will using in future ones. I've just finished my Godot version, and am currently looking at Unity. See the release builds for how to run the game, as some of the details differ slightly across releases. <br><br>
 To give the project a spin, download and extract the .Zip file from the latest release and run 'Snake_Launcher.exe', which will allow you to select between diferent versions of the game to try. For the Pygame version, you can also upload your own sprites, with instructions on how to do so contained in "Snake_Launcher/Snake_Game(Pygame)/Assets/asset instructions.txt"
 
 <h2>Snakes - PyGame Edition</h2>
