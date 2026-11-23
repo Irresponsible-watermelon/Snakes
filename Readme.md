@@ -13,3 +13,7 @@ I have now started on making snake in Godot. I've managed to put together a more
 
 <img width="1243" height="1080" alt="Screenshot 2026-11-02 001643" src="https://github.com/user-attachments/assets/f1d1964e-ee84-48f7-87ee-04aa53c091f5" />
 
+<h2>Snakes - Unity Edition</h2>
+I started the Unity version of the game and so far I despise it. I do like Unity's UI builder, but I don't like C# especially when compared to GodotScript, and I miss how Godot actually tried to work rather than just crashing with no explaination whenever something went wrong. The unity engine also feels quit heavy and seems to be introducing unneccessary complexity which appears to be causing lag for what is a very lightweight and simple game.
+
+<img width="1920" height="1080" alt="Screenshot 2026-11-23 212911" src="https://github.com/user-attachments/assets/befa9191-2504-45d1-9ec0-bbe905ee9450" />
