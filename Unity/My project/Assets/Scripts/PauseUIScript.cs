@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class UiScript : MonoBehaviour
+public class PauseUIScript : MonoBehaviour
 {
     private PanelRenderer panel_renderer;
     private int ui_version = -1;

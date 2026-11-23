@@ -16,6 +16,8 @@
     border-top-color: rgba(48, 48, 48, 0);
     border-bottom-color: rgba(48, 48, 48, 0);
     cursor: url("project://database/Assets/textures/link.svg?fileID=6192944022281365145&guid=176d637510aa5d0458ef2fc535313f17&type=3#link");
+    min-height: 35px;
+    height: 0;
 }
 
 .CenterPadding {

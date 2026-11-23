@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
->
-    <ui:Label text="Hello World! From UXML" />
-
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS.uss?fileID=7433441132597879392&amp;guid=7e8ea6bd70b867240a49f6b948593e41&amp;type=3#USS"/>
+    <ui:VisualElement name="Background" style="flex-grow: 1; background-color: rgb(18, 83, 159);">
+        <ui:VisualElement name="CenterButtons" style="flex-grow: 1; justify-content: center; align-self: center; align-content: center;">
+            <ui:Button text="Start" name="StartButton" class="Dyslexic-Button CenterPadding"/>
+            <ui:Button text="Options" name="OptionsButton" class="Dyslexic-Button CenterPadding"/>
+            <ui:Button text="Quit" name="QuitButton" class="Dyslexic-Button CenterPadding"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>
