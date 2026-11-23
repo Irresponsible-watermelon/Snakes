@@ -97,7 +97,7 @@ private void Move()
 
     has_collided = IsWallCollision(new_head_pos);
     // check if head in snake
-    for (int i = 1; i < sample_body_parts.Count; i++)
+    for (int i = 1; i < sample_body_parts.Count - 1; i++)
         {
             if (new_head_pos == sample_body_parts[i].transform.position)
             {
