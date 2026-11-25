@@ -27,6 +27,9 @@ public class StartUIScript : MonoBehaviour
 
     private void OnUIReload(PanelRenderer renderer, VisualElement root, int version)
     {
+        if (version == ui_version) return;
+        ui_version = version;
+
         start_button = root.Q<Button>("StartButton");
         options_button = root.Q<Button>("OptionsButton");
         quit_button = root.Q<Button>("QuitButton");

@@ -26,3 +26,10 @@
     margin-bottom: 20px;
     margin-left: 20px;
 }
+
+.dark_input #unity-text-input {
+    background-color: rgba(40, 40, 40, 0.85);
+    border-color: rgba(40, 40, 40, 0.85);
+    border-radius: 5px;
+    text-align: center;
+}

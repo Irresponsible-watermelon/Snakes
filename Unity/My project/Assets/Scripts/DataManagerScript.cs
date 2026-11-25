@@ -7,6 +7,9 @@ public class DataManagerScript : MonoBehaviour
     private static DataManagerScript _instance;
     public static DataManagerScript Instance {get => _instance; private set => _instance = value; }
     public bool is_initialised = false;
+    public int difficulty = 3;
+    public int zoom = 1;
+    public int grid_size = 14;
     // Scores ordered ascending
     public List<int> ordered_scores {get; private set; }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
