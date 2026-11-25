@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class OptionsUIScript : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class OptionsUIScript : MonoBehaviour
     private int ui_version = -1;
     private DataManagerScript singleton = DataManagerScript.Instance;
 
+    private Button close_button;
+    private Button apply_button;
     private SliderInt difficulty_slider;
     private SliderInt grid_input;
     private SliderInt zoom_input;
@@ -41,8 +44,21 @@ public class OptionsUIScript : MonoBehaviour
 
         DifficultyReload(root);
         ZoomReload(root);
+        GridSizeReload(root);
+        CloseReload(root);
+        AppleReload(root);
     }
-
+// Input registerers
+    void CloseReload(VisualElement root)
+    {
+        close_button = root.Q<Button>("CloseButton");
+        close_button.clicked += OnClosePressed;
+    }
+    void AppleReload(VisualElement root)
+    {
+        apply_button = root.Q<Button>("ApplyButton");
+        apply_button.clicked += OnApplyPressed;
+    }
     void DifficultyReload(VisualElement root)
     {
         if (difficulty_slider != null)
@@ -89,6 +105,12 @@ public class OptionsUIScript : MonoBehaviour
         zoom_input.RegisterValueChangedCallback(OnZoomChanged);
             
     }   
+    // Input handlers
+    void OnClosePressed()
+    {
+        PushSettings();
+        SceneManager.UnloadSceneAsync("Options");
+    }
     void OnDifficultySliderChanged(ChangeEvent<int> eventData)
     {
         difficulty = eventData.newValue;   
@@ -103,6 +125,11 @@ public class OptionsUIScript : MonoBehaviour
         zoom = eventData.newValue;
         GridZoomSync(zoom, false);
     }
+    void OnApplyPressed()
+    {
+        PushSettings();
+    }
+    // Other Functions
     void PushSettings()
     {
         singleton.difficulty = difficulty;

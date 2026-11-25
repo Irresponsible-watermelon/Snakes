@@ -60,9 +60,15 @@ private void Awake()
         SceneManager.UnloadSceneAsync("Pause");
     }
     private void OnOptionsClicked()
-    {}
+    {
+        SceneManager.LoadSceneAsync("Options", LoadSceneMode.Additive);
+    }
     private void OnRestartClicked()
-    {}
+    {
+        SceneManager.UnloadSceneAsync("Snake");
+        SceneManager.LoadSceneAsync("Start");
+        SceneManager.UnloadSceneAsync("Pause");
+    }
     private void OnQuitClicked()
     {
         Application.Quit();

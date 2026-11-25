@@ -48,7 +48,7 @@ private void Update()
 
         if (keyboard.escapeKey.wasPressedThisFrame)
         {
-            if (!is_paused) OpenPauseMenu();
+            if (!is_paused ) OpenPauseMenu();
             else ClosePauseMenu();
         }
     }

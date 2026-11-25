@@ -8,7 +8,7 @@ public class DataManagerScript : MonoBehaviour
     public static DataManagerScript Instance {get => _instance; private set => _instance = value; }
     public bool is_initialised = false;
     public int difficulty = 3;
-    public int zoom = 1;
+    public int zoom = 10;
     public int grid_size = 14;
     // Scores ordered ascending
     public List<int> ordered_scores {get; private set; }
