@@ -19,6 +19,7 @@ public class OptionsUIScript : MonoBehaviour
 
     private void Awake()
     {
+        PullSettings();
         panel_renderer = GetComponent<PanelRenderer>();
 
         if (panel_renderer = null) return;
@@ -94,11 +95,13 @@ public class OptionsUIScript : MonoBehaviour
     }
     void OnGridSizeChanged(ChangeEvent<int> eventData)
     {
-        zoom = eventData.newValue;
+        grid_size = eventData.newValue;
+        GridZoomSync(grid_size, true);
     }
     void OnZoomChanged(ChangeEvent<int> eventData)
     {
         zoom = eventData.newValue;
+        GridZoomSync(zoom, false);
     }
     void PushSettings()
     {
@@ -119,7 +122,7 @@ public class OptionsUIScript : MonoBehaviour
             grid_input.value = grid_size;
         
     }
-    void CellZoomSync(int value_in, bool is_grid_in)
+    void GridZoomSync(int value_in, bool is_grid_in)
     {
         if (is_grid_in)
         {
