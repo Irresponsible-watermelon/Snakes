@@ -1,3 +1,4 @@
+using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -5,13 +6,15 @@ using UnityEngine.UIElements;
 public class PauseUIScript : MonoBehaviour
 {
     private PanelRenderer panel_renderer;
+    private VisualElement menu_root;
     private int ui_version = -1;
 
-    private Button close_button;
-    private Button resume_button;
-    private Button options_button;
-    private Button restart_button;
-    private Button quit_button;
+    private UnityEngine.UIElements.Button close_button;
+    private UnityEngine.UIElements.Button resume_button;
+    private UnityEngine.UIElements.Button options_button;
+    private UnityEngine.UIElements.Button restart_button;
+    private UnityEngine.UIElements.Button quit_button;
+    private bool saved_is_interactable;
 
 private void Awake()
     {
@@ -20,6 +23,15 @@ private void Awake()
         if (panel_renderer == null) return;
 
         panel_renderer.RegisterUIReloadCallback(OnUIReload);
+    }
+
+    private void Update()
+    {
+        if (GameManagerScript.Instance != null && GameManagerScript.Instance.is_paused && GameManagerScript.Instance.is_options)
+        {
+            SetPauseInteraction(false);
+        }
+        else SetPauseInteraction(true);
     }
     private void OnDestroy()
     {
@@ -30,12 +42,13 @@ private void Awake()
     {
         if (version == ui_version) return;
         ui_version = version;
+        menu_root = root;
 
-        close_button = root.Q<Button>("CloseButton");
-        resume_button = root.Q<Button>("ResumeButton");
-        options_button = root.Q<Button>("OptionsButton");
-        restart_button = root.Q<Button>("RestartButton");
-        quit_button = root.Q<Button>("QuitButton");
+        close_button = root.Q<UnityEngine.UIElements.Button>("CloseButton");
+        resume_button = root.Q<UnityEngine.UIElements.Button>("ResumeButton");
+        options_button = root.Q<UnityEngine.UIElements.Button>("OptionsButton");
+        restart_button = root.Q<UnityEngine.UIElements.Button>("RestartButton");
+        quit_button = root.Q<UnityEngine.UIElements.Button>("QuitButton");
 
     if (close_button == null || resume_button == null ||
         options_button == null || restart_button == null || quit_button == null)
@@ -72,5 +85,10 @@ private void Awake()
     private void OnQuitClicked()
     {
         Application.Quit();
+    }
+    void SetPauseInteraction(bool is_interactble)
+    {
+        saved_is_interactable = is_interactble;
+        menu_root?.SetEnabled(is_interactble);
     }
 }

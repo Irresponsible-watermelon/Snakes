@@ -48,7 +48,9 @@ public class StartUIScript : MonoBehaviour
         SceneManager.LoadSceneAsync("Snake");
     }
     private void OnOptionsClicked()
-    {}
+    {
+        SceneManager.LoadSceneAsync("Options", LoadSceneMode.Additive);
+    }
     private void OnQuitClicked()
     {
         Application.Quit();

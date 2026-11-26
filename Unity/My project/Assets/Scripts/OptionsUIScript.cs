@@ -7,7 +7,7 @@ public class OptionsUIScript : MonoBehaviour
 {
     private PanelRenderer panel_renderer;
     private int ui_version = -1;
-    private DataManagerScript singleton = DataManagerScript.Instance;
+    private DataManagerScript singleton;
 
     private Button close_button;
     private Button apply_button;
@@ -22,10 +22,11 @@ public class OptionsUIScript : MonoBehaviour
 
     private void Awake()
     {
+        singleton = DataManagerScript.Instance;
         PullSettings();
         panel_renderer = GetComponent<PanelRenderer>();
 
-        if (panel_renderer = null) return;
+        if (panel_renderer == null) return;
 
         panel_renderer.RegisterUIReloadCallback(OnUIReload);
     }

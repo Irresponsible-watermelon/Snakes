@@ -11,6 +11,8 @@ public class GameManagerScript : MonoBehaviour
     public float true_cps {get; private set;} = 1.0f;
     public bool is_paused =>
         SceneManager.GetSceneByName("Pause").isLoaded;
+    public bool is_options =>
+        SceneManager.GetSceneByName("Options").isLoaded;
 private void Awake()
 {
     Debug.Log("START BEGIN");
