@@ -20,13 +20,14 @@ public class MapEdge : MonoBehaviour
     private List<float> sample_edge_positions = new List<float>();
     private int grid_size => DataManagerScript.Instance.grid_size;
     private float wall_pos_from_cent => (grid_size + 1) / 2 ;
-    private Vector3 wall_scale_vect_x => new Vector3(grid_size + 2, 0, 0);
-    private Vector3 wall_scale_vect_y => new Vector3(0, grid_size + 2, 0);
+    private Vector3 wall_scale_vect_x => new Vector3(grid_size + 2, 1, 0);
+    private Vector3 wall_scale_vect_y => new Vector3(1, grid_size + 2, 0);
     private int saved_grid;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
 {   
         establish(false);
+        saved_grid = DataManagerScript.Instance.grid_size;
     }
     void Update()
     {
@@ -42,7 +43,8 @@ public class MapEdge : MonoBehaviour
         }
 
         if (is_update)
-        {
+        {   
+            GenerateSamplePositions();
             List<GameObject> snake_body_parts_list = SnakeObject.GetComponent<Snake>().body_parts;
             for (int i = 0; i < snake_body_parts_list.Count; i++)
             {
@@ -83,4 +85,14 @@ public class MapEdge : MonoBehaviour
         LeftWall.transform.position = new Vector3(0 - wall_pos_from_cent, 0, 0);
         RightWall.transform.position = new Vector3 (0 + wall_pos_from_cent, 0, 0); 
     }
-}
+    void GenerateSamplePositions()
+    {
+        sample_edge_positions = new List<float>
+        {
+          0 + wall_pos_from_cent,
+          0 - wall_pos_from_cent,
+          0 - wall_pos_from_cent,
+          0 + wall_pos_from_cent, 
+        };
+    }
+}   

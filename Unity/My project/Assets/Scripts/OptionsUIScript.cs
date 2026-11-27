@@ -134,7 +134,7 @@ public class OptionsUIScript : MonoBehaviour
     void PushSettings()
     {
         singleton.difficulty = difficulty;
-        singleton.grid_size = zoom;
+        singleton.grid_size = grid_size;
         singleton.zoom = zoom;
     }
     void PullSettings()
