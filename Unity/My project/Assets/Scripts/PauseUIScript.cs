@@ -78,6 +78,7 @@ private void Awake()
     }
     private void OnRestartClicked()
     {
+        DataManagerScript.Instance.cause_of_death = DataManagerScript.autopsy.RESTART;
         SceneManager.UnloadSceneAsync("Snake");
         SceneManager.LoadSceneAsync("Start");
         SceneManager.UnloadSceneAsync("Pause");

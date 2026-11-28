@@ -8,17 +8,29 @@ public class Food : MonoBehaviour
     [SerializeField] private GameObject snake;
     private int box_size;
     public UnityEngine.Vector3 food_pos;
+    private int saved_grid_size;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created    
+    
     private IEnumerator Start()
     {
         Snake snakeScript = snake.GetComponent<Snake>();
-        
+        saved_grid_size = DataManagerScript.Instance.grid_size;
+            
         while (!snakeScript.has_initialised)
             yield return null;
         
         box_size = (int)edge.GetComponent<BoxCollider2D>().size.x;
         OnFoodNeeded();
+    }
+    private void Update()
+    {
+        if (saved_grid_size != DataManagerScript.Instance.grid_size)
+        {
+            saved_grid_size = DataManagerScript.Instance.grid_size;
+            OnMapAdjusted();
+        }
+
     }
 
     // Update is called once per frame

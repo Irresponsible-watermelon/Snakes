@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class DataManagerScript : MonoBehaviour
 {
+    public enum autopsy
+    {
+        RESTART,
+        WALL,
+        Self,
+    }
     private static DataManagerScript _instance;
     public static DataManagerScript Instance {get => _instance; private set => _instance = value; }
     public bool is_initialised = false;
@@ -12,6 +18,7 @@ public class DataManagerScript : MonoBehaviour
     public int grid_size = 14;
     // Scores ordered ascending
     public List<int> ordered_scores {get; private set; }
+    public autopsy cause_of_death;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class Snake : MonoBehaviour
 {
@@ -90,18 +91,19 @@ private void Move()
     List<GameObject> sample_body_parts = new List<GameObject>(body_parts);
 
     // sort out head
-    Vector3 new_head_pos = (Vector3)sample_body_parts[0].transform.position;
+    Vector3 pos = sample_body_parts[0].transform.position;
+    Vector3 new_head_pos = new Vector3(pos.x, pos.y, pos.z);
     new_head_pos += new Vector3(current_direction.x, current_direction.y, 0);
     RotateObject(sample_body_parts[0].transform, current_direction);
 
     has_collided = IsWallCollision(new_head_pos);
     // check if head in snake
-    for (int i = 1; i < sample_body_parts.Count - 1; i++)
+    if (!has_collided) for (int i = 1; i < sample_body_parts.Count - 1; i++)
         {
             if (new_head_pos == sample_body_parts[i].transform.position)
             {
                 has_collided = true;
-                print("Has_collided set true by snake in self");
+                DataManagerScript.Instance.cause_of_death = DataManagerScript.autopsy.Self;
                 break;
             }
         }
@@ -183,10 +185,26 @@ public void Grow(Vector3 position)
 private bool IsWallCollision(Vector3 pos)
     {
         List<float> edges = FetchEdges();
-        if (pos.y > edges[0]) return true;
-        else if (pos.y < edges[1]) return true;
-        else if (pos.x < edges[2]) return true;
-        else if(pos.x > edges[3]) return true;
+        if (pos.y > edges[0])
+        {
+            DataManagerScript.Instance.cause_of_death = DataManagerScript.autopsy.WALL;
+            return true;
+        }
+        else if (pos.y < edges[1])
+        {
+            DataManagerScript.Instance.cause_of_death = DataManagerScript.autopsy.WALL;
+            return true;
+        }
+        else if (pos.x < edges[2])
+        {
+            DataManagerScript.Instance.cause_of_death = DataManagerScript.autopsy.WALL;
+            return true;
+        }
+        else if(pos.x > edges[3])
+        {
+            DataManagerScript.Instance.cause_of_death = DataManagerScript.autopsy.WALL;
+            return true;
+        }
         else return false;
     }
 private List<float> FetchEdges()
