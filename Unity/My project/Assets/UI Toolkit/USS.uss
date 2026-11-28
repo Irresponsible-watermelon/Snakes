@@ -33,3 +33,8 @@
     border-radius: 5px;
     text-align: center;
 }
+
+.unity-help-box .unity-help-box__button{
+    border-radius: 5px;
+    text-align: center;
+}

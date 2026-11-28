@@ -9,12 +9,14 @@ public class OptionsUIScript : MonoBehaviour
     private PanelRenderer panel_renderer;
     private int ui_version = -1;
     private DataManagerScript singleton;
-
+    private Snake snake_script;
     private Button close_button;
     private Button apply_button;
     private SliderInt difficulty_slider;
     private SliderInt grid_input;
     private SliderInt zoom_input;
+    private HelpBox grid_alert;
+    private Button alert_button;
     public int difficulty;
     public int grid_size;
     public int zoom;
@@ -26,6 +28,12 @@ public class OptionsUIScript : MonoBehaviour
         singleton = DataManagerScript.Instance;
         PullSettings();
         panel_renderer = GetComponent<PanelRenderer>();
+        
+        if (SceneManager.GetSceneByName("Snake").isLoaded)
+            {
+                snake_script = FindAnyObjectByType<Snake>();
+            }
+        else snake_script = null;
 
         if (panel_renderer == null) return;
 
@@ -48,7 +56,10 @@ public class OptionsUIScript : MonoBehaviour
         ZoomReload(root);
         GridSizeReload(root);
         CloseReload(root);
-        AppleReload(root);
+        ApplyReload(root);
+        AlertReload(root);
+
+        if (grid_alert != null) AlertButtonReload();
     }
 // Input registerers
     void CloseReload(VisualElement root)
@@ -56,17 +67,26 @@ public class OptionsUIScript : MonoBehaviour
         close_button = root.Q<Button>("CloseButton");
         close_button.clicked += OnClosePressed;
     }
-    void AppleReload(VisualElement root)
+    void ApplyReload(VisualElement root)
     {
         apply_button = root.Q<Button>("ApplyButton");
         apply_button.clicked += OnApplyPressed;
+    }
+    void AlertReload(VisualElement root)
+    {
+        grid_alert = root.Q<HelpBox>("GridAlert");
+    }
+    void AlertButtonReload()
+    {
+        alert_button = grid_alert.Q<Button>();
+        alert_button.clicked += GridAlertAccept;
     }
     void DifficultyReload(VisualElement root)
     {
         if (difficulty_slider != null)
             difficulty_slider.UnregisterValueChangedCallback(OnDifficultySliderChanged);
         
-        difficulty_slider = root.Q<SliderInt>("DifficultySlider");
+        difficulty_slider = root.Q<SliderInt>("DifficultySliderInt");
 
         if (difficulty_slider == null)
         {
@@ -91,6 +111,11 @@ public class OptionsUIScript : MonoBehaviour
         grid_input.value = grid_size;
         grid_input.RegisterValueChangedCallback(OnGridSizeChanged);
         
+    }
+    void GridAlertAccept()
+    {
+        grid_alert.SetEnabled(false);
+        grid_alert.visible = false;
     }
     void ZoomReload(VisualElement root)
     {
@@ -119,9 +144,24 @@ public class OptionsUIScript : MonoBehaviour
     }
     void OnGridSizeChanged(ChangeEvent<int> eventData)
     {
-        grid_size = ((eventData.newValue + 1 ) / 2) *2;
-        grid_input.SetValueWithoutNotify(grid_size);
-        GridZoomSync(grid_size, true);
+        int grid_in = ((eventData.newValue + 1) / 2) * 2;
+        if (snake_script != null)
+        {
+            if (IsSnakeInBox(grid_in))
+            {   
+                grid_size = grid_in;
+                grid_input.SetValueWithoutNotify(grid_size);
+                GridZoomSync(grid_size, true);
+            }
+            else
+            {
+                grid_input.SetValueWithoutNotify(grid_size);
+                grid_alert.SetEnabled(true);
+                grid_alert.visible = true;
+            }
+        }
+        else grid_size = grid_in;
+
     }
     void OnZoomChanged(ChangeEvent<int> eventData)
     {
@@ -166,12 +206,30 @@ public class OptionsUIScript : MonoBehaviour
         else
         {
             int new_zoom_value = value_in;
-            int max_grid_value = (new_zoom_value - 2) * 2;
+            int max_grid_value = (new_zoom_value * 2) - 2;
             if (grid_size > max_grid_value)
             {
                 grid_input.value = max_grid_value;
             }
         }
         
+    }
+    bool IsSnakeInBox(int grid_in)
+    {
+        float min = 0 - ((grid_in - 1f) / 2f);
+        float max = 0 + ((grid_in - 1f) / 2f);
+ 
+        for (int i = 0; i < snake_script.body_parts.Count; i++)
+        {
+            float x = snake_script.body_parts[i].transform.position.x;
+            float y = snake_script.body_parts[i].transform.position.y;
+
+            if (x < min || x > max || y < min || y < max)
+            {
+                print($"Grid_size {grid_in} rejected by body part {i} at ({x}, {y}), with bounds set to min {min} and max {max}");
+                return false;
+            }
+        }
+        return true;
     }
 }
