@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class OptionsUIScript : MonoBehaviour
 {
@@ -118,7 +119,8 @@ public class OptionsUIScript : MonoBehaviour
     }
     void OnGridSizeChanged(ChangeEvent<int> eventData)
     {
-        grid_size = eventData.newValue;
+        grid_size = ((eventData.newValue + 1 ) / 2) *2;
+        grid_input.SetValueWithoutNotify(grid_size);
         GridZoomSync(grid_size, true);
     }
     void OnZoomChanged(ChangeEvent<int> eventData)

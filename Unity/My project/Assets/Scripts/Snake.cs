@@ -15,7 +15,7 @@ private List<bool> is_corner;
 private List<Vector2> dir_array;
 [SerializeField] private GameObject body_part_prefab;
 [SerializeField] private GameObject map_box;
-private List<float> edges;
+
 public int survival_counter = 0;
 public bool has_collided = false;
 public bool has_initialised = false;
@@ -24,7 +24,6 @@ private void Start()
     {
         cps_count = 1;
         body_parts = new List<GameObject>();
-        edges = new List<float>(map_box.GetComponent<MapEdge>().edge_positions);
         is_corner = new List<bool>();
         dir_array = new List<Vector2>();
         body_parts.Add(this.gameObject);
@@ -183,15 +182,16 @@ public void Grow(Vector3 position)
 
 private bool IsWallCollision(Vector3 pos)
     {
+        List<float> edges = FetchEdges();
         if (pos.y > edges[0]) return true;
         else if (pos.y < edges[1]) return true;
         else if (pos.x < edges[2]) return true;
         else if(pos.x > edges[3]) return true;
         else return false;
     }
-
-
-
+private List<float> FetchEdges()
+    {
+        return new List<float>(map_box.GetComponent<MapEdge>().edge_positions);
+    } 
 
 }
-

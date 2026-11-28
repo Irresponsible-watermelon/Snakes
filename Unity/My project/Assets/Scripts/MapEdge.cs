@@ -19,28 +19,31 @@ public class MapEdge : MonoBehaviour
     public List<float> edge_positions {get ; private set;} = new List<float>();
     private List<float> sample_edge_positions = new List<float>();
     private int grid_size => DataManagerScript.Instance.grid_size;
-    private float wall_pos_from_cent => (grid_size + 1) / 2 ;
-    private Vector3 wall_scale_vect_x => new Vector3(grid_size + 2, 1, 0);
-    private Vector3 wall_scale_vect_y => new Vector3(1, grid_size + 2, 0);
+    private float wall_pos_from_cent => (grid_size + 2) / 2 ;
+    private Vector3 wall_scale_vect_x => new Vector3(grid_size + 1.5f, 1, 0);
+    private Vector3 wall_scale_vect_y => new Vector3(1, grid_size + 1.5f, 0);
     private int saved_grid;
+    private BoxCollider2D collider;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
 {   
+        collider = this.GetComponent<BoxCollider2D>();
+        saved_grid = grid_size;
         establish(false);
-        saved_grid = DataManagerScript.Instance.grid_size;
+        
+        
     }
     void Update()
     {
-        if (DataManagerScript.Instance.grid_size != saved_grid) establish(true);
-        saved_grid = DataManagerScript.Instance.grid_size;
+        if (grid_size != saved_grid)
+        {
+            saved_grid = grid_size;
+            establish(true);
+        }
     }
 
     void establish(bool is_update)
     {   
-        if (!is_update)
-        {
-            EdgePullFromMap(edge_positions);
-        }
 
         if (is_update)
         {   
@@ -56,8 +59,9 @@ public class MapEdge : MonoBehaviour
             edge_positions = new List<float>(sample_edge_positions);
             EdgePushToMap(edge_positions);
         }
+        else EdgePullFromMap(edge_positions);
 
-        transform.position = new Vector3(right_edge - left_edge, bottom_edge - top_edge, 0);
+        collider.size = new Vector3(saved_grid - 1, saved_grid -1, 0);
     } 
     void EdgePullFromMap(List<float> edge_list)
     {
