@@ -19,9 +19,9 @@ public class MapEdge : MonoBehaviour
     public List<float> edge_positions {get ; private set;} = new List<float>();
     private List<float> sample_edge_positions = new List<float>();
     private int grid_size => DataManagerScript.Instance.grid_size;
-    private float wall_pos_from_cent => (grid_size + 2) / 2 ;
-    private Vector3 wall_scale_vect_x => new Vector3(grid_size + 1.5f, 1, 0);
-    private Vector3 wall_scale_vect_y => new Vector3(1, grid_size + 1.5f, 0);
+    private float wall_pos_from_cent => (grid_size + 1f) / 2f;
+    private Vector3 wall_scale_vect_x => new Vector3(grid_size + 2, 1, 0);
+    private Vector3 wall_scale_vect_y => new Vector3(1, grid_size + 2, 0);
     private int saved_grid;
     private BoxCollider2D collider;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
